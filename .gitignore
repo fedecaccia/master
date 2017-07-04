@@ -1,0 +1,7 @@
+capTipsIB.tex
+*.log
+*.aux
+*.lot
+*.out
+*.bak
+*.toc
