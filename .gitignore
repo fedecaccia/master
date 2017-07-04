@@ -5,3 +5,5 @@ capTipsIB.tex
 *.out
 *.bak
 *.toc
+*.brf
+*.lof
