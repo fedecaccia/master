@@ -1,14 +1,38 @@
 \chapter{Técnicas de acoplamiento}
-\chapterquote{}{alguien, alguna vez}
+\label{chap2}
+\chapterquote
+{}
+{alguien, alguna vez}
 
 \section{Paradigma maestro-esclavo}
 \label{2:maestro-esclavo}
 
 \section{Códigos maestros utilizados}
 \label{2:maestros}
+Dos códigos:
+Código coupling desarrollado previamente x ...., para acoplar pares D2N.
+
+Visto que existen códigos cerrados incapaces de ser comunicados por MPI, 
+o que exigen otra formulación de residuos,
+ydurante la tesis se realizó un código más general, Newton, descripto en último capítulo.
+Con múltiples tipos de conexión (mpi-port, mpi-comm, I/O spawn and system),
+mappers, etc.
 
 \section{Formas de comunicación implementadas}
 \label{2:comunicación}
+
+mpi vs compartida, ver documentos/biblio-maestria/mpi
+
+técnicas mpi-port, mpi-comm, I/O spawn and system
+implementación: 
+
+grupos, 
+puertos, 
+
+spawn,
+barrier after spawn
+
+system
 
 \section{Arquitectura de acoplamiento montada en códigos esclavos}
 \label{2:arquitectura}

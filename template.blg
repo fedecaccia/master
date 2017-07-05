@@ -1,0 +1,55 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/dev/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: template.aux
+The style file: ibtesis.bst
+A level-1 auxiliary file: resumen.aux
+A level-1 auxiliary file: cap1.aux
+A level-1 auxiliary file: cap2.aux
+A level-1 auxiliary file: cap3.aux
+A level-1 auxiliary file: cap4.aux
+A level-1 auxiliary file: cap5.aux
+A level-1 auxiliary file: cap6.aux
+A level-1 auxiliary file: apend1.aux
+A level-1 auxiliary file: apend2.aux
+Database file #1: mibib.bib
+You've used 6 entries,
+            2634 wiz_defined-function locations,
+            1085 strings with 10534 characters,
+and the built_in function-call counts, 1901 in all, are:
+= -- 126
+> -- 48
+< -- 0
++ -- 24
+- -- 12
+* -- 95
+:= -- 226
+add.period$ -- 18
+call.type$ -- 6
+change.case$ -- 5
+chr.to.int$ -- 0
+cite$ -- 6
+duplicate$ -- 190
+empty$ -- 201
+format.name$ -- 16
+if$ -- 417
+int.to.chr$ -- 0
+int.to.str$ -- 6
+missing$ -- 56
+newline$ -- 35
+num.names$ -- 6
+pop$ -- 87
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 38
+stack$ -- 0
+substring$ -- 84
+swap$ -- 114
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 10
+width$ -- 7
+write$ -- 67

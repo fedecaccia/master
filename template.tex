@@ -21,6 +21,7 @@
 \usepackage{verbatim}
 \usepackage[T1]{fontenc}%Ahora puedo escribir con acentos
 %\usepackage[latin1]{inputenc}
+\usepackage{scrextend} % add extra margins in paragraph
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % New commands
 
@@ -36,8 +37,8 @@
 \jurado{Dr.F. Teruel (Instituto Balseiro, Universidad Nacional de Cuyo) \\
 Dr.P. Zanocco (Instituto Balseiro, Universidad Nacional de Cuyo)\\
 }
-\palabrasclave{formato de Tesis, Lineamientos de escritura, Instituto Balseiro}
-\keywords{Thesis format, Templates, Instituto Balseiro}
+\palabrasclave{Acoplamiento fuerte, modelado multiescala, fluidodin\'{a}mica computacional, m\'{e}todo de elementos finitos, acoplamiento neutr\'{o}nico-termohid\'{a}ulico.}
+\keywords{Strong coupling, multiscale model, computational fluid dynamics, finite element method, neutronic-termal-hydraulic couplings}
 % Si queremos poner la fecha manualmente:
 % \date{Diciembre de 2099}
 
@@ -58,7 +59,7 @@ Dr.P. Zanocco (Instituto Balseiro, Universidad Nacional de Cuyo)\\
 
 % Escriba su dedicatoria
 \dedicatoria{
-A todos aquellos que se animan a cuestionar lo incuestionable
+A todos aquellos que cuestionan lo incuestionable
 }
 
 %%% \'{I}ndices %%%%
@@ -71,9 +72,9 @@ A todos aquellos que se animan a cuestionar lo incuestionable
 
 \textbf{FEM}: Método de Elementos Finitos (\textit{Finite Element Method})
 
-\textbf{RANS}: Promedio de Reynolds de Navier-Stokes
+\textbf{PDE}: Ecuación con Derivadas Parciales (\textit{Partial Differential Equation})
 
-\textit{Reynolds-Averaged Navier–Stokes})
+\textbf{RANS}: Promedio de Reynolds de Navier-Stokes (\textit{Reynolds-Averaged Navier–Stokes})
 
 \end{abreviaturas}
 
@@ -95,7 +96,7 @@ A todos aquellos que se animan a cuestionar lo incuestionable
 \include{cap4} % resolución problemas
 \include{cap5} % neutrónica-termohidráulica
 \include{cap6} % conclusiones
-\input{capTipsIB}
+%\input{capTipsIB}
 
 \appendix
 \include{apend1}
@@ -132,7 +133,13 @@ A todos aquellos que se animan a cuestionar lo incuestionable
 \end{seccion}
 
 \begin{seccion}{Agradecimientos}
-
+a mi familia, 
+amigos, 
+a sol, 
+ludmila (ra10), guido(fermi), manuely alexis(puma), fede mezio(relap),
+compañeros de oficina,
+mecom,
+enzo
 \end{seccion}
 
 \end{postliminary}

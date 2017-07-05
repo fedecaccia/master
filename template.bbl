@@ -1,0 +1,40 @@
+\begin{thebibliography}{1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+
+\bibitem{coup-0d3d}
+Leiva, J.~S., Buscaglia, G.~C.
+\newblock Estretegias de acoplamiento entre c\'odigos 0d/1d and c\'odigos cfd
+  3d.
+\newblock \emph{Mec\'anica Computacional}, \textbf{XXV}, 53--82, 2006.
+
+\bibitem{coup-black}
+P.J.~Blanco, J.~L., Feij\'oo, R., Buscaglia, G.
+\newblock Black-box decomposition approach for computational hemodynamics:
+  One-dimensional models.
+\newblock \emph{Computer Methods in Applied Mechanics and Engineering},
+  \textbf{200}, 1389--1405, 2010.
+
+\bibitem{coup-hyd}
+Leiva, J.~S., Blanco, P.~J., Buscaglia, G.~C.
+\newblock Partitioned analysis for dimensionally-heterogeneous hydraulic
+  networks.
+\newblock \emph{Multiscale Model. Simul.}, \textbf{9}, 872--903, 2011.
+
+\bibitem{ddmethod}
+Quarteroni, A.
+\newblock Introduction to domain decomposition methods.
+\newblock \emph{6th Summer School in Analysis and Applied Mathematics}, 2011.
+
+\bibitem{broyden}
+Broyden, C.
+\newblock A class of methods for solving nonlinear simultaneous equations.
+\newblock \emph{American Mathematical Society}, \textbf{19}, 577--593, 1965.
+
+\bibitem{broyden-on}
+Dennis, J., Shnabel, R.
+\newblock Numerical Methods for Unconstrained Optimization and Nonlinear
+  Equations.
+\newblock Society for industrial and applied mathematics, 1996.
+
+\end{thebibliography}
