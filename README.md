@@ -7,4 +7,4 @@ bibtex template
 pdflatex template.tex
 pdflatex template.tex
 ```
-use ```pdflatex'``` with adecuate textlive packages.
+use ```pdflatex``` with adecuate textlive packages.
