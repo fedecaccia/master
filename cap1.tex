@@ -28,7 +28,7 @@ Como referencia a este enfoque se citan los trabajos desarrollados por J. S. Lei
 
 Dado un sistema $S$ en un dominio $\Omega$ con borde $\Gamma$, es posible desglosar este dominio en $N$ particiones 
 y analizar diferentes subsistemas $S_i,i=1,...,N$ por separado, acoplados entre sí mediante condiciones de borde en las uniones
-(método de descomposición de dominios disjuntos \cite{ddmethod}).
+(método de descomposición disjunta de dominios \cite{ddmethod}).
 Las condiciones de borde originales del problema, impuestas sobre la curva $\Gamma$,
 ahora se imponen sobre cada fragmento de la curva.
 La Figura \ref{esquema-acoplamiento} presenta el esquema propuesto.
@@ -46,7 +46,7 @@ La notación utilizada es la siguiente:
 
 \begin{figure}[ht]
 \centering{}\includegraphics[scale = 0.4]{coupling_systems.png}
-\caption[Esquema de descomposición en dominios disjuntos]{Esquema de subsistemas de estudio relacionados mediante condiciones de borde dinámicas en interfaces de acoplamiento.} 
+\caption[Esquema de descomposición disjunta de dominios]{Esquema de subsistemas de estudio relacionados mediante condiciones de borde dinámicas en interfaces de acoplamiento.} 
 \label{esquema-acoplamiento} 
 \end{figure}
 
@@ -123,36 +123,80 @@ En general, cada subsistema debe recibir condiciones o bien de tipo \textit{Diri
 \subsection{Métodos numéricos para la resolución de sistemas de ecuaciones de residuos}
 \label{1:metodos}
 Existen diferentes estrategias para hallar las raíces del sistema (\ref{sistema-simple}). 
-La forma clásica es el conocido método \textit{Dirichlet-to-Neumann}, que resuelve mediante iteraciones de tipo \textit{Piccard}.
-En este método los valores tentativos para las condiciones de borde que son datos en cada subsistema no pueden elegirse arbitrariamente. 
+La forma clásica es el conocido método \textit{Dirichlet-to-Neumann}, que resuelve mediante iteraciones de tipo \textit{Piccard}. La ventaja de este método es que es sencillo de implementar, ya que es un método explícito y por tanto, los valores calculados por algún subsistema son inmediatamente impuestos como condición de borde a otros subsistemas.
+Sin embargo, tiene algunas desventajas.
+Por ejemplo, las condiciones de borde que son datos en cada subsistema no pueden elegirse arbitrariamente. 
 Las interfaces $I_{S_i}^{l_1}$ y $I_{S_j}^{l_2}$ comunes a cada unión $U_{i,j}^k$ 
 deben alternar condiciones de borde de tipo \textit{Dirichlet} y de tipo \textit{Neumann} para las ecuaciones que relacionan las mismas variables de estado en cada subsistema.
 
-Por ejemplo, en un cálculo de campo de temperatura en un dominio descompuesto en dos subsistemas,
-las variables incógnitas en la interfaz de acople son la temperaturas y el flujo de calor.
+El siguiente ejemplo esclarece lo expresado. Se desea resolver la ecuación de calor con condiciones de borde homogéneas, para encontrar el campo de temperaturas $u$ en una barra unidimensional de longitud $L$, fuente interna de energía $f$ y conductividad térmica $k$:
+
+\begin{equation}
+\left\{\begin{matrix}
+-k \Delta u=f \\
+\left.u\right|_{\partial\Omega}=0
+\end{matrix}\right.
+\end{equation}
+mediante el método de descomposición disjunta de dominios (ver Figura \ref{temp-ej}. El dominio original [0,$L$] es particionado en los subdominios [$0$,$c$] y [$c$,$L$]. 
+\begin{figure}
+\centering{}
+\begin{tikzpicture}
+	\node at (12.5,4em) (om) {$\Omega$};
+
+	\node at (7.5,5.9em) (Olabel) {0}; % 0
+	\node at (7.5,5em) (O) {}; % point 0
+
+	\node at (14.5,6.9em) (clabel) {c}; % c
+	\node at (14.5,5em) (c) {}; % point c
+
+	\node at (17.5,5.9em) (llabel) {L}; % L
+	\node at (17.5,5em) (l) {}; % point L
+
+	\draw[line width=1pt, o-|] (O) -- (c.center); % primer extremo de barra completa
+	\draw[line width=1pt, |-o] (c.center) -- (l); % segundo extremo de barra completa
+
+	\draw[line width=0.8pt,->] (11,3.5em) -- (10,1.5em); % primer flecha
+	\draw[line width=0.8pt,->] (16,3.5em) -- (17,1.5em); % segunda flecha
+
+	\node at (10,-1em) (om1) {$\Omega_1$};
+	\node at (6.5,0.9em) (O1label) {0};
+	\node at (6.5,0em) (O1) {};
+	\node at (13.5,0.9em) (c1label) {c};
+	\node at (13.5,0em) (c1) {};
+
+	\draw[line width=1pt, o-o] (O1) -- (c1); % primer barra
+
+	\node at (17,-1em) (om2) {$\Omega_2$};
+	\node at (15.5,0.9em) (c2label) {c};
+	\node at (15.5,0em) (c2) {};
+	\node at (18.5,0.9em) (l2label) {L};
+	\node at (18.5,0em) (l2) {};
+
+	\draw[line width=1pt, o-o] (c2) -- (l2); % segunda barra
+
+\end{tikzpicture}
+\caption[Descomposición en barra unidimensional]{Descomposición disjunta de dominios en el cálculo del campo de temperatura a lo largo de una barra unidimensional.}
+\label{temp-ej}
+\end{figure}
+Para que cada problema quede bien planteado es necesario imponer una condición de borde extra en el punto de interfaz a cada lado.
 En el método \textit{Dirichlet-to-Neumann}, es necesario decidir qué subsistema va a resolverse en primera instancia, a partir de algún valor supuesto en el borde.
-Si arbitrariamente se decidiera imponer una temperatura al borde del primer subsistema,
+Si arbitrariamente se decidiera imponer una temperatura (condición \textit{Dirichlet} al borde del primer subsistema,
 luego de realizar el cálculo de temperaturas quedaría definido un flujo calórico a través de su interfaz de conexión con el segundo subsistema.
 Este valor de flujo luego debe ser utilizado para imponerse como condición de borde al segundo subsistema,
 en el cuál se resolverá el campo de temperaturas y quedará definida una nueva temperatura en la interfaz de acople.
 Esta temperatura se impone nuevamente al primer subsistema, y el cálculo continúa así hasta que los sucesivos valores de las variables acopladas convergan.
-Cómo se vio, la elección de un tipo de frontera en un subdominio dado determina el tipo de frontera en el subdominio contiguo,
+Si inicialmente se hubiera impuesto una condición de \textit{Neumann} en el primer subdominio, necesariamente al segundo subdominio debe imponérsele una condición de \textit{Dirichlet}. Es decir, al utilizar el método \textit{Dirichlet-to-Neumann}, la elección de un tipo de frontera en un subdominio dado determina el tipo de frontera en el subdominio contiguo,
 para las ecuaciones que relacionan las mismas variables de estado en ambos subsistemas.
+Otra desventaja de este método es que en general requiere demasiadas iteraciones para converger \cite{XXX}. En algunos problemas el método puede quedar estancado, iterando en series de valores que se repiten en ciclo. Y en otros casos el método es divergente (sin ir más allá, para un cierto conjunto de parámetros del problema ejemplo analizado, el método diverge, ver \cite{XXX}).
 
-Por ejemplo, en el subsistema $S_1$ se calcula el campo de temperaturas 
-a partir de una condición de tipo Neumann (flujo de calor) en la interfaz $I_{S_i}^{l_1}$.
-Luego el valor de temperatura resuelto en la interfaz, se fija como condición de borde de tipo \textit{Dirichlet} en la interfaz $I_{S_2}^{l_2}$ de $S_2$.
-A partir de este dato se calcula en $S_2$ el flujo de calor en la interfaz, que pasa nuevamente como condición de borde de tipo \textit{Neumann} a $S_1$,
-y así sucesivamente.
-En cierto tipo de problemas esta estrategia toma demasiadas iteraciones, y en algunos casos en divergente.
-Puede quedar estancada. Poner ejemplo iteraciones punto fijo.
-
-Otra forma de resolver el problema es aplicando algún método para encontrar raíces a sistemas de funciones no lineales,
+Otra forma de resolver el problema es aplicando métodos para encontrar raíces a funciones vectoriales no lineales (sistema de ecuaciones de residuos \ref{sistema-simple}en función de las variables de acople incógnitas),
 como por ejemplo, el método \textit{Newton}.
-Poner ecuaciones de newton.
+Haciendo un desarrollo de Taylor de las ecuaciones de residuos y truncando los términos superiores al primer orden, se tiene:
+
+\begin{equation}
+
+\end{equation}
 Éste método tiene orden de convergencia cuadrática.
-Haciendo un desarrollo de Taylor de las ecuaciones de residuos y truncando los términos superiores al primer orden.
-El sistema de ecuaciones resultantes puede resolverse entonces mediante el método de Newton. 
 
 El problema es que para utilizar este método se requiere la construcción de la matriz jacobiana en cada iteración, lo cual es demasiado costoso.
 Una sencilla aproximación mediante diferencias finitas de primer orden de cada elemento de la matriz jacobiana 
@@ -166,7 +210,7 @@ Representan una mejora respecto del método de Newton ya que aproximan la matriz
 El método de Broyden es uno de ellos \cite{broyden}.
 También existe otra variante del método, el método de Broyden Ortonormal.
 En esta versión se asegura que la resolución converge en $N$ iteraciones, donde $N$ es la dimensión de la matriz jacobiana \cite{broyden-on}.
-en lineales?
+en lineales?XXX
 
 \subsection{Problemas de evolución temporal}
 \label{1:evolucion}
