@@ -137,7 +137,7 @@ El siguiente ejemplo esclarece lo expresado. Se desea resolver la ecuación de c
 \left.u\right|_{\partial\Omega}=0
 \end{matrix}\right.
 \end{equation}
-mediante el método de descomposición disjunta de dominios (ver Figura \ref{temp-ej}. El dominio original [0,$L$] es particionado en los subdominios [$0$,$c$] y [$c$,$L$]. 
+mediante el método de descomposición disjunta de dominios (ver Figura \ref{temp-ej}. El dominio original $[0,L]$ es particionado en los subdominios $[0,c]$ y $[c,L]$.
 \begin{figure}
 \centering{}
 \begin{tikzpicture}
@@ -187,30 +187,45 @@ en el cuál se resolverá el campo de temperaturas y quedará definida una nueva
 Esta temperatura se impone nuevamente al primer subsistema, y el cálculo continúa así hasta que los sucesivos valores de las variables acopladas convergan.
 Si inicialmente se hubiera impuesto una condición de \textit{Neumann} en el primer subdominio, necesariamente al segundo subdominio debe imponérsele una condición de \textit{Dirichlet}. Es decir, al utilizar el método \textit{Dirichlet-to-Neumann}, la elección de un tipo de frontera en un subdominio dado determina el tipo de frontera en el subdominio contiguo,
 para las ecuaciones que relacionan las mismas variables de estado en ambos subsistemas.
-Otra desventaja de este método es que en general requiere demasiadas iteraciones para converger \cite{XXX}. En algunos problemas el método puede quedar estancado, iterando en series de valores que se repiten en ciclo. Y en otros casos el método es divergente (sin ir más allá, para un cierto conjunto de parámetros del problema ejemplo analizado, el método diverge, ver \cite{XXX}).
+Otra desventaja de este método es que en general requiere demasiadas iteraciones para converger \cite{fede-enief2016}. En algunos problemas el método puede quedar estancado, iterando en series de valores que se repiten en ciclo. Y en otros casos el método es divergente (sin ir más allá, para un cierto conjunto de parámetros del problema ejemplo analizado, el método diverge, ver \cite{coup-strong}).
 
-Otra forma de resolver el problema es aplicando métodos para encontrar raíces a funciones vectoriales no lineales (sistema de ecuaciones de residuos \ref{sistema-simple}en función de las variables de acople incógnitas),
-como por ejemplo, el método \textit{Newton}.
-Haciendo un desarrollo de Taylor de las ecuaciones de residuos y truncando los términos superiores al primer orden, se tiene:
+Otra forma de resolver el problema es aplicando métodos para encontrar raíces a funciones vectoriales no lineales (sistema de ecuaciones de residuos \ref{sistema-simple} en función de las variables de acople incógnitas),
+como por ejemplo, el método \textit{Newton-Raphson}.
+Haciendo un desarrollo de Taylor de las ecuaciones de residuos alrededor del punto $\bar{x}_n$, truncando los términos superiores al primer orden, y evaluando en $x=x_{n+1}$ se tiene:
 
 \begin{equation}
-
+\bar{R}(\bar{x}) = \bar{R}(\bar{x}_n) + \nabla \bar{R}(\bar{x}_n)(\bar{x}_{n+1}-\bar{x}_n)
+\label{taylor}
 \end{equation}
-Éste método tiene orden de convergencia cuadrática.
+donde $\nabla \bar{R}(\bar{x}_n)$ es la matriz jacobiana del sistema $J$ evaluada en el punto $\bar{x}_n$, donde el elemento $J_{ij}$ debe evaluarse como $J_{ij}=\frac{\partial R_i}{\partial x_j}$.
+Suponiendo que ${x_{n+1}}$ tiende a la raíz buscada se ha de cumplir que $\bar{R}(\bar{x}_{n+1})=0$. Sustituyendo en \ref{taylor} y operando algebraicamente se llega a la siguiente expresión:
 
+\begin{equation}
+\bar{R}(\bar{x}_n) = -J(\bar{x}_n)(\bar{x}_{n+1}-\bar{x}_n)
+\end{equation}
+que es el método de iterativo $Newton-Raphson$ con orden de convergencia cuadrática. Para hallar la solución $\bar{x}_{n+1}$ simplemente hay que resolver el sistema:
+
+\begin{equation}
+\bar{x}_{n+1} = \bar{x}_{n} -J^{-1}(\bar{x}_n)\bar{R}(\bar{x}_n)
+\end{equation}
 El problema es que para utilizar este método se requiere la construcción de la matriz jacobiana en cada iteración, lo cual es demasiado costoso.
-Una sencilla aproximación mediante diferencias finitas de primer orden de cada elemento de la matriz jacobiana 
-requiere una primera resolución por parte de cada código para encontrar los residuos en la posición original, y luego otras tantas resoluciones extras
-como tantas incógnitas existan, ya que deben evaluarse perturbaciones en todas las variables.
-Si bien éstas evaluaciones son independientes entre sí y por lo tanto altamente paralelizables, este método es excesivamente costoso.
+Una sencilla aproximación mediante diferencias finitas de primer orden de cada elemento de la matriz jacobiana requiere numerosas ejecuciones de códigos clientes
+\footnote{
+Cada elemento $J_{ij}=\frac{\partial R_i}{\partial x_j}$ puede aproximarse mediante diferencias finitas a primer orden como:
+\begin{equation}
+J_{ij} \approx \frac{R_i(x_j + \Delta x_j) - R_i(x_j)}{\Delta x_j}
+\end{equation}
+La construcción de la matriz jacobiana con éste método requiere una evaluación del vector residuo $\bar{R}$ en el punto $\bar{x}$ y luego $N$ evaluaciones extras, donde $N$ es la cantidad de incógnitas. Es decir, en total, se requieren $N+1$ ejecuciones de cada código cliente.
+}.
+Si bien estas evaluaciones son independientes entre sí y por lo tanto altamente paralelizables, este método es excesivamente costoso.
 
-Una forma alternativa y elegante de resolver el sistema de ecuaciones antes planteado es mediante métodos \textit{cuasi-Newton}.
-Estos métodos tienen convergencia superlineal, y por lo tanto se ubican entre los métodos presentados anteriormente en análisis de convergencia. 
-Representan una mejora respecto del método de Newton ya que aproximan la matriz jacobiana sin necesidad de realizar evaluaciones extras. 
-El método de Broyden es uno de ellos \cite{broyden}.
-También existe otra variante del método, el método de Broyden Ortonormal.
-En esta versión se asegura que la resolución converge en $N$ iteraciones, donde $N$ es la dimensión de la matriz jacobiana \cite{broyden-on}.
-en lineales?XXX
+Una forma alternativa y elegante de resolver el sistema de ecuaciones planteado en \ref{sistema-simple} es mediante métodos \textit{cuasi-Newton}.
+Estos métodos tienen convergencia superlineal \cite{broyden-on}, y por lo tanto presentan una ventaja frente a los métodos mediante iteraciones de \textit{Piccard}. 
+La característica principal de estos métodos es que aproximan la matriz jacobiana sin necesidad de realizar evaluaciones extras, y por lo tanto tienen también un punto de ventaja frente al método de \textit{Newton-Raphson}.
+El método de \textit{Broyden} es uno de ellos \cite{broyden}.
+También existe otra variante del método, el método \textit{Broyden ortonormal}, que asegura la convergencia en $N$ iteraciones para sistemas lineales (XXX), donde $N$ es la dimensión de la matriz jacobiana.
+
+Existe también un conjunto de métodos conocidos como métodos \textit{Newton-Krylov} para la resolución del sistema \ref{sistema-simple}. Estos métodos no requieren el cálculo de matriz jacobiana ya que resuelven el sistema mediante gradientes descendientes, gradientes conjugados y otras técnicas que también serán exploradas en el presente trabajo. Sin embargo, en cada paso de descenso requieren evaluaciones de residuos, y por tanto son altamente costosos.
 
 \subsection{Problemas de evolución temporal}
 \label{1:evolucion}

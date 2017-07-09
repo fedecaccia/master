@@ -26,15 +26,26 @@ Quarteroni, A.
 \newblock Introduction to domain decomposition methods.
 \newblock \emph{6th Summer School in Analysis and Applied Mathematics}, 2011.
 
-\bibitem{broyden}
-Broyden, C.
-\newblock A class of methods for solving nonlinear simultaneous equations.
-\newblock \emph{American Mathematical Society}, \textbf{19}, 577--593, 1965.
+\bibitem{fede-enief2016}
+Caccia, F.~A., Dari, E.~A.
+\newblock Acoplamiento multiescala en cálculos fluidodinámicos.
+\newblock \emph{Mecánica Computacional}, \textbf{XXXIV}, 1955--1972, 2016.
+
+\bibitem{coup-strong}
+Jorge S.~Leiva, P. J.~B., Buscaglia, G.~C.
+\newblock Iterative strong coupling of dimensionally heterogeneous models.
+\newblock \emph{International Journal for Numerical Methods in Engineering},
+  \textbf{81}, 1558--1580, 2009.
 
 \bibitem{broyden-on}
 Dennis, J., Shnabel, R.
 \newblock Numerical Methods for Unconstrained Optimization and Nonlinear
   Equations.
 \newblock Society for industrial and applied mathematics, 1996.
+
+\bibitem{broyden}
+Broyden, C.
+\newblock A class of methods for solving nonlinear simultaneous equations.
+\newblock \emph{American Mathematical Society}, \textbf{19}, 577--593, 1965.
 
 \end{thebibliography}
