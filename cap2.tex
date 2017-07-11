@@ -133,7 +133,6 @@ En el caso de lectura y escritura de archivos y ejecución de programas \textit{
 la estrategia definida paraleliza las responsabilidades entre todos los procesos lanzados del código \textit{maestro}.
 El esquema \ref{esquema-comunicacion} resume la estrategia de comunicación.
 
-
 \begin{figure}
 \centering{}
 \begin{tikzpicture}[
@@ -262,7 +261,8 @@ Las acciones de acoplamiento deben ser llamadas en 4 instancias diferentes:
 \end{enumerate}
 Los problemas que no involucran evolución de variables pueden ser tratados como problemas con un solo paso de evolución.
 El programador podría definir una nueva variable \textit{booleana} que a modo de bandera indique cuándo se está realizando un cálculo acoplado para ingresar o no en las instancias nombradas.
-A continuación se describen las instancias de acplamiento.
+A continuación se describen las instancias de acoplamiento.
+
 
 \subsection*{Acoplamiento en instancia 1: al principio del programa}
 
@@ -309,7 +309,254 @@ Mientras, el programa \textit{maestro} recepciona los valores de las incógnitas
 Con estos valores resuelve las ecuaciones de residuos.
 Si el módulo del residuo cae por debajo de cierta tolerancia prefijada el código \textit{maestro} acepta los resultados y envía a sus \textit{esclavos} la órden de continuar con el cálculo.
 En caso contrario, puede enviarles la órden de volver a calcular el mismo paso de acoplamiento, o incluso de abortar el cálculo.
+La Figura \ref{esquema-evolucion} esquematiza lo comentado para un caso sencillo en que se acoplan dos programas \textit{esclavos} al programa \textit{maestro}.
+En este ejemplo, las variables $x,y$ son las incógnitas en las interfaces de acople.
+El programa \textbf{Esclavo 1} resuelve cada paso de evolución acoplado en función de un valor $x_{guess}$ recibido desde el código \textit{maestro}, y le devuelve el valor $y$ calculado a partir de él.
+El programa \textbf{Esclavo 2} calcula, en cambio, $x$ en función de $y_{guess}$.
 
 \subsection*{Acoplamiento en instancia 4: al finalizar el programa}
 
 Antes de finalizar el programa, es necesario cerrar las conexiones, liberar los grupos y los comunicadores establecidos.
+
+\pgfdeclarelayer{bg}    % declare background layer
+\pgfsetlayers{bg,main}  % set the order of the layers (main is the standard laye
+
+\begin{figure}
+\centering{}
+\begin{tikzpicture}[
+	block1/.style={
+	draw,
+	fill=white,
+  text centered,
+	rectangle, 
+	minimum width={width("Proceso $N_m$")+2pt},
+	minimum height={17pt},
+	font=\small},
+	block2/.style={
+	draw,
+	rectangle,
+  fill=blue!20,
+  text centered, 
+  rounded corners,
+	minimum width={width("Esclavo N")+2pt},
+	minimum height={15pt},
+	font=\large},
+	connector/.style={
+	-o,
+	line width=0.3mm
+	},
+  arrow1/.style={
+  -{Latex[length=3mm, width=1mm]}
+  },
+  arrow2/.style={
+  {Latex[length=3mm, width=1mm]}-{Latex[length=3mm, width=1mm]}
+  }
+  ]
+
+	% Dummy
+	\node at (0,10em)             (dummy) {}; % blank space
+
+	% Códigos
+	\node [block2] at (0,20em)          (maestro)   {\textbf{Maestro}};
+	\node [block2, left=6.5em  of maestro] (esclavo1) {\textbf{Esclavo $1$}};	
+	\node [block2, right=6.5em of maestro] (esclavo2) {\textbf{Esclavo $2$}};
+  
+  % guess0
+  \node [block1, text width=2cm] at (0,17em) (guess0) {\textit{guesses x,y} en $t_{coup,1}$};
+  
+  % ci
+  \node [anchor=east] at (-9 em,18.5em) (ci1) {\footnotesize condición inicial};
+  \node [anchor=west] at ( 9 em,18.5em) (ci2) {\footnotesize condición inicial};
+  
+  % s1
+  \node [anchor=east] at (-17 em,17em) (tc0)  {\footnotesize $t_{coup,0}$};
+  
+  \node [anchor=east] at (-13.5 em,17em) (tl10) {\footnotesize $t_{e1,0}$};  
+  \node at (-9.3em,17em) (dummy11) {};
+  \draw [dashed] ($(tl10)+(1em,-0.3em)$) -- ($(dummy11)-(0,0.3em)$);
+  
+  \node [anchor=east] at (-13.5 em,15em) (tl11) {\footnotesize $t_{e1,1}$};  
+  \node at (-9.3em,15em) (dummy21) {};
+  \draw [dashed] ($(tl11)+(1em,-0.3em)$) -- ($(dummy21)-(0,0.3em)$);
+  
+  \node [anchor=east] at (-13.5 em,13em) (tl12) {\footnotesize $t_{e1,2}$};  
+  \node at (-9.3em,13em) (dummy31) {};
+  \draw [dashed] ($(tl12)+(1em,-0.3em)$) -- ($(dummy31)-(0,0.3em)$);
+  
+  \node [anchor=east] at (-13.5 em,11em) (tl1i) {\footnotesize $t_{e1,i}$};  
+  \node at (-9.3em,11em) (dummy41) {};
+  \draw [dashed] ($(tl1i)+(1em,-0.3em)$) -- ($(dummy41)-(0,0.3em)$);
+  
+  \node [anchor=east] at (-13.5 em,9em) (tl1n) {\footnotesize $t_{e1,N}$};  
+  \node at (-9.3em,9em) (dummy51) {};
+  \draw [dashed] ($(tl1n)+(1.2em,-0.3em)$) -- ($(dummy51)+(0.2em,-0.3em)$);
+  \node [anchor=east] at (-17 em,9em) (tc1)  {\footnotesize $t_{coup,1}$};
+  
+  \node at(-20.5em,13em) (dtc1) {$\Delta t_{coup}$};
+  \draw[|-] ($(tc0.south)+(-2em,1em)$) to[out=-90, in=90] (dtc1);
+  \draw[-|] (dtc1) to[out=-90, in=90] ($(tc1.north)+(-2em,-1em)$);
+  
+  % flechas s1
+  \draw[->] ($(tl10.east)+(1.8em,-0.7em)$) -- ($(tl10.east)+(1.8em,-2em)$);
+  \draw[->] ($(tl11.east)+(1.8em,-0.7em)$) -- ($(tl11.east)+(1.8em,-2em)$);
+  \draw[->] ($(tl12.east)+(1.8em,-0.7em)$) -- ($(tl12.east)+(1.8em,-2em)$);
+  \draw[->] ($(tl1i.east)+(1.8em,-0.7em)$) -- ($(tl1i.east)+(1.8em,-2em)$);
+  
+  % s2
+  \node [anchor=west] at (13.5 em,17em) (tl20) {\footnotesize $t_{e2,0}$};
+  \node at (9.3em,17em) (dummy12) {};
+  \draw [dashed] ($(dummy12)-(0,0.3em)$) -- ($(tl20.west)-(0em,0.3em)$);
+  
+  \node [anchor=west] at (13.5 em,13em) (tl2i) {\footnotesize $t_{e2,i}$};
+  \node at (9.3em,13em) (dummy22) {};
+  \draw [dashed] ($(dummy22)-(0,0.3em)$) -- ($(tl2i.west)-(0em,0.3em)$);
+  
+  \node [anchor=west] at (13.5 em,9em) (tl2n) {\footnotesize $t_{e2,N}$};
+  \node at (9.3em,9em) (dummy32) {};
+  \draw [dashed] ($(dummy32)-(0,0.3em)$) -- ($(tl2n.west)-(0em,0.3em)$);
+  
+  % flechas s2
+  \draw[->] ($(dummy12.east)+(2em,-1em)$) -- ($(dummy12.east)+(2em,-3.5em)$);
+  \draw[->] ($(dummy22.east)+(2em,-1em)$) -- ($(dummy22.east)+(2em,-3.5em)$);
+  
+  % send 1
+  \draw [arrow1] (guess0) to node [midway, above]{\footnotesize $x_{guess}(t_{coup,1})$} (dummy11);
+  \draw [arrow1] (guess0) to node [midway, above]{\footnotesize $y_{guess}(t_{coup,1})$} (dummy12);
+
+  % calc0
+  \node [block1, text width=2cm] at (0,9em) (calc0) {cálculo de residuos};
+
+  % recv 1
+  \draw [arrow1] (dummy51) to node [midway, above]{\footnotesize $y(x_{guess})$} (calc0);
+  \draw [arrow1] (dummy32) to node [midway, above]{\footnotesize $x(y_{guess})$} (calc0);
+  
+  % convergencia
+  \node [draw, ellipse] at (0,5em) (convergencia) {\footnotesize convergencia?};
+  \draw[arrow1] (calc0) -- (convergencia);
+  
+  % si-no
+  \node [draw, diamond] at(-2em, 2em) (si) {\footnotesize sí};
+  \draw[arrow1] (convergencia) -- (si);
+  \node [draw, diamond] at( 2em, 2em) (no) {\footnotesize no};
+  \draw[arrow1] (convergencia) -- (no);
+  
+  % continue - restart
+  \node [draw,rectangle] at(-2em, -1em) (continuar) {\scriptsize continuar};
+  \draw[arrow1] (si) -- (continuar);
+  \node [draw,rectangle] at( 2em, -1em) (reinicio) {\scriptsize reinicio};
+  \draw[arrow1] (no) -- (reinicio);
+  
+  % guess1
+  \node [block1, text width=2cm] at (0,-5em) (guess1) {\textit{guesses x,y} en $t_{coup,2}$};
+  
+  % continuar->guess
+  \draw[arrow1] (continuar) -- (guess1);
+  
+  % s1
+  \node [anchor=east] at (-17 em,-5em) (tc0)  {\footnotesize $t_{coup,1}$};
+  
+  \node [anchor=east] at (-13.5 em,-5em) (tl10) {\footnotesize $t_{e1,N}$};  
+  \node at (-9.3em,-5em) (dummy11) {};
+  \draw [dashed] ($(tl10)+(1em,-0.3em)$) -- ($(dummy11)-(0,0.3em)$);
+  
+  \node [anchor=east] at (-13.5 em,-7em) (tl11) {\footnotesize $t_{e1,N+1}$};  
+  \node at (-9.3em,-7em) (dummy21) {};
+  \draw [dashed] ($(tl11)+(1.4em,-0.3em)$) -- ($(dummy21)-(0,0.3em)$);
+  
+  \node [anchor=east] at (-13.5 em,-9em) (tl12) {\footnotesize $t_{e1,N+2}$};  
+  \node at (-9.3em,-9em) (dummy31) {};
+  \draw [dashed] ($(tl12)+(1.4em,-0.3em)$) -- ($(dummy31)-(0,0.3em)$);
+  
+  \node [anchor=east] at (-13.5 em,-11em) (tl1i) {\footnotesize $t_{e1,N+i}$};  
+  \node at (-9.3em,-11em) (dummy41) {};
+  \draw [dashed] ($(tl1i)+(1.4em,-0.3em)$) -- ($(dummy41)-(0,0.3em)$);
+  
+  \node [anchor=east] at (-13.5 em,-13em) (tl1n) {\footnotesize $t_{e1,N+N}$};  
+  \node at (-9.3em,-13em) (dummy51) {};
+  \draw [dashed] ($(tl1n)+(1.6em,-0.3em)$) -- ($(dummy51)+(0.2em,-0.3em)$);
+  \node [anchor=east] at (-17 em,-13em) (tc1)  {\footnotesize $t_{coup,2}$};
+  
+  \node at(-20.5em,-9em) (dtc1) {$\Delta t_{coup}$};
+  \draw[|-] ($(tc0.south)+(-2em,1em)$) to[out=-90, in=90] (dtc1);
+  \draw[-|] (dtc1) to[out=-90, in=90] ($(tc1.north)+(-2em,-1em)$);
+  
+  % flechas s1
+  \draw[->] ($(tl10.east)+(1.8em,-0.7em)$) -- ($(tl10.east)+(1.8em,-2em)$);
+  \draw[->] ($(tl11.east)+(1.8em,-0.7em)$) -- ($(tl11.east)+(1.8em,-2em)$);
+  \draw[->] ($(tl12.east)+(1.8em,-0.7em)$) -- ($(tl12.east)+(1.8em,-2em)$);
+  \draw[->] ($(tl1i.east)+(1.8em,-0.7em)$) -- ($(tl1i.east)+(1.8em,-2em)$);
+  
+  % s2
+  \node [anchor=west] at (13.5 em,-5em) (tl20) {\footnotesize $t_{e2,N}$};
+  \node at (9.3em,-5em) (dummy12) {};
+  \draw [dashed] ($(dummy12)-(0,0.3em)$) -- ($(tl20.west)-(0em,0.3em)$);
+  
+  \node [anchor=west] at (13.5 em,-9em) (tl2i) {\footnotesize $t_{e2,N+i}$};
+  \node at (9.3em,-9em) (dummy22) {};
+  \draw [dashed] ($(dummy22)-(0,0.3em)$) -- ($(tl2i.west)-(0em,0.3em)$);
+  
+  \node [anchor=west] at (13.5 em,-13em) (tl2n) {\footnotesize $t_{e2,N+N}$};
+  \node at (9.3em,-13em) (dummy32) {};
+  \draw [dashed] ($(dummy32)-(0,0.3em)$) -- ($(tl2n.west)-(0em,0.3em)$);
+  
+  % flechas s2
+  \draw[->] ($(dummy12.east)+(2em,-1em)$) -- ($(dummy12.east)+(2em,-3.5em)$);
+  \draw[->] ($(dummy22.east)+(2em,-1em)$) -- ($(dummy22.east)+(2em,-3.5em)$);
+  
+  % send 1
+  \draw [arrow1] (guess1) to node [midway, above]{\footnotesize $x_{guess}(t_{coup,2})$} (dummy11);
+  \draw [arrow1] (guess1) to node [midway, above]{\footnotesize $y_{guess}(t_{coup,2})$} (dummy12);
+
+  % calc1
+  \node [block1, text width=2cm] at (0,-13em) (calc1) {cálculo de residuos};
+
+  % recv 1
+  \draw [arrow1] (dummy51) to node [midway, above]{\footnotesize $y(x_{guess})$} (calc1);
+  \draw [arrow1] (dummy32) to node [midway, above]{\footnotesize $x(y_{guess})$} (calc1);
+  
+  % Final node
+  \node at (0,-17em) (final) {...};
+  \draw [arrow1] (calc1) -- (final);
+  
+  % Reinicial connection
+  %\draw[arrow1, dashed] (reinicio.east) to[out=0, in=-10, distance=4cm] (guess0.south);
+  \node at (8em,-1em) (reini1) {};
+  \node at (8em, 13em) (reini2) {};
+  \draw [arrow1,dashed] (reinicio.east) -- (reini1.center) -- (reini2.center) -- ($(guess0.south) - (0,0.0em)$);
+  
+  % Cuadros
+  \begin{pgfonlayer}{bg}    % select the background layer  
+    \draw [red, dashed, rounded corners, on background layer, thick, opacity=0.5, fill=red!10] 
+    (esclavo1.west) 
+    -- ($(esclavo1.west) - (1.6em,0)$) -- ($(esclavo1.west) - (1.6em,38em)$) 
+    -- ($(esclavo1.east) + (0.5em,-38em)$) -- ($(esclavo1.east) + (0.5em,0em)$)
+    -- (esclavo1.east);
+    
+    \draw [red, dashed, rounded corners, on background layer, thick, opacity=0.5, fill=red!10] 
+    (esclavo2.west) 
+    -- ($(esclavo2.west) - (0.5em,0)$) -- ($(esclavo2.west) - (0.5em,38em)$) 
+    -- ($(esclavo2.east) + (1.6em,-38em)$) -- ($(esclavo2.east) + (1.6em,0em)$)
+    -- (esclavo2.east);
+    
+    \draw [black!60!green, dashed, rounded corners, on background layer, thick, opacity=0.5, fill=back!60!green!10]
+    (maestro.west)
+    -- ($(esclavo1.east) + (0.7em,0)$) -- ($(esclavo1.east) + (0.7em,-38em)$) 
+    -- ($(esclavo2.west) + (-0.7em,-38em)$) -- ($(esclavo2.west) - (0.7em,0em)$)
+    -- (maestro.east);
+  \end{pgfonlayer}
+
+\end{tikzpicture}
+\caption[Esquema de acoplamiento implementado]{Esquema de acoplamento entre el programa \textit{maestro} y los programas \textit{esclavos}.
+En el ejemplo, cada código \textit{esclavo} resuelve ecuaciones diferenciales en subsitemas que están acoplados entre sí en alguna interfaz en las que las variables $x$ e $y$ son incógnitas.
+El código \textbf{Esclavo 1} inicia recibiendo como \textit{guess} para el tiempo $t_{coup,1}$ la variable $x_{guess}$.
+El valor de $x_{guess}$ utilizado en los pasos intermedios de cálculo es simplemente una interpolación entre la condición incial y el valor recibido.
+El código \textbf{Esclavo 2} recibe alternativamente como \textit{guess} para el tiempo $t_{coup,1}$ la variable $y_{guess}$.
+Al finalizar $\Delta t_{coup}$ ambos programas devuelven al programa \textbf{Maestro} las variables conjugadas calculadas.
+\textbf{Maestro} computa los residuos entre los valores \textit{guess} previamente propuestos y los valores recibidos.
+Si el residuo no supera cierta tolerancia prefijada, envía la órden de reinicio a cada programa \textit{esclavo}, 
+para volver a calcular el mismo paso de acoplamiento, tras lo cual enviará nuevos valores \textit{guesses} propuestos.
+En caso contrario, cuando los resultados convergen, envía la órden de continuación, y ambos \textit{esclavos} prosiguen con el cálculo.
+Notar que en problemas sin evolución, el proceso es similar, pero todos los programas calculan un único paso temporal ficticio.
+}
+\label{esquema-evolucion}
+\end{figure}
