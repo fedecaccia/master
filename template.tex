@@ -2,7 +2,7 @@
 % \documentclass[12pt,papel,twoside]{ibtesis}
 \documentclass[12pt,screen,twoside,pagebackref]{ibtesis}
 % \documentclass[12pt,papel,singlespace,oneside]{ibtesis}
-% \documentclass[12pt,papel,preprint,singlespace,oneside]{ibtesis}
+%\documentclass[12pt,papel,preprint,singlespace,oneside]{ibtesis}
 
 
 %%%%%%%%%%%%%%%%%%%%% Paquetes extra %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -23,10 +23,13 @@
 %\usepackage[latin1]{inputenc}
 \usepackage{scrextend} % add extra margins in paragraph
 \usepackage{tikz} % Scientific schemes
+\usetikzlibrary{arrows.meta} % Arrows
+\usetikzlibrary{calc} % Coordinate calculation
 \usetikzlibrary{positioning} % To get more advances positioning options
 \usetikzlibrary{babel} % To allow <>
 \usetikzlibrary{arrows} % To get more arrow heads
 \usepackage{pgfplots} % Scientific plots
+\usepackage{hyperref} % http links
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % New commands
 
@@ -63,9 +66,9 @@ Dr.P. Zanocco (Instituto Balseiro, Universidad Nacional de Cuyo)\\
 \begin{preliminary}
 
 % Escriba su dedicatoria
-\dedicatoria{
-A todos aquellos que cuestionan lo incuestionable
-}
+%\dedicatoria{
+%A todos aquellos que cuestionan lo incuestionable
+%}
 
 %%% \'{I}ndices %%%%
 
@@ -77,9 +80,19 @@ A todos aquellos que cuestionan lo incuestionable
 
 \textbf{FEM}: Método de Elementos Finitos (\textit{Finite Element Method})
 
+\textbf{GPL}: Licencia Pública General (\textit{Public General License})
+
+\textbf{MIMD}: Múltiples Instrucciones, Múltiples Datos (\textit{Multiple Instruction, Multiple Data})
+
+\textbf{MPI}: Interfaz de Paso de Mensajes (\textit{Message Passing Interface})
+
 \textbf{PDE}: Ecuación con Derivadas Parciales (\textit{Partial Differential Equation})
 
 \textbf{RANS}: Promedio de Reynolds de Navier-Stokes (\textit{Reynolds-Averaged Navier–Stokes})
+
+\textbf{SISD}: Una Instrucción, Un Dato (\textit{Single Instruction, Single Data})
+
+\textbf{SIMD}: Una Instrucción, Múltiples Datos (\textit{Single Instruction, Multiple Data})
 
 \end{abreviaturas}
 
@@ -97,15 +110,14 @@ A todos aquellos que cuestionan lo incuestionable
 % Podemos usar cualquiera de los dos comandos: \input o \include para incluir el texto
 \include{cap1} % intro
 \include{cap2} % acoplamiento
-\include{cap3} % modelos fluidodinámicos
-\include{cap4} % resolución problemas
-\include{cap5} % neutrónica-termohidráulica
-\include{cap6} % conclusiones
+\include{cap3} % resolución problemas fluidodinámicos
+\include{cap4} % neutrónica-termohidráulica
+\include{conclusiones} % conclusiones
 %\input{capTipsIB}
 
-\appendix
-\include{apend1}
-\include{apend2}
+%\appendix
+%\include{apend1}
+%\include{apend2}
 
 \begin{biblio}
 \bibliography{mibib}
@@ -115,37 +127,37 @@ A todos aquellos que cuestionan lo incuestionable
 \begin{postliminary}
 
 \begin{seccion}{Publicaciones asociadas}
-\begin{enumerate}
+\begin{itemize}
 
 \item Informes técnicos en Comisión Nacional de Energía Atómica:
-\begin{enumerate}
+\begin{itemize}
 \item Rechiman, L.; Cantero, M.; Dari, E.; Caccia, F.; Chacoma, A. 2015. “Análisis hidrodinámico del Segundo Sistema de Parada del reactor RA10”. Reporte técnico CNEA IN-ATN40MC- Mayo de 2015, Bariloche, Argentina.
-\end{enumerate}
+\end{itemize}
 
 \item Publicaciones en revistas internacionales:
-\begin{enumerate}
+\begin{itemize}
 \item Rechiman, L.; Cantero, M. ; Caccia, F.; Chacoma, A. and Dari, E. 2017. “Three-dimensional hydrodynamic modeling of the second shutdown system of an experimental nuclear reactor” ("Modelado hidrodinámico tri-dimensional del segundo sistema de parada de un reactor nuclear experimental"), Nuclear Engineering and Design, vol. 319, pp 163-175.
-\end{enumerate}
+\end{itemize}
 
 \item Presentaciones en congresos con publicación en actas:
-\begin{enumerate}
+\begin{itemize}
 \item Caccia, F. and Dari. E. “Acoplamiento multiescala en cálculos fluidodinámicos”. Mecánica Computacional, vol XXXIV, págs 1955-1972.
 
 \item Rechiman, L.; Chacoma, A.; Caccia, F.; Dari E. and Cantero, M. "Validation of a multiscale model of the second shutdown system of an experimental nuclear reactor“ ("Validación del modelo multiescala del segundo sistema de parada del reactor nuclear experimental RA-10”). Mecánica Computacional, vol XXXIV, págs 2199-2215.
-\end{enumerate}
+\end{itemize}
 
-\end{enumerate}
+\end{itemize}
 \end{seccion}
 
-\begin{seccion}{Agradecimientos}
-a mi familia, 
-amigos, 
-a sol, 
-ludmila (ra10), guido(fermi), manuely alexis(puma), fede mezio(relap),
-compañeros de oficina,
-mecom,
-enzo
-\end{seccion}
+%~ \begin{seccion}{Agradecimientos}
+%~ a mi familia, 
+%~ amigos, 
+%~ a sol, 
+%~ ludmila (ra10), guido(fermi), manuely alexis(puma), fede mezio(relap),
+%~ compañeros de oficina,
+%~ mecom,
+%~ enzo
+%~ \end{seccion}
 
 \end{postliminary}
 

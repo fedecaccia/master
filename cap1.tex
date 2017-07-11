@@ -1,9 +1,12 @@
 \chapter{Introducción}
 \label{chap1}
 \chapterquote
-{Don't get involved in partial problems, 
-but always take flight to where there is a free view over the whole single great problem, 
-even if this view is still not a clear one.}
+%~ {Don't get involved in partial problems, 
+%~ but always take flight to where there is a free view over the whole single great problem, 
+%~ even if this view is still not a clear one.}
+{No se involucre en problemas parciales,
+siempre tome vuelo hacia donde hay una vista libre sobre el gran problema único,
+incluso cuando esta visión todavía no sea clara.}
 {Ludwig Wittgenstein, 1889-1951}
 
 \section{Motivación}
@@ -98,6 +101,7 @@ Restando el lado derecho en (\ref{ecuaciones-modelos}) a ambos lados, se obtiene
 \begin{equation}
 (R_m)_{i}^{l} =   (x_m)_{S_i}^{I_l} - (F_m)_{i}^{l} \left ( (\bar{x})_{S_i}^{I_1}, (\bar{x})_{S_i}^{I_2}, ..., 
   (\bar{x})_{S_i}^{I_{L_i}}, (\alpha_i({\Gamma_i}) \right ) 
+\label{ecuaciones-residuos}
 \end{equation}
 para cada residuo en la incógnita $m$ de cada interfaz $l$ del subsistema $i$.
 Debido a las relaciones de continuidad (\ref{continuidad}), es posible descartar ecuaciones,
@@ -219,11 +223,11 @@ La construcción de la matriz jacobiana con éste método requiere una evaluaci�
 }.
 Si bien estas evaluaciones son independientes entre sí y por lo tanto altamente paralelizables, este método es excesivamente costoso.
 
-Una forma alternativa y elegante de resolver el sistema de ecuaciones planteado en \ref{sistema-simple} es mediante métodos \textit{cuasi-Newton}.
+Una forma alternativa y elegante de resolver el sistema de ecuaciones planteado en \ref{sistema-simple} es mediante métodos \textit{quasi-Newton}.
 Estos métodos tienen convergencia superlineal \cite{broyden-on}, y por lo tanto presentan una ventaja frente a los métodos mediante iteraciones de \textit{Piccard}. 
 La característica principal de estos métodos es que aproximan la matriz jacobiana sin necesidad de realizar evaluaciones extras, y por lo tanto tienen también un punto de ventaja frente al método de \textit{Newton-Raphson}.
 El método de \textit{Broyden} es uno de ellos \cite{broyden}.
-También existe otra variante del método, el método \textit{Broyden ortonormal}, que asegura la convergencia en $N$ iteraciones para sistemas lineales (XXX), donde $N$ es la dimensión de la matriz jacobiana.
+También existe otra variante del método, el método \textit{Broyden ortonormal}, que asegura la convergencia en $N$ iteraciones para sistemas lineales \cite{broyden-on}, donde $N$ es la dimensión de la matriz jacobiana.
 
 Existe también un conjunto de métodos conocidos como métodos \textit{Newton-Krylov} para la resolución del sistema \ref{sistema-simple}. Estos métodos no requieren el cálculo de matriz jacobiana ya que resuelven el sistema mediante gradientes descendientes, gradientes conjugados y otras técnicas que también serán exploradas en el presente trabajo. Sin embargo, en cada paso de descenso requieren evaluaciones de residuos, y por tanto son altamente costosos.
 
@@ -254,11 +258,11 @@ interacción entre ellos sólo mediante condiciones de borde.}
 La estructura de la tesis es detallada a continuación.
 En el presente \hyperlink{chapter.1}{capítulo} se han planteado las ecuaciones que surgen al dividir sistemas complejos mediante interfaces con condiciones de borde dinámicas,
 y se han presentado alternativas numéricas para la resolución de las mismas.
-En el \hyperlink{chapter.2}{Capítulo 2} se describen las diferentes formas de implementar el acoplamiento entre códigos que han sido investigadas e implementadas.
-En el \hyperlink{chapter.3}{Capítulo 3} se presentan los distintos códigos utilizados para realizar cálculos fluidodinámicos,
-se comentan sus modelos matemáticos y las implementaciones realizadas en ellos para efectuar acoplamientos.
-En el \hyperlink{chapter.4}{Capítulo 4} se muestran algunas aplicaciones de la herramienta estudiada.
-La primera es un sistema fluídico cerrado que se estudia subdividiéndolo en dos subsistemas, con dos interfaces de acople cada uno.
+En el \hyperlink{chapter.2}{Capítulo 2} se describen las diferentes formas de implementar el acoplamiento entre códigos que han sido investigadas e implementadas,
+se presenta la estructura de comunicación definida y se describe la arquitectura de acoplamiento necesaria a ser implementada en los códigos comunicados por paso de mensajes.
+En el \hyperlink{chapter.3}{Capítulo 3} se muestran algunas aplicaciones de la herramienta estudiada,
+presentando distintos códigos utilizados para realizar cálculos fluidodinámicos.
+La primera aplicación es un sistema fluídico cerrado que se estudia subdividiéndolo en dos subsistemas, con dos interfaces de acople cada uno.
 El movimiento del fluido está gobernado por fuerzas naturales y por lo tanto interesa acoplar variables de 
 caudal, presión, temperatura y flujo de calor en cada interfaz.
 El siguiente sistema de estudio es el vaciado del tanque reflector del reactor de investigación RA-10.
@@ -268,6 +272,7 @@ acoplando con condiciones de borde dinámicas a modelos cero-dimensionales que r
 Al final del capítulo se presenta un estudio de redes hidráulicas con múltiples componentes,
 para demostrar la eficiencia de la herramienta en acoples de mayor escala.
 En éstos últimos ejemplos comentados, las variables incógnitas en las interfaces de acoplamiento son velocidades (o caudales) y fuerzas (presiones y tensiones de corte).
-En el \hyperlink{chapter.5}{Capítulo 5} se extiende la técnica de acople a problemas que involucran otros modelos físicos.
+En este Capítulo se 
+En el \hyperlink{chapter.4}{Capítulo 4} se extiende la técnica de acople a problemas que involucran otros modelos físicos.
 Se describe el código maestro de acople multifísico desarrollado y se presentan ejemplos de aplicación en el problema neutrónico-termohidráulico.
 

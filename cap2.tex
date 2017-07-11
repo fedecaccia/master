@@ -1,38 +1,315 @@
-\chapter{Técnicas de acoplamiento}
+\chapter{Estrategia de acoplamiento}
 \label{chap2}
 \chapterquote
-{}
-{alguien, alguna vez}
+%~ {We build too many walls and not enough bridges.}
+{Construimos demasiadas murallas y no suficientes puentes.}
+{Isaac Newton, 1643-1727}
 
 \section{Paradigma maestro-esclavo}
 \label{2:maestro-esclavo}
 
+El modelo de comunicación utilizado en el trabajo recibe el nombre de \textit{maestro-esclavo} \cite{maestro-esclavo}.
+En este modelo, existe un programa \textit{maestro} que tiene el control unidireccional sobre los demás programas, que actúan bajo el rol de \textit{esclavos}.
+Cada código \textit{esclavo} se encarga de calcular el valor de las incógnitas en las interfaces de acople mediante las ecuaciones \ref{ecuaciones-modelos}.
+El código \textit{maestro} recibe estos valores y con ellos resuelve las ecuaciones de residuos \ref{ecuaciones-residuos}.
+En base a estos residuos propone\footnote{
+Esta propuesta reside en el método de resolución de ecuaciones no lineales seleccionado, ver sección \ref{1:metodos}.
+} nuevos valores para las inćognitas en las interfaces de acople y se los envía a sus \textit{esclavos}.
+Así también, es función del código \textit{maestro} enviarles órdenes de comenzar el cálculo en un dato paso de evolución, reiniciar el cálculo o incluso abortar.
+
+Cabe notar que cada código \textit{esclavo} podría ejecutarse en varios procesos, paralelizando sus cálculos,
+ya sea mediante memoria compartida como mediante memoria distribuida.
+Incluso podrían lanzarse diversos procesos del código \textit{maestro} en la resolución de algún problema.
+Debido a la complejidad en destinatarios de mensajes, cantidades y tipos de variables a compartir,
+es necesario definir una estrategia clara de comunicación
+que permita acoplar diversos códigos de manera genérica, segura y eficaz.
+La estrategia definida es comentada en la sección \ref{2:estructura}.
+
 \section{Códigos maestros utilizados}
 \label{2:maestros}
-Dos códigos:
-Código coupling desarrollado previamente x ...., para acoplar pares D2N.
 
-Visto que existen códigos cerrados incapaces de ser comunicados por MPI, 
-o que exigen otra formulación de residuos,
-ydurante la tesis se realizó un código más general, Newton, descripto en último capítulo.
-Con múltiples tipos de conexión (mpi-port, mpi-comm, I/O spawn and system),
-mappers, etc.
+En este trabajo se utilizaron dos códigos maestros para la resolución de los problemas.
+El primer código \textit{maestro} utilizado es el código \textbf{Coupling} desarrollado por XXX en XXX.
+\textbf{Coupling} permite acoplar códigos mediante funciones del estándard Interfaz de Paso de Mensajes (MPI por sus siglas en inglés, \textit{Message Passing Interface}).
+Esta estrategia requiere el código fuente de los programas \textit{esclavos} para implementar las funciones adecuadas.
+El código maestro está diseñado de tal forma que los códigos acoplados resuelvan ecuaciones del tipo \ref{ecuaciones-modelos}
+para incógnitas en interfaces con condiciones de borde de tipo \textit{Dirichlet} o de tipo \textit{Neumann}.
 
-\section{Formas de comunicación implementadas}
-\label{2:comunicación}
+Con la idea de extender estas capacidades al acoplamiento de programas cuyos códigos fuente no estuvieran disponibles,
+así como a programas cuyos cálculos no dependieran exclusivamente de variables seteadas como condiciones de borde,
+sino de otros parámetros generales del sistema,
+se desarrolló un código más genérico de acoplamiento, el código \textbf{Newton} \cite{newton},
+que será descripto en el Capítulo \ref{chap5}.
 
-mpi vs compartida, ver documentos/biblio-maestria/mpi
+\section{Modelos de comunicación}
+\label{2:comunicacion}
 
-técnicas mpi-port, mpi-comm, I/O spawn and system
-implementación: 
+La configuración \textit{maestro-esclavo} requiere la ejecución de múltiples programas independientes.
+Al mismo tiempo, cada código podría estar corriendo en forma paralelizada\footnote{
+En general, cada programa \textit{esclavo} es un programa que ya ha sido utilizado y validado para algún tipo de cálculo.
+Si el código está paralelizado, en base a estudios de \textit{speedup} se podría tener cierta experiencia en su modo de ejecución óptimo para alguna tarea dada.
+Esta ejecución podría requerir múltiples nodos en un clúster, por ejemplo.
+}.
+Debido a esta complejidad es necesario planificar la estrategia de comunicación considerando la distribución del cálculo en múltiples procesadores,
+con el objetivo de no perder generalidad en la herramienta desarrollada.
+Los modos de comunicación implementados son los siguientes:
+\begin{itemize}
+\item paso de mensajes: este modo es implementado para comunicar procesos de programas en los cuales es posible modificar los códigos fuente;
+\item lectura y escritura de archivos de entrada y salida: este modo es implementado para comunicar procesos de programas que serán tratados como cajas negras.
+\end{itemize}
 
-grupos, 
-puertos, 
+Si bien este tipo de comunicaciones remotas son mucho más lentas que las
+comunicaciones locales, en general su latencia es despreciable frente al tiempo de cálculo de los procesos \textit{esclavos}.
 
-spawn,
-barrier after spawn
+\subsection*{Paso de mensajes}
+\label{2:mpi}
 
-system
+En sistemas de memoria distribuida, el paso de mensajes es un método de
+programación utilizado para realizar el intercambio de datos entre los
+procesadores \cite{comunicacion}. En estos sistemas, los datos son enviados de un procesador a otro
+utilizando mensajes. El paso de mensajes involucra la transferencia de datos desde un proceso
+que envía a un proceso que recibe. El proceso que envía,
+necesita conocer la localización, el tamaño y el tipo de los datos, así como el
+proceso destino.
 
-\section{Arquitectura de acoplamiento montada en códigos esclavos}
-\label{2:arquitectura}
+Estas funcionalidades se implementaron siguiendo el protocolo MPI. 
+MPI es una especificación de paso de mensajes aceptada como estándar
+por todos los fabricantes de computadores. 
+El objetivo principal de MPI es proporcionar un estándar para escribir
+programas (lenguajes \textit{C}, \textit{C++}, \textit{Fortran}) con paso de mensajes. De esta forma, se
+pretende mejorar la portabilidad, el rendimiento, la funcionalidad y
+la disponibilidad de las aplicaciones.
+
+Se utilizaron dos implementaciones alternativas.
+En la primera, cada código \textit{esclavo}, así como el código \textit{maestro},
+son ejecutados de manera independiente en uno (SISD por sus siglas en inglés, Single Instruction, Single Data) o múltiples procesos (SIMD por sus siglas en inglés, Single Instruction, Multiple Data).
+El código \textit{maestro} publica una serie de puertos a los cuales cada código \textit{esclavo} puede conectarse\footnote{
+Para que los programas puedan encontrar los puertos publicados, es necesario que todos ellos pertenezcan a un mismo servicio de comunicación generado por el \textit{ompi-server}.
+}.
+Una vez aceptadas las conexiones, los programas pueden intercambiar mensajes siguiendo una lógica preestablecida.
+Cuando ya no es necesario que dos programas continúen comunicándose, se cierran las conexiones.
+
+En la otra implementación, todos los programas son ejecutados al mismo tiempo (MIMD por sus siglas en inglés, Multiple Instruction, Multiple Data).
+En este tipo de ejecuciones todos los procesos cuentan con un único comunicador original, \textit{MPI\_COMM\_WORLD}, y por ello es necesario crear nuevos grupos de procesos y de comunicadores.
+Una vez establecidos los comunicadores, los programas pueden intercambiar mensajes siguiendo la misma lógica preestablecida en el modelo previo.
+Si bien esta implementación no permite la posibilidad de realizar nuevas conexiones una vez que los programas han sido ejecutados,
+son mucho más seguras, ya que no dependen del éxito de encontrar los puertos requeridos para las conexiones.
+
+\subsection*{Lectura y escritura de archivos de entrada y salida}
+\label{2:io}
+
+La comunicación mediante lectura y escritura de archivos se implementó para demostrar la capacidad de acoplar códigos cuyos códigos fuente no son capaces de ser modificados.
+La idea principal es ejecutar corridas simples del código \textit{esclavo} administradas desde el código \textit{maestro}.
+Para ello el código \textit{maestro} escribe en el archivo de entrada del programa \textit{esclavo} todos los parámetros necesarios para la ejecución del cálculo,
+ordena su ejecución, y espera a que este termine y luego realiza una búsqueda de los valores de las variables de interés en archivos de salida.
+En problemas de evolución, el código \textit{maestro} debe notificar en el archivo de entrada el parámetro de evolución,
+así como otros valores de variables de estado del paso previo.
+
+La ejecución de programas \textit{esclavos} se implementó de dos formas alternativas.
+La primera forma es mediante el uso de la función \textit{system} de la librería de \textit{c}.
+Esta función deja al proceso que la ejecuta en pausa hasta que el programa \textit{esclavo} finaliza, cuando ella retorna algún mensaje de error o de éxito.
+La ventaja de esto es que no debe implementarse alguna función extra para conocer cuándo leer los archivos de salida del programa \textit{esclavo}.
+Sin embargo, no es posible disparar múltiples procesos de un programa mediante la función \textit{system} desde un proceso que actualemente utiliza \textit{MPI}.
+Ésta prohibición es necesaria para controlar el disparo de procesos.
+Para este tipo de ejecuciones, existe la función \textit{MPI\_Comm\_Spawn} de \textit{MPI}, que se implementó como forma alternativa de ejecución de programas \textit{esclavos}.
+Esta función permite especificar la cantidad de procesos de ejecución del programa a disparar.
+El problema es que la función devuelve el control al programa \textit{maestro} de forma instantánea, sin esperar a que el código disparado finalice,
+por lo que, en principio, debe implementarse alguna función extra para saber cuándo es posible leer el archivo de salida.
+
+Es necesario notar que este modelo de comunicación no es tan eficiente como el de intercambio de mensajes,
+ya que la lectura y escritura de archivos consume mayores recursos de tiempo, por lo que, siempre que fuera posible, es recomendable implementar el otro modelo.
+Además, requiere la programación de rutinas extras específicas dedicadas a la escritura de archivos de entrada y lectura de archivos de salida de distintos códigos \textit{esclavos}.
+
+\subsection*{Estructura de comunicación implementada}
+\label{2:estructura}
+
+Se desarrollaron funciones híbridas para códigos maestros con la finalidad de cubrir todas las formas de comunicación descriptas en la sección previa.
+En el caso de comunicación por intercambio de mensajes, 
+la estrategia definida establece comunicaciones siempre entre un único proceso del código \textit{maestro}, el proceso \textit{raíz},
+y un único proceso de cada código \textit{esclavo} (sus propios procesos \textit{raíces}\footnote{
+Es responsabilidad del código \textit{esclavo} la comunicación de los datos recibidos por el proceso \textit{raíz} a los demás procesos.
+}).
+En el caso de lectura y escritura de archivos y ejecución de programas \textit{esclavos},
+la estrategia definida paraleliza las responsabilidades entre todos los procesos lanzados del código \textit{maestro}.
+El esquema \ref{esquema-comunicacion} resume la estrategia de comunicación.
+
+
+\begin{figure}
+\centering{}
+\begin{tikzpicture}[
+	block1/.style={
+	draw,
+	fill=white,
+	rectangle, 
+	minimum width={width("Proceso $N_m$")+2pt},
+	minimum height={15pt},
+	font=\small},
+	block2/.style={
+	draw,
+	fill=white,
+	rectangle,
+  fill=blue!20,
+  text centered, 
+  rounded corners,
+	minimum width={width("Esclavo N")+2pt},
+	minimum height={15pt},
+	font=\large},
+	connector/.style={
+	-o,
+	line width=0.3mm
+	},
+  arrow1/.style={
+  -{Latex[length=3mm, width=1mm]}
+  },
+  arrow2/.style={
+  {Latex[length=3mm, width=1mm]}-{Latex[length=3mm, width=1mm]}
+  }]
+
+	% Dummy
+	\node at (0,10em)             (dummy) {}; % blank space
+
+	% Master
+	\node [block2] at (0,8em)             (master) {\textbf{Maestro}};
+	\node [block1, below=1em of master]   (masterp1) {...};
+	\node [block1, left=1em of masterp1]  (masterp0) {Proceso $0_m$};	
+	\node [block1, right=1em of masterp1] (masterpN) {Proceso $N_m$};
+
+	% Slave 1
+	\node [block2] at (-6.5,0em)    		(slave1) {\textbf{Esclavo 1}};
+	\node [block1, below=1em of slave1] (s1p0) 	 {Proceso $0_1$};
+	\node [block1, below=1em of s1p0]   (s1p1) 	 {...};
+	\node [block1, below=1em of s1p1] 	(s1pN) 	 {Proceso $N_1$};
+	
+	% Slave 2
+	\node [block2] at (-3.5,-4em)    		(slave2) {\textbf{Esclavo 2}};
+	\node [block1, below=1em of slave2] (s2p0) 	 {Proceso $0_2$};
+	\node [block1, below=1em of s2p0]   (s2p1) 	 {...};
+	\node [block1, below=1em of s2p1] 	(s2pN) 	 {Proceso $N_2$};
+	
+	% Slave 3
+	\node [block2] at (0,0em)      		  (slave3) {\textbf{Esclavo 3}};
+	\node [block1, below=1em of slave3] (s3p0) 	 {Proceso $0_3$};
+	\node [block1, below=1em of s3p0]   (s3p1) 	 {...};
+	\node [block1, below=1em of s3p1] 	(s3pN) 	 {Proceso $N_3$};
+	
+	% Slave 4
+	\node [block2] at (3.5,-4em)   		  (slave4) {\textbf{Esclavo $i$}};
+	\node [block1, below=1em of slave4] (s4p0) 	 {Proceso $0_i$};
+	\node [block1, below=1em of s4p0]   (s4p1) 	 {...};
+	\node [block1, below=1em of s4p1] 	(s4pN) 	 {Proceso $N_i$};
+	
+	% Slave N
+	\node [block2] at (6.5,0em)    		  (slave5) {\textbf{Esclavo N}};
+	\node [block1, below=1em of slave5] (s5p0) 	 {Proceso $0_N$};
+
+	% Processes
+	\draw[connector] (master.south) -- ($(masterp0.north)+(0,0.2em)$);
+	\draw[connector] (master.south) -- ($(masterp1.north)+(0,0em)$);
+	\draw[connector] (master.south) -- ($(masterpN.north)+(0,0.2em)$);
+
+	\draw[connector] (slave1.west) -- ++(-1em,0) |- (s1p0.west);
+	\draw[connector] (slave1.west) -- ++(-1em,0) |- (s1p1.west);
+	\draw[connector] (slave1.west) -- ++(-1em,0) |- (s1pN.west);
+
+	\draw[connector] (slave2.west) -- ++(-1em,0) |- (s2p0.west);
+	\draw[connector] (slave2.west) -- ++(-1em,0) |- (s2p1.west);
+	\draw[connector] (slave2.west) -- ++(-1em,0) |- (s2pN.west);
+
+	\draw[connector] (slave3.west) -- ++(-1em,0) |- (s3p0.west);
+	\draw[connector] (slave3.west) -- ++(-1em,0) |- (s3p1.west);
+	\draw[connector] (slave3.west) -- ++(-1em,0) |- (s3pN.west);
+
+	\draw[connector] (slave4.west) -- ++(-1em,0) |- (s4p0.west);
+	\draw[connector] (slave4.west) -- ++(-1em,0) |- (s4p1.west);
+	\draw[connector] (slave4.west) -- ++(-1em,0) |- (s4pN.west);
+
+	\draw[connector] (slave5.west) -- ++(-1em,0) |- (s5p0.west);
+
+
+	% Comunicators
+	\draw[arrow2] ($(masterp0.south)-(1em,0)$) to[out=-90, in=15, distance=2em] node [midway, sloped, anchor=center, above]{\textit{MPI}} (s1p0.east);
+
+	\draw[arrow2] ($(masterp0.south)+(0em,0)$) to[out=-90, in=35, distance=3em] node [midway, rotate=90, anchor=center, above]{\textit{MPI}} (s2p0.east);
+
+	\draw[arrow1] ($(masterp0.south)+(1em,0)$) to[out=-90, in=105, distance=2em] node [midway, sloped, anchor=center, above]{\textit{Ejecución}} (slave3.north);
+
+	\draw[arrow1] (masterp1.south) to[out=-90, in=105, distance=2em] node [midway, sloped, anchor=center, above]{\textit{Ejecución}} (slave4.north);
+
+	\draw[arrow1] (masterpN.south) to[out=-90, in=105, distance=2em] node [midway, sloped, anchor=center, above]{\textit{Ejecución}} (slave5.north);
+
+\end{tikzpicture}
+\caption[Esquema de comunicación implementado]{Esquema de comunicación entre los programas \textit{esclavos} y el programa \textit{maestro} implementado en el acoplamiento de códigos.
+Los \textit{esclavos} se comunican solo con el \textit{maestro} y no intercambian datos entre sí.
+Se utilizan dos modelos de comunicación diferentes.
+En el primero, cada código \textit{esclavo} es comunicado con el código \textit{maestro} a través de intercambio de mensajes por \textit{MPI}.
+Como podrían correr en modo serial o paralelo, solo sus procesos \textit{raíces} establecen la comunicación con el proceso \textit{raíz} del programa \textit{maestro}.
+En el segundo modelo de comunicación, los códigos \textit{esclavos} son directamente \textit{ejecutados} por el programa \textit{maestro} en uno o varios procesos.
+En este modelo, la comunicación se establece solo mediante lectura y escritura de archivos.}
+\label{esquema-comunicacion}
+\end{figure}
+
+\section{Arquitectura de acoplamiento montada en códigos \textit{esclavos} comunicados por paso de mensajes}
+\label{2:arquitectura-mpi}
+
+En general, los códigos \textit{esclavos} son programas de cálculo particulares que no han sido diseñados para mantenerse acoplados a otros códigos.
+En esta sección se demuestra cómo mediante unas mínimas modificaciones en sus rutinas es posible implementar un acoplamiento eficiente.
+Las acciones de acoplamiento deben ser llamadas en 4 instancias diferentes:
+\begin{enumerate}
+\item al principio del programa;
+\item al principio de cada paso de evolución;
+\item al finalizar cada paso de evolución;
+\item al finalizar el programa.
+\end{enumerate}
+Los problemas que no involucran evolución de variables pueden ser tratados como problemas con un solo paso de evolución.
+El programador podría definir una nueva variable \textit{booleana} que a modo de bandera indique cuándo se está realizando un cálculo acoplado para ingresar o no en las instancias nombradas.
+A continuación se describen las instancias de acplamiento.
+
+\subsection*{Acoplamiento en instancia 1: al principio del programa}
+
+En esta instancia es necesario establecer la comunicación \textit{MPI} entre el proceso \textit{raíz} del código \textit{esclavo} y el código maestro.
+Si ambos programas han sido ejecutados en el esquema \textit{MIMD} los pasos a realizar son los siguientes:
+\begin{itemize}
+\item creación de grupo global de procesos;
+\item creación de subgrupo local de procesos;
+\item creación de un comunicador dentro del subgrupo previo, necesario para el paso de mensajes dentro del programa;
+\item creación de un grupo entre el proceso \textit{raíz} del programa esclavo y el proceso \textit{raíz} del programa \textit{maestro};
+\item creación de un comunicador en el grupo previo, necesario para el paso de mensajes de acople.
+\end{itemize}
+Si en cambio, el programa ha sido ejecutado en forma independiente, los pasos a realizar son los siguientes:
+\begin{itemize}
+\item búsqueda del puerto publicado por el el proceso \textit{raíz} del programa \textit{maestro};
+\item conexión del proceso \textit{raíz} del programa esclavo a este puerto y creación del comunicador.
+\end{itemize}
+Una vez implementada la comunicación, el código \textit{esclavo} puede recibir datos generales 
+(como parámetros de evolución iniciales, cantidad de pasos de evolución, cantidad de incógnitas en interfaces de acople, cantidad de interfaces de acople, etc.),
+y chequear la consistencia con los datos propios del programa.
+Si es necesario, los datos locales pueden ser cambiados notificando al usuario.
+
+\subsection*{Acoplamiento en instancia 2: al principio de cada paso de evolución}
+
+La estrategia de acoplamiento se define entre el parámetro de evolución inicial $t_{coup,0}$ y el parámetro final $t_{coup,N}$,
+con $N+1$ pasos de acoplamiento cada $\Delta t_{coup}=\frac{t_{coup,N} - t_{coup,0}}{N}$.
+Si bien el código \textit{esclavo} debe intercambiar mensajes en cada uno de estos pasos, es posible que además utilice subpasos de evolución $\Delta t_{local}$ locales\footnote{
+Distintos programas pueden tener diferentes requisitos sobre el parámetro de evolución, dependiendo de la física que resuelven.
+Algunos, por ejemplo, podrían estar resolviendo transitorios fluidodinámicos, en los que es de interés mantener por debajo de algún valor 
+ciertos parámetros (como el número de \textit{Courant}) dependientes del paso de tiempo.
+Otros, en cambio, pueden no tener este requisito.
+La idea es que cada programa \textit{esclavo} devuelva al programa \textit{maestro} el mejor resultado posible al cabo de $\Delta t_{coup}$.
+}. En estos casos, se implementa una estrategia de interpolación de los valores de las variables en las interfaces de acoplamiento entre los pasos de evolución acoplados.
+
+Al principio de cada paso acoplado de cálculo el código \textit{esclavo} recibe valores supuestos para las incógnitas que se toman como dato en las interfaces de acople,
+en función de la estretegia implementada (ver sección \ref{1:abordaje}).
+El programa resuelve el paso $\Delta t_{coup}$ en base a ellos.
+
+\subsection*{Acoplamiento en instancia 3: al finalizar cada paso de evolución}
+
+Una vez resuelto cada $\Delta t_{coup}$, el programa envía al programa \textit{maestro} los valores de las variables que se han definido como incógnitas en las interfaces de acoplamiento.
+Tras este envío, el programa queda en espera de órden para continuar.
+Mientras, el programa \textit{maestro} recepciona los valores de las incógnitas calculados por los demás códigos \textit{esclavos}.
+Con estos valores resuelve las ecuaciones de residuos.
+Si el módulo del residuo cae por debajo de cierta tolerancia prefijada el código \textit{maestro} acepta los resultados y envía a sus \textit{esclavos} la órden de continuar con el cálculo.
+En caso contrario, puede enviarles la órden de volver a calcular el mismo paso de acoplamiento, o incluso de abortar el cálculo.
+
+\subsection*{Acoplamiento en instancia 4: al finalizar el programa}
+
+Antes de finalizar el programa, es necesario cerrar las conexiones, liberar los grupos y los comunicadores establecidos.
