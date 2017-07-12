@@ -116,10 +116,11 @@ Invap.
 \newblock Segundo sistema de parada - validaci\'on del cfd para drenaje del
   tanque reflector, 2013.
 
-\bibitem{rechiman}
-Rechiman, L., Cantero, M., Dari, E.
-\newblock Hydrodinamic transient assesment of a draining tank.
-\newblock \emph{Mec\'anica Computacional}, 2014.
+\bibitem{rechiman-paper}
+L.M.~Rechiman, F. C. A.~C., M.I.~Cantero, Dari, E.
+\newblock Three-dimensional hydrodynamic modeling of the second shutdown system
+  of an experimental nuclear reactor.
+\newblock \emph{Nuclear Engineering and Design}, \textbf{319}, 163, 2017.
 
 \bibitem{bird}
 Bird, R., Stewart, W., Lightfoot, E.

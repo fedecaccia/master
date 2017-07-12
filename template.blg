@@ -9,14 +9,18 @@ A level-1 auxiliary file: cap3.aux
 A level-1 auxiliary file: cap4.aux
 A level-1 auxiliary file: conclusiones.aux
 Database file #1: mibib.bib
-Warning--string name "xxxiii" is undefined
---line 209 of file mibib.bib
+I was expecting a `,' or a `}'---line 210 of file mibib.bib
+ :   pages = 163
+ :              -175
+I'm skipping whatever remains of this entry
 Warning--empty author in newton
 Warning--missing publisher in iedelchik
 Warning--missing publisher in kays
 Warning--missing publisher in gunzburger
 Warning--empty journal in gmsh
 Warning--empty journal in invap-mockup
+Too many commas in name 1 of "L.M. Rechiman, M.I. Cantero, F.A. Caccia, A. Chacoma and E.A. Dari" for entry rechiman-paper
+while executing---line 1604 of file ibtesis.bst
 Warning--missing publisher in bird
 Warning--empty journal in salome
 Warning--missing publisher in durbin
@@ -24,43 +28,43 @@ Warning--missing publisher in k-e
 Warning--missing publisher in level-set
 You've used 30 entries,
             2634 wiz_defined-function locations,
-            1191 strings with 13469 characters,
-and the built_in function-call counts, 8820 in all, are:
-= -- 580
-> -- 241
+            1193 strings with 13582 characters,
+and the built_in function-call counts, 8851 in all, are:
+= -- 583
+> -- 237
 < -- 3
-+ -- 121
-- -- 60
-* -- 378
-:= -- 1012
++ -- 119
+- -- 59
+* -- 384
+:= -- 1014
 add.period$ -- 86
 call.type$ -- 30
 change.case$ -- 22
 chr.to.int$ -- 0
 cite$ -- 41
-duplicate$ -- 902
-empty$ -- 928
-format.name$ -- 81
-if$ -- 1967
+duplicate$ -- 905
+empty$ -- 934
+format.name$ -- 80
+if$ -- 1974
 int.to.chr$ -- 0
 int.to.str$ -- 30
-missing$ -- 261
+missing$ -- 262
 newline$ -- 151
 num.names$ -- 29
-pop$ -- 468
+pop$ -- 464
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 248
+skip$ -- 247
 stack$ -- 0
-substring$ -- 271
-swap$ -- 519
+substring$ -- 280
+swap$ -- 524
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 11
-while$ -- 44
+while$ -- 45
 width$ -- 32
-write$ -- 300
-(There were 12 warnings)
+write$ -- 301
+(There were 2 error messages)

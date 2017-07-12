@@ -8,12 +8,12 @@
 \label{3:ff}
 
 \subsection*{Presentación del problema}
-Como primer ejemplo se presenta un sistema que se estudia analizándolo en dos subsistemas por separado,
+Como primer ejemplo se presenta un sistema que se estudia analizándolo en dos subsistemas separados,
 definiendo dos interfaces de acople,
-y en cada una de ellas dos pares de variables dinámicas. 
+y en cada una de ellas dos pares de variables dinámicas.
 El primer subsistema modela un fluido en un tanque de paredes adiabáticas y con fuente interna de energía. 
 El segundo subsistema representa un circuito en el que el fluido transfiere energía en un intercambiador de calor para bajar su temperatura.
-Ambos se comunican mediante dos conexiones, una ubicada debajo y la otra en la parte superior,
+Ambos se comunican mediante dos conexiones, una ubicada en la parte inferior y la otra en la parte superior,
 definiendo un circuito cerrado en el que el flujo queda completamente dominado por convección natural.
 El sistema completo modela el movimiento de un fluido en régimen de convección natural a través de
 una fuente fría de neutrones alojada próxima al núcleo de un reactor de investigación \cite{fuente-fria}.
@@ -25,14 +25,14 @@ En la Figura \ref{esquemaFuenteFria} puede apreciarse un diagrama del sistema.
 El subsistema de la izquierda es un intercambiador de calor y se estudia con un código cero-dimensional.
 El modelo de la derecha es una cavidad con una fuente de energía interna y se estudia con un código bi-dimensional.
 El sistema completo es abordado con una estrategia de acoplamiento mediante condiciones de borde dinámicas.
-En el esquema se ejemplifica una de las elecciones posibles para las variables que son dato en cada subsistema.}
-\label{esquemaFuenteFria} 
+En el esquema se ejemplifica una de las elecciones posibles para las variables que son datos en cada subsistema.}
+\label{esquemaFuenteFria}
 \end{figure}
 
 En cada interfaz de acople existen incógnitas de caudal, presión, temperatura y flujo de calor. 
 Por lo tanto el sistema queda definido por ocho ecuaciones de continuidad de campos de variables 
 y ocho ecuaciones de residuos que relacionan las incógnitas de forma similar 
-a la que se presentó en la sección \ref{abordaje}.
+a la que se presentó en la sección \ref{1:abordaje}.
 
 Las ecuaciones de continuidad en las interfaces implican que:
 
@@ -51,17 +51,16 @@ q"_2^2&=& - q"_2^1
 \end{equation}
 donde $Q$ es caudal, $P$ es presión, $T$ es temperatura y $q"$ es flujo de calor. 
 Notar que el subíndice en cada variable refiere a la numeración global del subsistema, y el supraíndice indica el número de interfaz local,
-como se convino previamente.
+como se convino previamente en el \hyperlink{chapter.1}{Capítulo 1}.
 Al evaluar los residuos en cada interfaz, se genera una ecuación no lineal por cada incógnita en cada interfaz.
 Para que las ecuaciones queden bien planteadas se selecciona solo una de las relaciones para el par presión-caudal
 y solo una para el par temperatura-flujo de calor en cada interfaz.
-sí entonces, entre las dos interfaces del subsistema 1 se generan 4 ecuaciones de residuos
+Así entonces, entre las dos interfaces del subsistema 1 se generan 4 ecuaciones de residuos
 \footnote{
 Cada ecuación de residuo relaciona las incógnitas según el modelo aplicado.
 En $R_{p,Q}$ se considera dependencia entre el caudal $Q$, la presión $p$ y la temperatura $T$, y en 
 $R_{T,q"}$ se considera dependencia entre el caudal $Q$, la temperatura $T$ y el flujo de calor $q"$.
-}:
-$(R_m)_{i}^{l}=0$,
+} del tipo $(R_m)_{i}^{l}=0$:
 
 %~ \begin{equation}
 %~ \[
@@ -91,6 +90,7 @@ $(R_m)_{i}^{l}=0$,
 (R_{T,q"})_{1}^{2} \;(Q_1^1, T_1^1, q"_1^1, Q_1^2, T_1^2, q"_1^2) &=& 0 
 \end{array}
 \right.
+\label{residuos-1}
 \end{equation}
 y entre las dos interfaces del subsistema 2 se generan otras 4 ecuaciones de residuos:
 
@@ -102,6 +102,7 @@ y entre las dos interfaces del subsistema 2 se generan otras 4 ecuaciones de res
 (R_{T,q"})_{2}^{2} \;(Q_2^1, T_2^1, q"_2^1, Q_2^2, T_2^2, q"_2^2) &=& 0
 \end{array}
 \right.
+\label{residuos-2}
 \end{equation}
 
 Notar que según la estrategia de acoplamiento seleccionada, algunas de las dependencias pueden anularse.
@@ -141,12 +142,12 @@ donde $f_D$ es el factor de Darcy de pérdida de carga distribuida y $D$ es el d
 En este modelo se supone que el flujo de calor es nulo en la dirección axial en cada interfaz de acople.
 
 La cavidad bidimensional se modela con $L_0=0.3$ $m$, y $A_1^1=A_1^2=0.03$ $m^2$.
-El fluido de relleno es agua ($\rho_0=10^3$ $Kg/m^3$, $\mu=6\cdot 10^{-4}$ $Kg/ms$, $c_p=4184$ $J/KgK$, 
-$k=0.64$ $W/mK$, $\beta=0.44\cdot10^{-3}K^{-1}$),
-y con fuente interna $f_0=10^6$ $W/m^3$.
+El fluido de trabajo es agua ($\rho_0=10^3$ $Kg/m^3$, $\mu=6\cdot 10^{-4}$ $Kg/ms$, $c_p=4184$ $J/KgK$, 
+$k=0.64$ $W/mK$, $\beta=0.44\cdot10^{-3}K^{-1}$)
+con fuente interna $f_0=10^6$ $W/m^3$.
 La evolución de las variables $\{p,Q,T,q"\}$ en este subsistema se calcula resolviendo las ecuaciones de Navier-Stokes {\cite{gunzburger}}
 y de transporte de energía \cite{kays}. 
-Se utiliza la aproximación de Boussinesq considerando variaciones de densidad solo en el término de fuerza volumétrica:
+Se utiliza la aproximación de \textit{Boussinesq} considerando variaciones de densidad solo en el término de fuerza volumétrica:
 
 \begin{equation}
 \left\{ \begin{array}{rcl}
@@ -161,12 +162,12 @@ Se utiliza la aproximación de Boussinesq considerando variaciones de densidad s
 \end{equation}
 donde $\rho_0$ es la densidad del fluido a la temperatura de referencia $T_{ref}$.
 
-Las paredes imponen condiciones de no deslizamiento para las ecuaciones de Navier-Stokes y de flujo de energía nulo para la ecuación de temperatura.
+Las paredes imponen condiciones de no deslizamiento para las ecuaciones de \textit{Navier-Stokes} y de flujo de energía nulo para la ecuación de energía.
 Las ecuaciones (\ref{eq-cavidad}) se resuelven mediante una formulación de elementos finitos, 
-con elementos lineales para aproximar tanto presiones, como velocidades y temperaturas, 
-estabilizando con el método $SUPG/PSPG$ (\cite{supg} y \cite{pspg}).
+con elementos lineales para aproximar los campos de presiones, velocidades y temperaturas, 
+estabilizando con los métodos \textit{SUPG} \cite{supg} y \textit{PSPG} \cite{pspg}.
 
-La malla de cálculo se genera con Gmsh \cite{gmsh} y se discretiza el dominio en 43874 elementos triangulares con un $\Delta x \approx 0.005m$. 
+La malla de cálculo se genera con \textbf{Gmsh} \cite{gmsh} y se discretiza el dominio en $43874$ elementos triangulares con un tamaño medio de arista de $\Delta x \approx 0.005m$. 
 
 Como se mencionó previamente, no existe necesidad de que ambos códigos utilicen el mismo paso temporal de cálculo.
 Sin embargo en ambas simulaciones se utiliza $\Delta t=0.01s$, debido a que ninguna requiere una mayor discretización temporal.
@@ -192,16 +193,6 @@ Sin embargo en ambas simulaciones se utiliza $\Delta t=0.01s$, debido a que ning
 	\label{acople_ri28_1}
 \end{figure}
 
-Las condiciones iniciales del sistema son estáticas y sin gradientes de temperatura.
-A medida que evoluciona el fluido comienza a incrementar su temperatura en la cavidad y a circular por fuerza boyante.
-El régimen del fluido depende del número adimensional de Richardson $Ri$, \cite{richardson},
-que representa la relación entre las fuerzas boyantes y las fuerzas inerciales.
-Con los parámetros del subsistema bidimensional el $Ri$ del fluido queda definido en $Ri=28.34$
-Como este valor es alto, el fluido se estratifica en capas de diferentes temperaturas.
-Las líneas de corrientes serpentean entre la entrada y la salida, manteniendo corrientes paralelas horizontales.
-En las Figuras \ref{acople_ri28_1} y \ref{acople_ri28_2} pueden observarse 
-la evolución de las líneas de corriente y del campo de temperatura en la cavidad bidimensional.
-
 \begin{figure}['ht]
 	\begin{minipage}{0.5\linewidth}
 		\centering
@@ -221,32 +212,42 @@ la evolución de las líneas de corriente y del campo de temperatura en la cavid
 	\label{acople_ri28_2}
 \end{figure}
 
+Las condiciones iniciales del sistema son estáticas y sin gradientes de temperatura.
+A medida que evoluciona el fluido comienza a incrementar su temperatura en la cavidad y a circular por fuerza boyante.
+El régimen del fluido depende del número adimensional de Richardson \textit{Ri}, \cite{richardson},
+que representa la relación entre las fuerzas boyantes y las fuerzas inerciales.
+Con los parámetros del subsistema bidimensional el \textit{Ri} del fluido queda definido en $Ri=28.34$.
+Como este valor es alto, el fluido se estratifica en capas de diferentes temperaturas.
+Las líneas de corrientes serpentean entre la entrada y la salida, manteniendo corrientes paralelas horizontales.
+En las Figuras \ref{acople_ri28_1} y \ref{acople_ri28_2} puede observarse 
+la evolución de las líneas de corriente y del campo de temperatura en la cavidad bidimensional.
+
 \subsection*{Análisis de métodos de resolución del sistema de ecuaciones de residuos}
 
-Se exploran los métodos mencionados para resolver el sistema de residuos presentado
-en el modelado multiescala de la cavidad bidimensional acoplada al intercambiador de calor.
-En la Figura \ref{iteraciones_ri} puede apreciarse la cantidad de iteraciones requeridas 
-por cada método descripto para disminuir los residuos debajo de cierta tolerancia prefijada, para cada paso temporal.
-El método de Newton necesita inicializar la matriz jacobiana en cada paso temporal, y por lo tanto requiere siempre nueve iteraciones extras.
-Puede observarse que la cantidad de iteraciones reales del método para converger es en promedio una sola.
-Los métodos cuasi-Newton inicializan la matriz jacobiana sólo en el primer paso temporal,
-y luego utilizan aproximacionas económicas de la misma. 
-Cada cierta cantidad de pasos temporales pueden reinicializar la matriz mediante diferencias finitas. 
-En las simulaciones realizadas se utiliza reinicialización cada 100 pasos temporales, 
-y por lo tanto la primera reinicialización se efectúa en el paso 101.
-En promedio estos métodos requieren dos iteraciones por cada paso temporal, 
-además de los nueve llamados extras a códigos en cada paso de reinicialización.
+Se exploran diferentes métodos numéricos para resolver el sistema de ecuaciones de residuos presentado en \ref{residuos-1} y \ref{residuos-2}.
+En la Figura \ref{iteraciones_ri} puede apreciarse la cantidad de evaluaciones requeridas 
+por cada método para disminuir los residuos debajo de cierta tolerancia prefijada, para cada paso temporal.
+El método de \textit{Newton} calcula la matriz jacobiana en cada iteración.
+Este cálculo se realiza con diferencias finitas a primer órden y por lo tanto requiere 1 evaluación de los residuos en el punto inicial, y 8 evaluaciones extras para el cálculo de cada diferencia finita.
+En total son 9 evaluaciones extras.
+Puede observarse que la cantidad de iteraciones del método para converger es en promedio una sola, ya que en general utiliza 10 evaluaciones en cada paso temporal.
 
 \begin{figure}['ht]
-\centering{}\includegraphics[scale = 1]{iteraciones.pdf}
-\caption{Iteraciones requeridas por diversos métodos numéricos para resolver los sistemas de ecuaciones de residuos planteados
+\centering{}\includegraphics[scale = 1]{evaluaciones-ff.pdf}
+\caption{Evaluaciones de residuos requeridas por diversos métodos numéricos para resolver los sistemas de ecuaciones planteados
  en el problema doblemente acoplado descripto de la fuente fría de neutrones.} \label{iteraciones_ri} 
 \end{figure}
 
-No es posible hallar aquí diferencia alguna entre el método de Broyden original y el método de Broyden ortonormal,
-pero demuestran ser más eficientes que el método clásico.
-El método $Dirichlet-to-Neumann$ es el que mayor cantidad de iteraciones reales necesita por cada paso temporal, 
-excediendo el doble de los pasos requeridos por los métodos cuasi-Newton.
+Los métodos \textit{quasi-Newton} inicializan la matriz jacobiana sólo en el primer paso temporal,
+y luego utilizan aproximacionas económicas de la misma. 
+Cada cierta cantidad de pasos temporales pueden reinicializar la matriz también mediante diferencias finitas. 
+En los modelos realizados se utiliza reinicialización cada 100 pasos temporales, 
+y por lo tanto la primera reinicialización se efectúa en el paso 101.
+En promedio estos métodos requieren dos iteraciones por cada paso temporal, 
+además de las 9 llamadas extras a códigos en cada paso de reinicialización.
+Los métodos \textit{Broyden} y \textit{Broyden ortonormal} tinen comportamiento similar y demuestran ser más eficientes que el método clásico.
+El método \textit{Dirichlet-to-Neumann} es el que mayor cantidad de iteraciones necesita por cada paso temporal, 
+excediendo el doble de los pasos requeridos por los métodos \textit{quasi-Newton}.
 
 \section{Análisis del segundo sistema de parada del reactor RA-10}
 \label{3:ra10}
@@ -294,12 +295,13 @@ por lo tanto no es considerada en este estudio.
 
 \subsection*{Subsistemas de estudio}
 
-En estudios previos se analizó el detalle fluídico tridimensional en el tanque reflector durante la descarga,
-modelando con ecuaciones cero-dimensionales la pérdida de carga en la red hidráulica \cite{rechiman}.
+En un estudio previo \cite{rechiman-paper} se analizó el detalle fluídico tridimensional en el tanque reflector durante la descarga,
+modelando con ecuaciones cero-dimensionales la pérdida de carga en la red hidráulica 
+y acoplando los subsistemas de forma débil.
 Es de interés ahora estudiar con mayor detalle la distribución de caudales a través del arreglo de válvulas,
 ya que si bien existen factores de pérdida de carga concentrada tabulados para diferentes geometrías,
 no existe un valor tabulado para el arreglo de codos y tuberías presente en la configuración de válvulas del SSP.
-La pérdida de carga se construyó de manera aproximada a partir de valores en tés y codos.
+La pérdida de carga se construyó a partir de un modelo sencillo de tés y codos.
 
 Se proponen entonces dos subsistemas de estudio:
 el primero incluye el tanque del reflector acoplado a una porción de la red hidráulica en la descarga,
@@ -307,7 +309,7 @@ y el segundo modela el arreglo de válvulas.
 Ambos están conectados a través de una sección de la tubería,
 en la cual quedan acoplados los valores de caudal y presión.
 El subsistema tanque del reflector tiene como incógnitas la presión $p_1^1$ y el caudal $Q_1^1$ en la interfaz de acople $I_1^1$.
-Asimismo, el subsistema arreglo de válvulas tiene como incógnitas $p_2^1$ y $Q_2^1$ en $I_2_1$.
+Asimismo, el subsistema arreglo de válvulas tiene como incógnitas $p_2^1$ y $Q_2^1$ en $I_{2_1}$.
 Las ecuaciones de continuidad implican que:
 
 \begin{equation}
@@ -318,9 +320,9 @@ Q_1^1 &=& Q_2^1
 \right.
 \end{equation}
 
-Se selecciona la siguiente estrategia:
-que el subsistema tanque del reflector tenga una condición de borde tipo Neumann en la interfaz,
-y que el subsistema arreglo de válvulas tenga una condición de tipo Dirichlet.
+Se utiliza la siguiente estrategia:
+condiciones de borde de tipo \textit{Neumann} en la interfaz de acople para el subsistema tanque del reflector,
+y condiciones de borde de tipo \textit{Dirichlet} para el subsistema arreglo de válvulas.
 Las ecuaciones de residuos quedan entonces:
 
 \begin{equation}
@@ -392,7 +394,7 @@ Q_1^1 = -\dot{h} A_D
 \label{eq-qd}
 \end{equation}
 
-El subsistema arreglo de válvulas es modelado con una malla tridimensional de elementos tetraédricos realizada en Salomé \cite{salome}.
+El subsistema arreglo de válvulas es modelado con una malla tridimensional de elementos tetraédricos realizada en \textbf{Salomé} \cite{salome}.
 El caudal ingresa a través del extremo superior y se reparte entre los múltiples caños que comunican los colectores.
 En operación normal del reactor cada uno de ellos está bloqueado mediante una válvula esférica,
 y del otro lado las cañerías están rellenas de gas,
@@ -426,7 +428,7 @@ El sistema de ecuaciones resultantes en el segundo subsistema es:
 donde $\bar{f}$ es una fuerza volumétrica, 
 $\kappa$ es la energía cinética turbulenta, $\epsilon$ es la disipación viscosa de energía turbulenta,
 $\nu_T$ es la viscosidad turbulenta y $P^*$ es la presión efectiva del sistema, que se calcula como
-$\displaystyle P^* &=& P + \frac {2}{3}\kappa$.
+$\displaystyle P^* = P + \frac {2}{3}\kappa$.
 Las variables mayúsculas refieren a valores medios estadísticos.
 Los parámetros de las ecuaciones de transporte de $\kappa$ y $\epsilon$ toman los siguientes valores:
 $c_\mu=0.09$, $c_1=0.126$, $c_2=1.92$ y $c_\epsilon=0.07$ \cite{durbin}.
@@ -434,33 +436,35 @@ $c_\mu=0.09$, $c_1=0.126$, $c_2=1.92$ y $c_\epsilon=0.07$ \cite{durbin}.
 Para evitar la resolución de la capa límite en las paredes de las tuberías se implementa un modelo de pared,
 en el que se reemplaza la misma por una tracción tangencial equivalente a la que realizaría la misma sobre la corriente externa
 \cite{k-e}.
-Este modelo impone condiciones de tipo Dirichlet para $\kappa$ y $\epsilon$ en la frontera en que se impone la ley de pared.
+Este modelo impone condiciones de tipo \textit{Dirichlet} para $\kappa$ y $\epsilon$ en la frontera en que se impone la ley de pared.
 Las condiciones de borde al ingreso de la cañería dependen del valor $Q_2^1$ impuesto,
 que define las velocidades del fluido.
 En base a estas velocidades se calcula un valor para la intensidad turbulenta $I_T$,
 y con ella se aproximan los valores de $\kappa$ y $\epsilon$ en la interfaz.
 En la descarga de la cañería se impone una fuerza normal que depende de la presión atmosférica.
 
-El sistema de ecuaciones (\ref{eq-mani}) es resuelto en pasos fraccionados mediante una formulación de elementos finitos con elementos lineales, 
-estabilizada mediante $SUPG/PSPG$ (\cite{supg} y \cite{pspg}).
+El sistema de ecuaciones (\ref{eq-mani}) es resuelto en pasos fraccionados \cite{lew} mediante una formulación de elementos finitos con elementos lineales, 
+estabilizada mediante \textit{SUPG} \cite{supg} y \textit{PSPG} \cite{pspg}.
 En el primer paso fraccionado se resuelve el transporte de $\kappa$,
 en el segundo paso se resuelve el transporte de $\epsilon$,
-y en el último paso se resuelven en forma monolítica las ecuaciones de Navier-Stokes
-(en \cite{lew} se detalla la implementación).
+y en el último paso se resuelven en forma monolítica las ecuaciones de \textit{Navier-Stokes}.
 
-Una vez resueltas las ecuaciones es posible calcular el valor de la presión $p_2^1$ en la interfaz $I_2_1$:
+Una vez resueltas las ecuaciones es posible calcular el valor de la presión $p_2^1$ en la interfaz $I_{2_1}$:
 
 \begin{equation}
-p_2^1 &= P^*_{I_2^1} - \frac {2}{3} \kappa_{I_2^1}
+p_2^1 = P^*_{I_2^1} - \frac {2}{3} \kappa_{I_2^1}
 \end{equation}
 
 \subsection*{Resultados del cálculo}
 
-Se realizan simulaciones utilizando dos mallas con diferente refinamiento para el modelo tri-dimensional, con fines de obtener convergencia de los resultados.
-La primera es una malla con $\Delta x=0.01m$ y 1145659 de elementos. La segunda es una malla más fina, con $\Delta x=0.008m$ y 1806202 elementos.
-Se utiliza $\Delta t=0.01s$ en los cálculos.
-Las ecuaciones de residuos se resuelven mediante el método de Broyden ortonormal, 
-con reinicialización de la matriz jacobiana cada 100 pasos temporales.
+Se realizan cálculos utilizando mallas del modelo tri-dimensional con diferente refinamiento para estudiar la convergencia de los resultados.
+La primera es una malla con $\Delta x=0.01m$ y 1145659 de elementos. 
+La segunda es malla tiene $\Delta x=0.008m$ y 1806202 elementos.
+La tercera es la malla más fina y tiene $\Delta x=0.005m$ y 2951259 elementos.
+Se utiliza $\Delta t=0.01s$ en los cálculos con las dos primeras mallas y $\Delta t=0.005s$ en los cálculos con la última malla.
+Las ecuaciones de residuos se resuelven estudiando diferentes métodos numericos.
+%mediante el método de Broyden ortonormal, 
+%con reinicialización de la matriz jacobiana cada 100 pasos temporales.
 %~ En la Figura \ref{qpvst} se reportan los resultados obtenidos para la evolución de los caudales y de las presiones en la interfaz de acople.
 
 %~ \begin{figure}['ht]
@@ -542,7 +546,7 @@ Las porciones del sistema con líquido tienen $\phi$ positivo y las porciones co
 $\phi$ tiene valor nulo en la superficie libre.
 La ecuación (\ref{eq-ls}) requiere un valor de contorno allí donde $\bar{u} \cdot \bar{n} < 0$,
 y por lo tanto debe proveerse el valor del campo a la entrada de la tubería.
-Esta ecuación también es resuelta mediante una formulación de elementos finitos con elementos lineales y estabilización $SUPG$.
+Esta ecuación también es resuelta mediante una formulación de elementos finitos con elementos lineales y estabilización \textit{SUPG}.
 Se utiliza, además, un enriquecimiento del espacio de presiones en los elementos de la interfaz \cite{enriq}.
 El campo del level set es reinicializado mediante cálculos geométricos cada 10 pasos temporales.
 
@@ -568,7 +572,7 @@ En la Figura \ref{evol-ls} se observa la evolución de la superficie libre duran
 \centering
 \subfloat[t = 0 s]{\includegraphics[scale=0.15]{0ms.png}}\\
 \subfloat[t = 0.6 s]{\includegraphics[scale=0.15]{600ms.png}}\\
-\subfloat[t = 1.2 s]{\includegraphics[scale=0.15]{1200ms.png}}}
+\subfloat[t = 1.2 s]{\includegraphics[scale=0.15]{1200ms.png}}
 \end{minipage}\hfill
 \begin{minipage}[t]{.48\textwidth}
 \centering
