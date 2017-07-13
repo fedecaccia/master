@@ -495,7 +495,8 @@ También se muestran los valores experimentales reportados en la referencia \cit
 \begin{figure}['ht]
 \centering
 \includegraphics[scale = 1]{hvst.pdf}
-\caption{Evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP.} \label{hvst} 
+\caption{Evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP.}
+\label{hvst} 
 \end{figure}
 
 Puede notarse cómo la evolución simulada modela la dinámica hallada experimentalmente.
@@ -515,18 +516,26 @@ Como puede observarse no se notan diferencias considerables en la evolución de 
 La pérdida de carga total del arreglo de válvulas apenas llega a ser sensible a la válvula que falla.
 
 \begin{figure}['ht]
-	\begin{minipage}{0.5\linewidth}
-		\centering
-		\includegraphics[scale=0.6]{hvstvZoom.pdf}
-	\end{minipage}
-	\begin{minipage}{0.5\linewidth}
-		\centering
-		\includegraphics[scale=0.6]{hvstv.pdf}
-	\end{minipage}
-	\caption{Comparación de la evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP
-  considerando falla simple en diferentes válvulas.}  
-	\label{hvstv}
+\centering
+\includegraphics[scale = 1]{hvstv.pdf}
+\caption{Comparación de la evolución del nivel de líquido en el mockup del tanque del reflector
+ante accionamiento del SSP considerando falla simple en diferentes válvulas.}
+\label{hvstv} 
 \end{figure}
+
+%~ \begin{figure}['ht]
+	%~ \begin{minipage}{0.5\linewidth}
+		%~ \centering
+		%~ \includegraphics[scale=0.6]{hvstvZoom.pdf}
+	%~ \end{minipage}
+	%~ \begin{minipage}{0.5\linewidth}
+		%~ \centering
+		%~ \includegraphics[scale=0.6]{hvstv.pdf}
+	%~ \end{minipage}
+	%~ \caption{Comparación de la evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP
+  %~ considerando falla simple en diferentes válvulas.}  
+	%~ \label{hvstv}
+%~ \end{figure}
 
 \subsection*{Transporte de superficie libre en las tuberías}
 
@@ -561,7 +570,7 @@ y por lo tanto la aproximación realizada inicialmente es conservativa, ya que c
 \centering
 \includegraphics[scale = 1]{hvstlsZoom.pdf}
 \caption{Evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP durante el transitorio inicial.
-  Se comparan la solución obtenida despreciando el gas en la cañería y la obtenida con transporte de level-set.}  
+  Se comparan la solución obtenida despreciando el gas en la cañería y la obtenida con transporte de superficie libre mediante la técnica de \textit{level-set}.}  
 	\label{hvstls}
 \end{figure}
 
@@ -588,7 +597,13 @@ En la Figura \ref{evol-ls} se observa la evolución de la superficie libre duran
 \label{evol-ls}
 \end{figure}
 
-agregar resultados del tanque 3d y figuras, nombrar a ludmila
+p vs q
+
+all eval
+
+d2n eval
+
+extrapol
 
 \section{Resolución de grandes redes hidráulicas}
 \label{3:redes}
