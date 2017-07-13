@@ -170,7 +170,12 @@ estabilizando con los métodos \textit{SUPG} \cite{supg} y \textit{PSPG} \cite{p
 La malla de cálculo se genera con \textbf{Gmsh} \cite{gmsh} y se discretiza el dominio en $43874$ elementos triangulares con un tamaño medio de arista de $\Delta x \approx 0.005m$. 
 
 Como se mencionó previamente, no existe necesidad de que ambos códigos utilicen el mismo paso temporal de cálculo.
-Sin embargo en ambas simulaciones se utiliza $\Delta t=0.01s$, debido a que ninguna requiere una mayor discretización temporal.
+Sin embargo en ambos modelos se utiliza $\Delta t=0.01s$, debido a que ninguno requiere una mayor discretización temporal.
+
+Los cálculos cero-dimensionales se realizan con un programa escrito para este propósito.
+Los cálculos bi-dimensionales se realizan con el programa de elementos finitos de propósito general paralelizado
+(\textbf{Par-GPFEP} por sus siglas en ingés, \textit{Parallel General Purpose Finite Element Program})
+desarrollado en el Departamento de Mecánica Computacional de la Comisión Nacional de Energía Atómica (\cite{gpfep}, \cite{pargpfep}).
 
 \subsection*{Resultados del cálculo}
 
@@ -455,6 +460,9 @@ Una vez resueltas las ecuaciones es posible calcular el valor de la presión $p_
 p_2^1 = P^*_{I_2^1} - \frac {2}{3} \kappa_{I_2^1}
 \end{equation}
 
+Los cálculos cero-dimensionales se realizan con un programa escrito para este propósito.
+Los cálculos tri-dimensionales se realizan con \textbf{Par-GPFEP}.
+
 \subsection*{Resultados del cálculo}
 
 Se realizan cálculos utilizando mallas del modelo tri-dimensional con diferente refinamiento para estudiar la convergencia de los resultados.
@@ -463,9 +471,27 @@ La segunda es malla tiene $\Delta x=0.008m$ y 1806202 elementos.
 La tercera es la malla más fina y tiene $\Delta x=0.005m$ y 2951259 elementos.
 Se utiliza $\Delta t=0.01s$ en los cálculos con las dos primeras mallas y $\Delta t=0.005s$ en los cálculos con la última malla.
 Las ecuaciones de residuos se resuelven estudiando diferentes métodos numericos.
-%mediante el método de Broyden ortonormal, 
-%con reinicialización de la matriz jacobiana cada 100 pasos temporales.
-%~ En la Figura \ref{qpvst} se reportan los resultados obtenidos para la evolución de los caudales y de las presiones en la interfaz de acople.
+mediante el método de Broyden ortonormal, 
+con reinicialización de la matriz jacobiana cada 100 pasos temporales.
+En la Figura \ref{qpvst} se reportan los resultados obtenidos para la evolución de los caudales y de las presiones en la interfaz de acople.
+
+\begin{figure}['ht]
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.55]{p_vs_t.pdf}
+		%\caption{t=80 s}
+		\label{asd}	
+	\end{minipage}
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.55]{q_vs_t.pdf}
+		%\caption{t=250 s}
+		\label{asd}	
+	\end{minipage}
+	\caption{Evolución de la presión y del caudal volumétrico en la interfaz de acople entre los dos subsistemas.
+  La presión atmosférica es de 92000 Pa.}  
+	\label{qpvst}
+\end{figure}
 
 %~ \begin{figure}['ht]
 %~ \centering{}\includegraphics[scale = 1]{qpvst.pdf}
@@ -473,29 +499,21 @@ Las ecuaciones de residuos se resuelven estudiando diferentes métodos numericos
 %~ \label{qpvst}
 %~ \end{figure}
 
-En la Figura \ref{hvst} se observa la evolución de la altura de la superficie libre del líquido en el tanque obtenida en las dos simulaciones.
-Comparativamente se reportan también los valores obtenidos acoplando el modelo cero-dimensional del tanque a un modelo cero-dimensional
-que modela la pérdida de carga en el arreglo de válvulas,
-y los resultados del cálculo en el que se modela el transporte de gas en las cañerías (se comenta en el siguiente apartado).
-También se muestran los valores experimentales reportados en la referencia \cite{invap-mockup}.
-
-%~ \begin{figure}['ht]
-	%~ \begin{minipage}{0.5\linewidth}
-		%~ \centering
-		%~ \includegraphics[scale=0.6]{hvstZoom.pdf}
-	%~ \end{minipage}
-	%~ \begin{minipage}{0.5\linewidth}
-		%~ \centering
-		%~ \includegraphics[scale=0.6]{hvst.pdf}
-	%~ \end{minipage}
-	%~ \caption{Evolución del nivel de líquido en el mockup del tanque del reflector.}  
-	%~ \label{hvst}
-%~ \end{figure}
+En la Figura \ref{hvst} se observa la evolución de la altura de la superficie libre del líquido en el tanque obtenida en diferentes cálculos.
+La curva azul reporta los resultados obtenidos con la malla más gruesa, la curva roja los resultados obtenidos con la malla intermedia y la curva violeta los resultados obtenidos con la malla más fina.
+La curva verde muestra resultados de análisis estudiando la condición inicial de gas de relleno en las cañerías, que será comentada en la sección \ref{3:level-set}.
+Las curvas cyan y gris muestran resultados del cálculo del modelo tri-dimensional del tanque con acoplamiento débil al modelo cero dimensional de la red hidráulica \cite{rechiman-paper},
+obtenidas sin utilizar modelo de turbulencia, y utilizando el modelo \textit{RANS} $\kappa-\epsilon$ \textit{realizable} respectivamente.
+Comparativamente se muestran también los valores experimentales reportados en la referencia \cite{invap-mockup}.
 
 \begin{figure}['ht]
 \centering
 \includegraphics[scale = 1]{hvst.pdf}
-\caption{Evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP.}
+\caption{Evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP.
+La curva negra está construida con datos experimentales proporcionados por INVAP S.E.
+Las curvas azul, roja, verde y violeta reportan datos calculados mediante diferentes mallas para el modelo tri-dimensional del arreglo de válvulas, 
+con acoplamiento fuerte al modelo cero-dimensional del resto del sistema.
+Las curvas cyan y gris muestran resultados del cálculo del modelo tri-dimensional del tanque con acoplamiento débil al modelo cero dimensional de la red hidráulica.}
 \label{hvst} 
 \end{figure}
 
@@ -512,8 +530,6 @@ Esta dinámica no es considerada en el modelo cero-dimensional del tanque.
 Los cálculos previos se realizaron suponiendo que falla la válvula de la última conexión entre los colectores.
 Es de interés conocer si existe variación en los tiempos de descarga si la válvula que falla es alguna otra.
 En la Figura \ref{hvstv} se compara la evolución de la superficie libre ante fallas en la primera, la tercera y la sexta válvula.
-Como puede observarse no se notan diferencias considerables en la evolución de la descarga.
-La pérdida de carga total del arreglo de válvulas apenas llega a ser sensible a la válvula que falla.
 
 \begin{figure}['ht]
 \centering
@@ -523,21 +539,11 @@ ante accionamiento del SSP considerando falla simple en diferentes válvulas.}
 \label{hvstv} 
 \end{figure}
 
-%~ \begin{figure}['ht]
-	%~ \begin{minipage}{0.5\linewidth}
-		%~ \centering
-		%~ \includegraphics[scale=0.6]{hvstvZoom.pdf}
-	%~ \end{minipage}
-	%~ \begin{minipage}{0.5\linewidth}
-		%~ \centering
-		%~ \includegraphics[scale=0.6]{hvstv.pdf}
-	%~ \end{minipage}
-	%~ \caption{Comparación de la evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP
-  %~ considerando falla simple en diferentes válvulas.}  
-	%~ \label{hvstv}
-%~ \end{figure}
+Como puede observarse no se notan diferencias considerables en la evolución de la descarga.
+La pérdida de carga total del arreglo de válvulas apenas llega a ser sensible a la válvula que falla.
 
 \subsection*{Transporte de superficie libre en las tuberías}
+\label{3:level-set}
 
 Como se comentó, en los cálculos realizados previamente no se consideró el gas de relleno en las tuberías durante los primeros instantes del drenado.
 Es de interés estudiar su influencia.
@@ -597,13 +603,68 @@ En la Figura \ref{evol-ls} se observa la evolución de la superficie libre duran
 \label{evol-ls}
 \end{figure}
 
-p vs q
+\subsection*{Análisis de métodos de resolución del sistema de ecuaciones de residuos}
 
-all eval
+\begin{figure}['ht]
+\centering
+\includegraphics[scale = 1]{nonlinear_fevals.pdf}
+\caption{.}  
+	\label{nonlinear_fevals}
+\end{figure}
 
-d2n eval
+\begin{figure}['ht]
+\centering
+\includegraphics[scale = 1]{nonlinear_fevals_d2n.pdf}
+\caption{.}  
+	\label{nonlinear_fevals_d2n}
+\end{figure}
 
-extrapol
+\begin{figure}['ht]
+\centering
+\includegraphics[scale = 1]{nonlinear_fevals_ex.pdf}
+\caption{.}  
+	\label{nonlinear_fevals_ex}
+\end{figure}
 
-\section{Resolución de grandes redes hidráulicas}
+\section{Resolución de redes hidráulicas de múltiples componentes}
 \label{3:redes}
+
+Laminar flow
+
+\begin{figure}['ht]
+\centering
+\includegraphics[scale = 1]{net_linear_its.pdf}
+\caption{.}  
+	\label{net_linear_its}
+\end{figure}
+
+\begin{figure}['ht]
+\centering
+\includegraphics[scale = 1]{net_linear_fevals_broy.pdf}
+\caption{.}  
+	\label{net_linear_fevals_broy}
+\end{figure}
+
+\begin{figure}['ht]
+\centering
+\includegraphics[scale = 1]{net_linear_fevals.pdf}
+\caption{.}  
+	\label{net_linear_fevals}
+\end{figure}
+
+
+Turbulent flow
+
+\begin{figure}['ht]
+\centering
+\includegraphics[scale = 1]{net_nonLinear_its.pdf}
+\caption{.}  
+	\label{net_nonLinear_its}
+\end{figure}
+
+\begin{figure}['ht]
+\centering
+\includegraphics[scale = 1]{net_nonLinear_fevals.pdf}
+\caption{.}  
+	\label{net_nonLinear_fevals}
+\end{figure}

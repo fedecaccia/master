@@ -9,62 +9,56 @@ A level-1 auxiliary file: cap3.aux
 A level-1 auxiliary file: cap4.aux
 A level-1 auxiliary file: conclusiones.aux
 Database file #1: mibib.bib
-I was expecting a `,' or a `}'---line 210 of file mibib.bib
- :   pages = 163
- :              -175
-I'm skipping whatever remains of this entry
 Warning--empty author in newton
 Warning--missing publisher in iedelchik
 Warning--missing publisher in kays
 Warning--missing publisher in gunzburger
 Warning--empty journal in gmsh
 Warning--empty journal in invap-mockup
-Too many commas in name 1 of "L.M. Rechiman, M.I. Cantero, F.A. Caccia, A. Chacoma and E.A. Dari" for entry rechiman-paper
-while executing---line 1604 of file ibtesis.bst
 Warning--missing publisher in bird
 Warning--empty journal in salome
 Warning--missing publisher in durbin
 Warning--missing publisher in k-e
 Warning--missing publisher in level-set
-You've used 30 entries,
+You've used 32 entries,
             2634 wiz_defined-function locations,
-            1193 strings with 13582 characters,
-and the built_in function-call counts, 8851 in all, are:
-= -- 583
-> -- 237
+            1202 strings with 13702 characters,
+and the built_in function-call counts, 9566 in all, are:
+= -- 626
+> -- 277
 < -- 3
-+ -- 119
-- -- 59
-* -- 384
-:= -- 1014
-add.period$ -- 86
-call.type$ -- 30
-change.case$ -- 22
++ -- 139
+- -- 69
+* -- 416
+:= -- 1098
+add.period$ -- 92
+call.type$ -- 32
+change.case$ -- 24
 chr.to.int$ -- 0
-cite$ -- 41
-duplicate$ -- 905
-empty$ -- 934
-format.name$ -- 80
-if$ -- 1974
+cite$ -- 43
+duplicate$ -- 977
+empty$ -- 994
+format.name$ -- 92
+if$ -- 2128
 int.to.chr$ -- 0
-int.to.str$ -- 30
-missing$ -- 262
-newline$ -- 151
-num.names$ -- 29
-pop$ -- 464
+int.to.str$ -- 32
+missing$ -- 284
+newline$ -- 161
+num.names$ -- 31
+pop$ -- 508
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 247
+skip$ -- 265
 stack$ -- 0
-substring$ -- 280
-swap$ -- 524
+substring$ -- 292
+swap$ -- 566
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 11
-while$ -- 45
-width$ -- 32
-write$ -- 301
-(There were 2 error messages)
+while$ -- 47
+width$ -- 34
+write$ -- 321
+(There were 11 warnings)
