@@ -19,7 +19,7 @@ El sistema completo modela el movimiento de un fluido en régimen de convección
 una fuente fría de neutrones alojada próxima al núcleo de un reactor de investigación \cite{fuente-fria}.
 En la Figura \ref{esquemaFuenteFria} puede apreciarse un diagrama del sistema.
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering{}\includegraphics[scale = 0.25]{acople_ri_enief.png}
 \caption{Esquema del sistema analizado. 
 El subsistema de la izquierda es un intercambiador de calor y se estudia con un código cero-dimensional.
@@ -179,7 +179,7 @@ desarrollado en el Departamento de Mecánica Computacional de la Comisión Nacio
 
 \subsection*{Resultados del cálculo}
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 	\begin{minipage}{0.5\linewidth}
 		\centering
 		\includegraphics[scale=0.32]{acople_ri28_t0.png}
@@ -198,7 +198,7 @@ desarrollado en el Departamento de Mecánica Computacional de la Comisión Nacio
 	\label{acople_ri28_1}
 \end{figure}
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 	\begin{minipage}{0.5\linewidth}
 		\centering
 		\includegraphics[scale=0.32]{acople_ri28_t80.png}
@@ -237,7 +237,7 @@ Este cálculo se realiza con diferencias finitas a primer órden y por lo tanto 
 En total son 9 evaluaciones extras.
 Puede observarse que la cantidad de iteraciones del método para converger es en promedio una sola, ya que en general utiliza 10 evaluaciones en cada paso temporal.
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering{}\includegraphics[scale = 1]{evaluaciones-ff.pdf}
 \caption{Evaluaciones de residuos requeridas por diversos métodos numéricos para resolver los sistemas de ecuaciones planteados
  en el problema doblemente acoplado descripto de la fuente fría de neutrones.} \label{iteraciones_ri} 
@@ -264,7 +264,7 @@ Es de interés verificar si el diseño cumple con el criterio de éxito,
 a saber, completar el 55\% del vaciado en un tiempo inferior a los 15 segundos,
 ante una falla simple del sistema (falla de apertura de cualquiera de las válvulas).
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering{}\includegraphics[scale = 0.8]{SSP.pdf}
 \caption{Esquema del segundo sistema de parada del reactor RA10.} \label{fig:SSP} 
 \end{figure}
@@ -475,7 +475,7 @@ mediante el método de Broyden ortonormal,
 con reinicialización de la matriz jacobiana cada 100 pasos temporales.
 En la Figura \ref{qpvst} se reportan los resultados obtenidos para la evolución de los caudales y de las presiones en la interfaz de acople.
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 	\begin{minipage}{0.5\linewidth}
 		\centering
 		\includegraphics[scale=0.55]{p_vs_t.pdf}
@@ -493,7 +493,7 @@ En la Figura \ref{qpvst} se reportan los resultados obtenidos para la evolución
 	\label{qpvst}
 \end{figure}
 
-%~ \begin{figure}['ht]
+%~ \begin{figure}[ht]
 %~ \centering{}\includegraphics[scale = 1]{qpvst.pdf}
 %~ \caption{Evolución de la presión y del caudal volumétrico en la interfaz de acople entre los dos subsistemas.}
 %~ \label{qpvst}
@@ -506,7 +506,7 @@ Las curvas cyan y gris muestran resultados del cálculo del modelo tri-dimension
 obtenidas sin utilizar modelo de turbulencia, y utilizando el modelo \textit{RANS} $\kappa-\epsilon$ \textit{realizable} respectivamente.
 Comparativamente se muestran también los valores experimentales reportados en la referencia \cite{invap-mockup}.
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{hvst.pdf}
 \caption{Evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP.
@@ -531,7 +531,7 @@ Los cálculos previos se realizaron suponiendo que falla la válvula de la últi
 Es de interés conocer si existe variación en los tiempos de descarga si la válvula que falla es alguna otra.
 En la Figura \ref{hvstv} se compara la evolución de la superficie libre ante fallas en la primera, la tercera y la sexta válvula.
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{hvstv.pdf}
 \caption{Comparación de la evolución del nivel de líquido en el mockup del tanque del reflector
@@ -572,7 +572,7 @@ Sin embargo, este efecto no tiene mayor peso.
 La evolución posterior es similar a la obtenida sin el modelado de la superficie libre,
 y por lo tanto la aproximación realizada inicialmente es conservativa, ya que considera una mayor pérdida de carga.
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{hvstlsZoom.pdf}
 \caption{Evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP durante el transitorio inicial.
@@ -582,7 +582,7 @@ y por lo tanto la aproximación realizada inicialmente es conservativa, ya que c
 
 En la Figura \ref{evol-ls} se observa la evolución de la superficie libre durante los primeros instantes de tiempo.
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \begin{minipage}[t]{.48\textwidth}
 \centering
 \subfloat[t = 0 s]{\includegraphics[scale=0.15]{0ms.png}}\\
@@ -605,21 +605,21 @@ En la Figura \ref{evol-ls} se observa la evolución de la superficie libre duran
 
 \subsection*{Análisis de métodos de resolución del sistema de ecuaciones de residuos}
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{nonlinear_fevals.pdf}
 \caption{.}  
 	\label{nonlinear_fevals}
 \end{figure}
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{nonlinear_fevals_d2n.pdf}
 \caption{.}  
 	\label{nonlinear_fevals_d2n}
 \end{figure}
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{nonlinear_fevals_ex.pdf}
 \caption{.}  
@@ -631,21 +631,21 @@ En la Figura \ref{evol-ls} se observa la evolución de la superficie libre duran
 
 Laminar flow
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{net_linear_its.pdf}
 \caption{.}  
 	\label{net_linear_its}
 \end{figure}
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{net_linear_fevals_broy.pdf}
 \caption{.}  
 	\label{net_linear_fevals_broy}
 \end{figure}
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{net_linear_fevals.pdf}
 \caption{.}  
@@ -655,14 +655,14 @@ Laminar flow
 
 Turbulent flow
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{net_nonLinear_its.pdf}
 \caption{.}  
 	\label{net_nonLinear_its}
 \end{figure}
 
-\begin{figure}['ht]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{net_nonLinear_fevals.pdf}
 \caption{.}  

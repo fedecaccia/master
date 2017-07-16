@@ -26,7 +26,7 @@ Como referencia a este enfoque se citan los trabajos desarrollados por J. S. Lei
 \section{Abordaje del modelado}
 \label{1:abordaje}
 
-\subsection{Desglosado del sistema original en subsistemas acoplados}
+\subsection*{Desglosado del sistema original en subsistemas acoplados}
 \label{1:acoplamiento}
 
 Dado un sistema $S$ en un dominio $\Omega$ con borde $\Gamma$, es posible desglosar este dominio en $N$ particiones 
@@ -53,11 +53,10 @@ La notación utilizada es la siguiente:
 \label{esquema-acoplamiento} 
 \end{figure}
 
-En principio, existen tantas incógnitas como valores de variables en cada interfaz.
+En principio, existen tantas incógnitas como variables en cada interfaz.
 Sin embargo, es posible notar que la unión $U_{i,j}^k$ que relaciona los sistemas $S_{i}$ y $S_{j}$ 
 mediante las interfaces $I_{S_{i}}^{l_1}$ e $I_{S_{j}}^{l_2}$ respectivamente, 
-define una relación de continuidad
-\footnote{
+define una relación de continuidad\footnote{
 Las incógnitas que representan derivadas normales en la interfaz de acople pueden tomar signos opuestos según la convención.
 Por ejemplo, si el flujo de calor es una incógnita, 
 y se define como flujo positivo a aquel que es saliente del subsistema, 
@@ -66,7 +65,7 @@ entonces la condición de continuidad implicará que:
 {(q")_{S_i}^{I_{l_1}}}=-{(q")_{S_j}^{I_{l_2}}}
 \label{continuidad-q}
 \end{equation*}
-}entre las incógnitas ${(x_m)_{S_i}^{I_{l_1}}}$ y ${(x_m)_{S_j}^{I_{l_2}}}$, de tal forma que:
+} entre las incógnitas ${(x_m)_{S_i}^{I_{l_1}}}$ y ${(x_m)_{S_j}^{I_{l_2}}}$, de tal forma que:
 
 \begin{equation}
 {(x_m)_{S_i}^{I_{l_1}}}={(x_m)_{S_j}^{I_{l_2}}}
@@ -75,7 +74,7 @@ entonces la condición de continuidad implicará que:
 Estas relaciones reducen a la mitad la cantidad de incógnitas.
 Las demás ecuaciones se encuentran a partir del modelo de estudio de cada subsistema. 
 Sean $(F_m)_{i}^{l}$ las relaciones funcionales que calculan el valor de las incógnitas ${(x_m)_{S_i}^{I_l}}$ en la interfaz $l$ del subsistema $i$,
-a partir del valor de otras incógnitas y de los datos de contorno sobre la frontera exterior $\Gamma_i$:
+a partir del valor de otras incógnitas y de los datos de contorno sobre la frontera exterior $\Gamma_i$. Se tiene que:
 
 \begin{equation}
 \begin{split}
@@ -85,49 +84,45 @@ a partir del valor de otras incógnitas y de los datos de contorno sobre la fron
 \label{ecuaciones-modelos}
 \end{equation}
 donde $(\alpha_i({\Gamma_i})$ representa las condiciones de borde impuestas sobre la curva $\Gamma_i$.
-Notar que algunas de las dependencias pueden anularse dependiendo del modelo de estudio utilizado en cada subsistema
-\footnote{
+Estas relaciones, básicamente, mapean condiciones de borde de un tipo, que son impuestas como datos, en condiciones de borde de otro tipo.
+Notar que algunas de las dependencias pueden anularse dependiendo del modelo de estudio utilizado en cada subsistema.
 Cuando la expresión es más sencilla y solo involucra el valor de otro tipo de condición de borde en la misma interfaz,
 la relación funcional recibe el nombre de operador \textit{Steklov-Poincaré}.
 En matemática, el operador \textit{Steklov-Poincaré} mapea el valor de una condición de borde de una PDE elíptica en un dominio al valor
 de otra condición de borde (por ejemplo, una condición de borde de tipo \textit{Dirichlet} en una condición de borde de tipo \textit{Neumann}).
 Usualmente, cualquiera de las dos condiciones determinan la solución.
-}.
 
-\subsection{Sistema de ecuaciones a resolver}
+\subsection*{Sistema de ecuaciones a resolver}
 \label{1:ecuaciones}
-Restando el lado derecho en (\ref{ecuaciones-modelos}) a ambos lados, se obtienen relaciones del tipo:
-
-\begin{equation}
-(R_m)_{i}^{l} =   (x_m)_{S_i}^{I_l} - (F_m)_{i}^{l} \left ( (\bar{x})_{S_i}^{I_1}, (\bar{x})_{S_i}^{I_2}, ..., 
-  (\bar{x})_{S_i}^{I_{L_i}}, (\alpha_i({\Gamma_i}) \right ) 
-\label{ecuaciones-residuos}
-\end{equation}
-para cada residuo en la incógnita $m$ de cada interfaz $l$ del subsistema $i$.
-Debido a las relaciones de continuidad (\ref{continuidad}), es posible descartar ecuaciones,
-seleccionándolas de tal forma que el sistema de ecuaciones en cada subsistema quede bien planteado,
-como se explica más adelante.
-La convergencia fuerte de los subsistemas acoplados necesita que los residuos sean nulos.
-El sistema global de ecuaciones restante se reduce a la siguiente expresión:
-
-\begin{equation}
-\bar{R}=\bar{0}
-\label{sistema-simple}
-\end{equation}
-donde $\bar{R}$ es el vector de residuos de las ecuaciones seleccionadas.
-En general estas relaciones son no lineales, y por lo tanto se resuelven de forma iterativa, a partir de un primer vector solución propuesto.
-Debido a que en cada subsistema solo han sobrevivido ciertas relaciones funcionales, 
-van a tomar como dato solo algunos de estos valores propuestos.
-Es necesario por tanto seleccionar las ecuaciones de modo que el problema resulte bien planteado.
+La estrategia de acoplamiento propuesta es una estrategia iterativa.
+En primera instancia se propone un valor \textit{guess} para todas las incógnitas $(x_{m,guess})_{S_i}^{I_l}$, considerando las relaciones de continuidad \ref{continuidad}. 
+Luego se seleccionan una serie de ecuaciones \ref{ecuaciones-modelos}
+y se resuelven mediante la ejecución de códigos especíicos, obteniendo los valores $(x_{m,calc})_{S_i}^{I_l}$.
+Las ecuaciones modelos seleccionadas junto con las ecuaciones de continuidad deben definir un problema bien planteado\footnote{
 Por ejemplo, si interesara calcular el campo de temperaturas en un subsistema dado,
 serían incógnitas la temperatura y el flujo de calor en cada una de sus interfaces.
 Sin embargo ambas no pueden ser impuestas como dato en el mismo subsistema.
 En general, cada subsistema debe recibir condiciones o bien de tipo \textit{Dirichlet}, o bien de tipo \textit{Neumann}, para cada ecuación.
+}.
+Finalmente, se computan las diferencias entre los valores \textit{guess} y los valores calculados, obteniendo los residuos $(R_m)_{i}^{l}$:
 
-\subsection{Métodos numéricos para la resolución de sistemas de ecuaciones de residuos}
+\begin{equation}
+(R_m)_{i}^{l} = (x_{m,guess})_{S_i}^{I_l} - (x_{m,calc})_{S_i}^{I_l}
+\label{ecuaciones-residuos}
+\end{equation}
+donde $m$ es el índice de incógnita, $l$ de la intefaz e $i$ del subsistema.
+La convergencia fuerte de los subsistemas acoplados requiere que estos residuos sean nulos, y por lo tanto el método iterativo utilizado debe buscar el siguiente resultado:
+\begin{equation}
+\bar{R}=\bar{0}
+\label{sistema-simple}
+\end{equation}
+donde $\bar{R}$ es el vector de residuos de las ecuaciones.
+
+\subsection*{Métodos numéricos para la resolución de sistemas de ecuaciones de residuos}
 \label{1:metodos}
 Existen diferentes estrategias para hallar las raíces del sistema (\ref{sistema-simple}). 
-La forma clásica es el conocido método \textit{Dirichlet-to-Neumann}, que resuelve mediante iteraciones de tipo \textit{Piccard}. La ventaja de este método es que es sencillo de implementar, ya que es un método explícito y por tanto, los valores calculados por algún subsistema son inmediatamente impuestos como condición de borde a otros subsistemas.
+La forma clásica es el conocido método \textit{Dirichlet-to-Neumann}, que resuelve mediante iteraciones de tipo \textit{Piccard}. 
+La ventaja de este método es su sencillez de implementación, ya que es un método explícito y por tanto, los valores calculados por algunos subsistemas son inmediatamente impuestos como condición de borde a otros subsistemas.
 Sin embargo, tiene algunas desventajas.
 Por ejemplo, las condiciones de borde que son datos en cada subsistema no pueden elegirse arbitrariamente. 
 Las interfaces $I_{S_i}^{l_1}$ y $I_{S_j}^{l_2}$ comunes a cada unión $U_{i,j}^k$ 
@@ -140,8 +135,9 @@ El siguiente ejemplo esclarece lo expresado. Se desea resolver la ecuación de c
 -k \Delta u=f \\
 \left.u\right|_{\partial\Omega}=0
 \end{matrix}\right.
+\label{ecuacion-calor}
 \end{equation}
-mediante el método de descomposición disjunta de dominios (ver Figura \ref{temp-ej}. El dominio original $[0,L]$ es particionado en los subdominios $[0,c]$ y $[c,L]$.
+mediante el método de descomposición disjunta de dominios (ver Figura \ref{temp-ej}). El dominio original $[0,L]$ es particionado en los subdominios $[0,c]$ y $[c,L]$. Se va a resolver la ecuación  \ref{ecuacion-calor} en cada uno de ellos, pero la condición de borde \textit{Dirichlet} ahora solo aplica sobre el borde original del dominio.
 \begin{figure}
 \centering{}
 \begin{tikzpicture}
@@ -182,36 +178,41 @@ mediante el método de descomposición disjunta de dominios (ver Figura \ref{tem
 \caption[Descomposición en barra unidimensional]{Descomposición disjunta de dominios en el cálculo del campo de temperatura a lo largo de una barra unidimensional.}
 \label{temp-ej}
 \end{figure}
-Para que cada problema quede bien planteado es necesario imponer una condición de borde extra en el punto de interfaz a cada lado.
-En el método \textit{Dirichlet-to-Neumann}, es necesario decidir qué subsistema va a resolverse en primera instancia, a partir de algún valor supuesto en el borde.
-Si arbitrariamente se decidiera imponer una temperatura (condición \textit{Dirichlet} al borde del primer subsistema,
+Para que cada problema quede bien planteado es necesario imponer una condición de borde extra en el punto de descomposición.
+En el método \textit{Dirichlet-to-Neumann}, es necesario decidir qué subsistema va a ser resuelto en primera instancia.
+En este ejemplo se decide el subsistema de la izquierda.
+Ahora es necesario decidir qué tipo de condición de borde se le va a aplicar.
+Si arbitrariamente se decidiera imponer una temperatura (condición \textit{Dirichlet}) al borde del primer subsistema,
 luego de realizar el cálculo de temperaturas quedaría definido un flujo calórico a través de su interfaz de conexión con el segundo subsistema.
-Este valor de flujo luego debe ser utilizado para imponerse como condición de borde al segundo subsistema,
+En el método \textit{Dirichlet-to-Neumann}, este valor de flujo luego debe ser utilizado para ser impuesto como condición de borde al segundo subsistema,
 en el cuál se resolverá el campo de temperaturas y quedará definida una nueva temperatura en la interfaz de acople.
-Esta temperatura se impone nuevamente al primer subsistema, y el cálculo continúa así hasta que los sucesivos valores de las variables acopladas convergan.
+Esta temperatura se impone nuevamente al primer subsistema.
+El cálculo continúa así hasta que los sucesivos valores de las variables acopladas convergan.
 Si inicialmente se hubiera impuesto una condición de \textit{Neumann} en el primer subdominio, necesariamente al segundo subdominio debe imponérsele una condición de \textit{Dirichlet}. Es decir, al utilizar el método \textit{Dirichlet-to-Neumann}, la elección de un tipo de frontera en un subdominio dado determina el tipo de frontera en el subdominio contiguo,
-para las ecuaciones que relacionan las mismas variables de estado en ambos subsistemas.
+para las ecuaciones que relacionan las mismas variables de estado en ambos subsistemas (aquí solo existe una única variable de estado, la temperatura).
+
 Otra desventaja de este método es que en general requiere demasiadas iteraciones para converger \cite{fede-enief2016}. En algunos problemas el método puede quedar estancado, iterando en series de valores que se repiten en ciclo. Y en otros casos el método es divergente (sin ir más allá, para un cierto conjunto de parámetros del problema ejemplo analizado, el método diverge, ver \cite{coup-strong}).
 
-Otra forma de resolver el problema es aplicando métodos para encontrar raíces a funciones vectoriales no lineales (sistema de ecuaciones de residuos \ref{sistema-simple} en función de las variables de acople incógnitas),
+Otra forma de resolver el problema es aplicando métodos para encontrar raíces a funciones vectoriales no lineales (sistema de ecuaciones de residuos \ref{sistema-simple}),
 como por ejemplo, el método \textit{Newton-Raphson}.
-Haciendo un desarrollo de Taylor de las ecuaciones de residuos alrededor del punto $\bar{x}_n$, truncando los términos superiores al primer orden, y evaluando en $x=x_{n+1}$ se tiene:
+Haciendo un desarrollo de Taylor de las ecuaciones de residuos alrededor del punto $\bar{x}_n$, truncando los términos superiores al primer orden, y evaluando en $\bar{x}=\bar{x}_{n+1}$ se tiene:
 
 \begin{equation}
 \bar{R}(\bar{x}) = \bar{R}(\bar{x}_n) + \nabla \bar{R}(\bar{x}_n)(\bar{x}_{n+1}-\bar{x}_n)
 \label{taylor}
 \end{equation}
-donde $\nabla \bar{R}(\bar{x}_n)$ es la matriz jacobiana del sistema $J$ evaluada en el punto $\bar{x}_n$, donde el elemento $J_{ij}$ debe evaluarse como $J_{ij}=\frac{\partial R_i}{\partial x_j}$.
-Suponiendo que ${x_{n+1}}$ tiende a la raíz buscada se ha de cumplir que $\bar{R}(\bar{x}_{n+1})=0$. Sustituyendo en \ref{taylor} y operando algebraicamente se llega a la siguiente expresión:
+donde $\nabla \bar{R}(\bar{x}_n)$ es la matriz jacobiana del sistema $J$ evaluada en el punto $\bar{x}_n$, cuyo elemento $J_{ij}$ debe evaluarse como $J_{ij}=\frac{\partial R_i}{\partial x_j}$.
+Suponiendo que ${\bar{x}_{n+1}}$ tiende a la raíz buscada se ha de cumplir que $\bar{R}(\bar{x}_{n+1})=0$. Sustituyendo en \ref{taylor} y operando algebraicamente se llega a la siguiente expresión:
 
 \begin{equation}
 \bar{R}(\bar{x}_n) = -J(\bar{x}_n)(\bar{x}_{n+1}-\bar{x}_n)
 \end{equation}
-que es el método de iterativo $Newton-Raphson$ con orden de convergencia cuadrática. Para hallar la solución $\bar{x}_{n+1}$ simplemente hay que resolver el sistema:
+Para hallar la solución $\bar{x}_{n+1}$ simplemente hay que resolver el sistema:
 
 \begin{equation}
 \bar{x}_{n+1} = \bar{x}_{n} -J^{-1}(\bar{x}_n)\bar{R}(\bar{x}_n)
 \end{equation}
+que es el método de iterativo $Newton-Raphson$ con orden de convergencia cuadrática.
 El problema es que para utilizar este método se requiere la construcción de la matriz jacobiana en cada iteración, lo cual es demasiado costoso.
 Una sencilla aproximación mediante diferencias finitas de primer orden de cada elemento de la matriz jacobiana requiere numerosas ejecuciones de códigos clientes
 \footnote{
@@ -224,24 +225,30 @@ La construcción de la matriz jacobiana con éste método requiere una evaluaci�
 Si bien estas evaluaciones son independientes entre sí y por lo tanto altamente paralelizables, este método es excesivamente costoso.
 
 Una forma alternativa y elegante de resolver el sistema de ecuaciones planteado en \ref{sistema-simple} es mediante métodos \textit{quasi-Newton}.
-Estos métodos tienen convergencia superlineal \cite{broyden-on}, y por lo tanto presentan una ventaja frente a los métodos mediante iteraciones de \textit{Piccard}. 
+Estos métodos tienen convergencia superlineal \cite{broyden-on}, y por lo tanto presentan una ventaja fuerte frente a los métodos mediante iteraciones de \textit{Piccard}. 
 La característica principal de estos métodos es que aproximan la matriz jacobiana sin necesidad de realizar evaluaciones extras, y por lo tanto tienen también un punto de ventaja frente al método de \textit{Newton-Raphson}.
-El método de \textit{Broyden} es uno de ellos \cite{broyden}.
-También existe otra variante del método, el método \textit{Broyden ortonormal}, que asegura la convergencia en $N$ iteraciones para sistemas lineales \cite{broyden-on}, donde $N$ es la dimensión de la matriz jacobiana.
+El método de \textit{Broyden} es uno de estos métodos \cite{broyden}.
+También existe otra variante del método, el método \textit{Broyden ortonormal}, que asegura la convergencia en una cantidad finita de iteraciones para sistemas lineales \cite{broyden-on}, (la cantidad de iteraciones requerida es la dimensión de la matriz jacobiana).
 
-Existe también un conjunto de métodos conocidos como métodos \textit{Newton-Krylov} para la resolución del sistema \ref{sistema-simple}. Estos métodos no requieren el cálculo de matriz jacobiana ya que resuelven el sistema mediante gradientes descendientes, gradientes conjugados y otras técnicas que también serán exploradas en el presente trabajo. Sin embargo, en cada paso de descenso requieren evaluaciones de residuos, y por tanto son altamente costosos.
+Existe también un conjunto de métodos conocidos como métodos \textit{Newton-Krylov} para la resolución del sistema \ref{sistema-simple}. Estos métodos no requieren el cálculo de matriz jacobiana ya que resuelven el sistema mediante técnicas de gradientes descendentes. Sin embargo, en cada paso de descenso requieren evaluaciones de residuos, y por tanto son altamente costosos.
 
-\subsection{Problemas de evolución temporal}
+Notar que los últimos sistemas presentados resuelven sistemas de ecuaciones de forma monolítica, y por lo tanto permiten incluir estrategias prohibidas al método \textit{Dirichlet-to-Neumann}.
+El ejemplo presentado de cálculo de temperatura podría resolverse imponiendo cualquier combinación de condiciones de borde en las fronteras de acople de cada subdominio, como por ejemplo, fronteras \textit{Dirichlet} para ambos.
+
+\subsection*{Problemas de evolución}
 \label{1:evolucion}
-En problemas de avance temporal la estrategia de selección de variables que son datos o incógnitas en cada interfaz puede variar en la evolución.
-Cabe resaltar también que no existe necesidad de que los cálculos en cada subsistema utilicen el mismo paso temporal.
-Cualquiera de los códigos podría utilizar subdivisiones del paso temporal del otro código,
-y establecer el acople sólo en pasos de tiempo determinados.
-Los valores para las condiciones de borde dinámicas entre los pasos de tiempo en los que efectivamente se intercambian datos,
-pueden interpolarse con valores previos.
+En problemas de evolución la estretegia es permitir que cada subsistema avance por separado acoplando sus resultados mediante las ecuaciones \ref{sistema-simple} solo cada ciertos pasos.
+Esto se permite porque cada subsistema podría requerir subpasos de evolución diferentes\footnote{
+Distintos subdominios pueden tener diferentes requisitos sobre el parámetro de evolución, dependiendo de la física implicada.
+Algunos, por ejemplo, podrían experimentar transitorios fluidodinámicos, en los que es de interés mantener por debajo de algún valor 
+ciertos parámetros numéricos (como el número de \textit{Courant}) proporcionales al paso de tiempo.
+Otros, en cambio, podrían estar siendo resueltos por algún programa computacional que consume elevados recursos temporales,  por tanto sería de interés utilizar subpasos evolutivos mayores.
+}.
 
-Notar que la herramienta es incondicionalmente estable debido a que 
-en cada paso de tiempo se asegura la convergencia fuerte de los valores de las variables en las interfaces de acople.
+La estrategia de selección de variables que son datos o incógnitas en cada interfaz puede variar en la evolución, ya que pueden seleccionarse diferentes ecuaciones \ref{ecuaciones-modelos} en diferentes pasos de acople.
+
+Notar que el método es incondicionalmente estable debido a que 
+en cada paso de evolución se asegura la convergencia fuerte de los valores de las variables en las interfaces de acople.
 
 \section{Objetivos y estructura de trabajo}
 \label{1:objetivos}
@@ -262,16 +269,13 @@ En el \hyperlink{chapter.2}{Capítulo 2} se describen las diferentes formas de i
 se presenta la estructura de comunicación definida y se describe la arquitectura de acoplamiento necesaria a ser implementada en los códigos comunicados por paso de mensajes.
 En el \hyperlink{chapter.3}{Capítulo 3} se muestran algunas aplicaciones de la herramienta estudiada,
 presentando distintos códigos utilizados para realizar cálculos fluidodinámicos.
-La primera aplicación es un sistema fluídico cerrado que se estudia subdividiéndolo en dos subsistemas, con dos interfaces de acople cada uno.
-El movimiento del fluido está gobernado por fuerzas naturales y por lo tanto interesa acoplar variables de 
-caudal, presión, temperatura y flujo de calor en cada interfaz.
+La primera aplicación es un sistema fluídico cerrado gobernado por fuerzas naturales, que se estudia subdividiéndolo en dos subsistemas, con dos interfaces de acople cada uno.
 El siguiente sistema de estudio es el vaciado del tanque reflector del reactor de investigación RA-10.
-Interesa analizar los tiempos de descarga ya que el mismo es diseñado como Segundo Sistema de Parada (SSP).
+Interesa analizar el tiempo de descarga ya que el mismo es diseñado como Segundo Sistema de Parada (SSP).
 Se abordan distintos modelos multiescala del mismo, para estudiar el detalle fluídico tridimensional en un componente del sistema,
 acoplando con condiciones de borde dinámicas a modelos cero-dimensionales que representan el resto del sistema.
 Al final del capítulo se presenta un estudio de redes hidráulicas con múltiples componentes,
 para demostrar la eficiencia de la herramienta en acoples de mayor escala.
-En éstos últimos ejemplos comentados, las variables incógnitas en las interfaces de acoplamiento son velocidades (o caudales) y fuerzas (presiones y tensiones de corte).
 En el \hyperlink{chapter.4}{Capítulo 4} se extiende la técnica de acople a problemas que involucran otros modelos físicos.
 Se describe el código maestro de acople multifísico desarrollado y se presentan ejemplos de aplicación en el problema neutrónico-termohidráulico.
 

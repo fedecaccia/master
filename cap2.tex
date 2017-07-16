@@ -15,7 +15,7 @@ El código \textit{maestro} recibe estos valores y con ellos resuelve las ecuaci
 En base a estos residuos propone\footnote{
 Esta propuesta reside en el método de resolución de ecuaciones no lineales seleccionado, ver sección \ref{1:metodos}.
 } nuevos valores para las inćognitas en las interfaces de acople y se los envía a sus \textit{esclavos}.
-Así también, es función del código \textit{maestro} enviarles órdenes de comenzar el cálculo en un dato paso de evolución, reiniciar el cálculo o incluso abortar.
+Así también, es función del código \textit{maestro} enviarles órdenes de comenzar el cálculo en un dado paso de evolución, reiniciar el cálculo o incluso abortar.
 
 Cabe notar que cada código \textit{esclavo} podría ejecutarse en varios procesos, paralelizando sus cálculos,
 ya sea mediante memoria compartida como mediante memoria distribuida.
@@ -29,7 +29,7 @@ La estrategia definida es comentada en la sección \ref{2:estructura}.
 \label{2:maestros}
 
 En este trabajo se utilizaron dos códigos maestros para la resolución de los problemas.
-El primer código \textit{maestro} utilizado es el código \textbf{Coupling} desarrollado por XXX en XXX.
+El primer código \textit{maestro} utilizado es el código \textbf{Coupling} desarrollado por XYZ en XYZ.
 \textbf{Coupling} permite acoplar códigos mediante funciones del estándard Interfaz de Paso de Mensajes (MPI por sus siglas en inglés, \textit{Message Passing Interface}).
 Esta estrategia requiere el código fuente de los programas \textit{esclavos} para implementar las funciones adecuadas.
 El código maestro está diseñado de tal forma que los códigos acoplados resuelvan ecuaciones del tipo \ref{ecuaciones-modelos}
@@ -65,10 +65,11 @@ comunicaciones locales, en general su latencia es despreciable frente al tiempo 
 \label{2:mpi}
 
 En sistemas de memoria distribuida, el paso de mensajes es un método de
-programación utilizado para realizar el intercambio de datos entre los
-procesadores \cite{comunicacion}. En estos sistemas, los datos son enviados de un procesador a otro
-utilizando mensajes. El paso de mensajes involucra la transferencia de datos desde un proceso
-que envía a un proceso que recibe. El proceso que envía,
+programación utilizado para realizar el intercambio de datos entre
+procesos \cite{comunicacion}. 
+El paso de mensajes involucra la transferencia de datos desde un proceso
+que envía a otro proceso que recibe. 
+El proceso que envía,
 necesita conocer la localización, el tamaño y el tipo de los datos, así como el
 proceso destino.
 
@@ -92,7 +93,7 @@ Cuando ya no es necesario que dos programas continúen comunicándose, se cierra
 En la otra implementación, todos los programas son ejecutados al mismo tiempo (MIMD por sus siglas en inglés, Multiple Instruction, Multiple Data).
 En este tipo de ejecuciones todos los procesos cuentan con un único comunicador original, \textit{MPI\_COMM\_WORLD}, y por ello es necesario crear nuevos grupos de procesos y de comunicadores.
 Una vez establecidos los comunicadores, los programas pueden intercambiar mensajes siguiendo la misma lógica preestablecida en el modelo previo.
-Si bien esta implementación no permite la posibilidad de realizar nuevas conexiones una vez que los programas han sido ejecutados,
+Si bien esta implementación no es posible para nuevas conexiones una vez que los programas han sido ejecutados,
 son mucho más seguras, ya que no dependen del éxito de encontrar los puertos requeridos para las conexiones.
 
 \subsection*{Lectura y escritura de archivos de entrada y salida}
@@ -101,9 +102,10 @@ son mucho más seguras, ya que no dependen del éxito de encontrar los puertos r
 La comunicación mediante lectura y escritura de archivos se implementó para demostrar la capacidad de acoplar códigos cuyos códigos fuente no son capaces de ser modificados.
 La idea principal es ejecutar corridas simples del código \textit{esclavo} administradas desde el código \textit{maestro}.
 Para ello el código \textit{maestro} escribe en el archivo de entrada del programa \textit{esclavo} todos los parámetros necesarios para la ejecución del cálculo,
-ordena su ejecución, y espera a que este termine y luego realiza una búsqueda de los valores de las variables de interés en archivos de salida.
+ordena su ejecución, espera a que este termine y luego realiza una búsqueda de los valores de las variables de interés en archivos de salida.
 En problemas de evolución, el código \textit{maestro} debe notificar en el archivo de entrada el parámetro de evolución,
-así como otros valores de variables de estado del paso previo.
+así como otros valores de variables de estado del paso previo,
+ya que cada corrida del código \textit{esclavo} solo vive para realizar un cálculo entre dos pasos de evolución acoplados.
 
 La ejecución de programas \textit{esclavos} se implementó de dos formas alternativas.
 La primera forma es mediante el uso de la función \textit{system} de la librería de \textit{c}.
@@ -253,15 +255,15 @@ En este modelo, la comunicación se establece solo mediante lectura y escritura 
 
 En general, los códigos \textit{esclavos} son programas de cálculo particulares que no han sido diseñados para mantenerse acoplados a otros códigos.
 En esta sección se demuestra cómo mediante unas mínimas modificaciones en sus rutinas es posible implementar un acoplamiento eficiente.
-Las acciones de acoplamiento deben ser llamadas en 4 instancias diferentes:
+Las acciones de acoplamiento deben ser llamadas en cuatro instancias diferentes:
 \begin{enumerate}
 \item al principio del programa;
 \item al principio de cada paso de evolución;
 \item al finalizar cada paso de evolución;
 \item al finalizar el programa.
 \end{enumerate}
-Los problemas que no involucran evolución de variables pueden ser tratados como problemas con un solo paso de evolución.
 El programador podría definir una nueva variable \textit{booleana} que a modo de bandera indique cuándo se está realizando un cálculo acoplado para ingresar o no en las instancias nombradas.
+Los problemas que no involucran evolución de variables pueden ser tratados como problemas con un solo paso de evolución.
 A continuación se describen las instancias de acoplamiento.
 
 
@@ -276,7 +278,7 @@ Si ambos programas han sido ejecutados en el esquema \textit{MIMD} los pasos a r
 \item creación de un grupo entre el proceso \textit{raíz} del programa esclavo y el proceso \textit{raíz} del programa \textit{maestro};
 \item creación de un comunicador en el grupo previo, necesario para el paso de mensajes de acople.
 \end{itemize}
-Si en cambio, el programa ha sido ejecutado en forma independiente, los pasos a realizar son los siguientes:
+Si, en cambio, el programa ha sido ejecutado en forma independiente, los pasos a realizar son los siguientes:
 \begin{itemize}
 \item búsqueda del puerto publicado por el el proceso \textit{raíz} del programa \textit{maestro};
 \item conexión del proceso \textit{raíz} del programa esclavo a este puerto y creación del comunicador.
@@ -290,13 +292,7 @@ Si es necesario, los datos locales pueden ser cambiados notificando al usuario.
 
 La estrategia de acoplamiento se define entre el parámetro de evolución inicial $t_{coup,0}$ y el parámetro final $t_{coup,N}$,
 con $N+1$ pasos de acoplamiento cada $\Delta t_{coup}=\frac{t_{coup,N} - t_{coup,0}}{N}$.
-Si bien el código \textit{esclavo} debe intercambiar mensajes en cada uno de estos pasos, es posible que además utilice subpasos de evolución $\Delta t_{local}$ locales\footnote{
-Distintos programas pueden tener diferentes requisitos sobre el parámetro de evolución, dependiendo de la física que resuelven.
-Algunos, por ejemplo, podrían estar resolviendo transitorios fluidodinámicos, en los que es de interés mantener por debajo de algún valor 
-ciertos parámetros (como el número de \textit{Courant}) dependientes del paso de tiempo.
-Otros, en cambio, pueden no tener este requisito.
-La idea es que cada programa \textit{esclavo} devuelva al programa \textit{maestro} el mejor resultado posible al cabo de $\Delta t_{coup}$.
-}. En estos casos, se implementa una estrategia de interpolación de los valores de las variables en las interfaces de acoplamiento entre los pasos de evolución acoplados.
+Si bien el código \textit{esclavo} debe intercambiar mensajes en cada uno de estos pasos, es posible que además utilice subpasos de evolución $\Delta t_{local}$ locales, como se explicó en el apartado \ref{1:evolucion}  \textbf{Problemas de evolución}. En estos casos, se implementa una estrategia de interpolación de los valores de las variables en las interfaces de acoplamiento entre los pasos de evolución acoplados.
 
 Al principio de cada paso acoplado de cálculo el código \textit{esclavo} recibe valores supuestos para las incógnitas que se toman como dato en las interfaces de acople,
 en función de la estretegia implementada (ver sección \ref{1:abordaje}).
@@ -305,19 +301,12 @@ El programa resuelve el paso $\Delta t_{coup}$ en base a ellos.
 \subsection*{Acoplamiento en instancia 3: al finalizar cada paso de evolución}
 
 Una vez resuelto cada $\Delta t_{coup}$, el programa envía al programa \textit{maestro} los valores de las variables que se han definido como incógnitas en las interfaces de acoplamiento.
-Tras este envío, el programa queda en espera de órden para continuar.
+Tras este envío, el programa queda en espera de la órden para continuar.
 Mientras, el programa \textit{maestro} recepciona los valores de las incógnitas calculados por los demás códigos \textit{esclavos}.
-Con estos valores resuelve las ecuaciones de residuos.
+Con estos valores resuelve las ecuaciones de residuos \ref{sistema-simple}.
 Si el módulo del residuo cae por debajo de cierta tolerancia prefijada el código \textit{maestro} acepta los resultados y envía a sus \textit{esclavos} la órden de continuar con el cálculo.
 En caso contrario, puede enviarles la órden de volver a calcular el mismo paso de acoplamiento, o incluso de abortar el cálculo.
-La Figura \ref{esquema-evolucion} esquematiza lo comentado para un caso sencillo en que se acoplan dos programas \textit{esclavos} al programa \textit{maestro}.
-En este ejemplo, las variables $x,y$ son las incógnitas en las interfaces de acople.
-El programa \textbf{Esclavo 1} resuelve cada paso de evolución acoplado en función de un valor $x_{guess}$ recibido desde el código \textit{maestro}, y le devuelve el valor $y$ calculado a partir de él.
-El programa \textbf{Esclavo 2} calcula, en cambio, $x$ en función de $y_{guess}$.
 
-\subsection*{Acoplamiento en instancia 4: al finalizar el programa}
-
-Antes de finalizar el programa, es necesario cerrar las conexiones, liberar los grupos y los comunicadores establecidos.
 
 \pgfdeclarelayer{bg}    % declare background layer
 \pgfsetlayers{bg,main}  % set the order of the layers (main is the standard laye
@@ -596,6 +585,16 @@ Si el residuo no supera cierta tolerancia prefijada, envía la órden de reinici
 para volver a calcular el mismo paso de acoplamiento, tras lo cual enviará nuevos valores \textit{guesses} propuestos.
 En caso contrario, cuando los resultados convergen, envía la órden de continuación, y ambos \textit{esclavos} prosiguen con el cálculo.
 Notar que en problemas sin evolución, el proceso es similar, pero todos los programas calculan un único paso temporal ficticio.
+Es necesario resaltar que el esquema también aplica para el caso de comunicación entre programas mediante lectura y escritura de archivos, en el que de cada programa \textit{esclavo} solo vive durante cada $\Delta t_{coup}$.
 }
 \label{esquema-evolucion}
 \end{figure}
+
+La Figura \ref{esquema-evolucion} esquematiza lo comentado para un caso sencillo en que se acoplan dos programas \textit{esclavos} al programa \textit{maestro}.
+En este ejemplo, las variables $x,y$ son las incógnitas en las interfaces de acople.
+El programa \textbf{Esclavo 1} resuelve cada paso de evolución acoplado en función de un valor $x_{guess}$ recibido desde el código \textit{maestro}, y le devuelve el valor $y$ calculado a partir de él.
+El programa \textbf{Esclavo 2} calcula, en cambio, $x$ en función de $y_{guess}$.
+
+\subsection*{Acoplamiento en instancia 4: al finalizar el programa}
+
+Antes de finalizar el programa, es necesario cerrar las conexiones, liberar los grupos y los comunicadores establecidos.
