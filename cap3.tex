@@ -29,9 +29,27 @@ En el esquema se ejemplifica una de las elecciones posibles para las variables q
 \label{esquemaFuenteFria}
 \end{figure}
 
-En cada interfaz de acople existen incógnitas de caudal, presión, temperatura y flujo de calor. 
-Por lo tanto el sistema queda definido por ocho ecuaciones de continuidad de campos de variables 
-y ocho ecuaciones de residuos que relacionan las incógnitas de forma similar 
+En cada interfaz de acople existen incógnitas de velocidades, fuerzas, temperatura y flujo de calor.
+En el caso de las velocidades la estrategia implementada es definir una variable integral, 
+el caudal volumétrico, que servirá como una de las variables de acoplamiento\footnote{
+Cuando se utilizan variables integrales o promediadas para el acoplamiento, es necesario definir una estrategia extra en el subdominio que la recibe.
+Como cada subproblema solo queda bien definido si la condición de borde está dada sobre todos los puntos del borde, estos valores deben distribuirse considerando algún perfil.
+Por ejemplo, para el caso del subdominio que recibe un valor de caudal, y está modelado con ecuaciones bi-dimensionales, necesita definir un perfil de velocidades a lo largo de toda la sección de acople.
+La definición del perfil se basa en alguna hipótesis que la persona que está modelando considera adecuada conforme a la física del problema.
+Este paso debe analizarse con cuidado ya que los resultados del acoplamiento dependen de ello.
+}.
+En el caso de las fuerzas se utilizan valores promediados para la fuerza normal (presión).
+Las fuerzas tangenciales se consideran nulas bajo la hipótesis de que son despreciables en las interfaces de acople.
+Esta hipótesis es correcta cuando el flujo es paralelo, 
+y por ello se selecciona como interfaz de acople aquella que se corresponda con el perfil de velocidades lo más plano posible, lejos de las curvas.
+Los valores de temperatura de acople también corresponden a valores promediados en la interfaz,
+y el flujo de calor corresponde al flujo integral a través de ella.
+En los subsistemas bi-dimensionales, los perfiles de velocidadades y temperaturas construidos a partir de las variables recibidas se consideran planos,
+bajo la hipótesis de flujo paralelo.
+Con esta estrategia, existen cuatro incógnitas en cada interfaz de cada subsistema. 
+Considerando los dos subsistemas, existen en total dieciseis incógnitas.
+Por lo tanto el sistema queda definido por ocho ecuaciones de continuidad de campos de variables
+y otras ocho ecuaciones de residuos que relacionan las incógnitas de forma similar 
 a la que se presentó en la sección \ref{1:abordaje}.
 
 Las ecuaciones de continuidad en las interfaces implican que:
@@ -55,7 +73,7 @@ como se convino previamente en el \hyperlink{chapter.1}{Capítulo 1}.
 Al evaluar los residuos en cada interfaz, se genera una ecuación no lineal por cada incógnita en cada interfaz.
 Para que las ecuaciones queden bien planteadas se selecciona solo una de las relaciones para el par presión-caudal
 y solo una para el par temperatura-flujo de calor en cada interfaz.
-Así entonces, entre las dos interfaces del subsistema 1 se generan 4 ecuaciones de residuos
+Así entonces, entre las dos interfaces del subsistema 1 se generan cuatro ecuaciones de residuos
 \footnote{
 Cada ecuación de residuo relaciona las incógnitas según el modelo aplicado.
 En $R_{p,Q}$ se considera dependencia entre el caudal $Q$, la presión $p$ y la temperatura $T$, y en 
@@ -92,7 +110,7 @@ $R_{T,q"}$ se considera dependencia entre el caudal $Q$, la temperatura $T$ y el
 \right.
 \label{residuos-1}
 \end{equation}
-y entre las dos interfaces del subsistema 2 se generan otras 4 ecuaciones de residuos:
+y entre las dos interfaces del subsistema 2 se generan otras cuatro ecuaciones de residuos:
 
 \begin{equation}
 \left\{ \begin{array}{rcl}
@@ -126,13 +144,12 @@ rugosidad de cañerías $\epsilon=0.5\cdot 10^{-3}$ $m$.
 Las áreas de las interfaces de acople son $A_2^1=A_2^2=0.03$ $m^2$.
 La altura total $\Delta z$ de este subsistema es equivalente a la de la cavidad bidimensional.
 La evolución de las variables $\{p,Q,T,q"\}$ en el subsistema se calcula mediante un código cero-dimensional
-que resuelve ecuaciones de pérdida de carga en una red hidráulica \cite{iedelchik}
+que resuelve ecuaciones de pérdida de carga en una red hidráulica con flujo turbulento \cite{iedelchik}
 y de transferencia de energía en un intercambiador de calor con flujo constante \cite{kays}:
 
 \begin{equation}
 \left\{ \begin{array}{rcl}
-p_2^1 + \rho g \Delta z &=& p_2^2 + \rho \Delta u \\ [0.2cm]
-\displaystyle \Delta u &=& \frac{1}{2} \left( \frac{Q_1^1}{A_2^1} \right)^2  \left( \frac {f_D L} {D} + \sum_i K_i \right) \\ [0.2cm]
+p_2^1 + \rho g \Delta z &=& p_2^2 + \rho \frac{1}{2} \left( \frac{Q_1^1}{A_2^1} \right)^2  \left( \frac {f_D L} {D} + \sum_i K_i \right) \\ [0.2cm]
 \displaystyle T_2^2 &=& \displaystyle T_2^1 + 2 \frac {q_0" L}{\frac{D}{2} \frac{Q_1^1}{A_2^1}\rho c_p}
 \label{eq-intercambiador}
 \end{array}
@@ -140,6 +157,14 @@ p_2^1 + \rho g \Delta z &=& p_2^2 + \rho \Delta u \\ [0.2cm]
 \end{equation}
 donde $f_D$ es el factor de Darcy de pérdida de carga distribuida y $D$ es el diámetro de la tubería.
 En este modelo se supone que el flujo de calor es nulo en la dirección axial en cada interfaz de acople.
+Esta aproximación es correcta ya que las interfaces se seleccionaron lejos de fuentes y sumideros, donde los gradientes de temperatura son despreciables.
+Con este modelo, ninguna de las dos ecuaciones puede recibir valores de contorno \textit{Dirichlet} en ambas interfaces,
+ya que los valores de caudal y temperatura en una interfaz determinan el valor en la otra.
+Por lo tanto, en la estrategia de acoplamiento, la primera ecuación debe tener, o bien ambos contornos con condiciones de tipo \textit{Neumann}, 
+o bien uno con condición de tipo \textit{Neuman} y otro con condición de tipo \textit{Dirichlet}.
+La segunda ecuación debe tener uno de los bordes con condición de tipo \textit{Dirichlet} y otro con condición de tipo \textit{Neumann}.
+Esta condición es necesaria a pesar de que el flujo de calor recibido no va a ser utilizado, basado en la hipótesis de que es despreciable.
+Si el flujo de calor fuera efectivamente apreciable, debería cambiarse el modelo en la ecuación planteada.
 
 La cavidad bidimensional se modela con $L_0=0.3$ $m$, y $A_1^1=A_1^2=0.03$ $m^2$.
 El fluido de trabajo es agua ($\rho_0=10^3$ $Kg/m^3$, $\mu=6\cdot 10^{-4}$ $Kg/ms$, $c_p=4184$ $J/KgK$, 
@@ -162,10 +187,22 @@ Se utiliza la aproximación de \textit{Boussinesq} considerando variaciones de d
 \end{equation}
 donde $\rho_0$ es la densidad del fluido a la temperatura de referencia $T_{ref}$.
 
-Las paredes imponen condiciones de no deslizamiento para las ecuaciones de \textit{Navier-Stokes} y de flujo de energía nulo para la ecuación de energía.
 Las ecuaciones (\ref{eq-cavidad}) se resuelven mediante una formulación de elementos finitos, 
 con elementos lineales para aproximar los campos de presiones, velocidades y temperaturas, 
 estabilizando con los métodos \textit{SUPG} \cite{supg} y \textit{PSPG} \cite{pspg}.
+El método \textit{SUPG} (\textit{Streamline Upwind Petrov-Galerkin) se utiliza para estabilizar problemas de transporte con alto número de \textit{Peclet} (\textit{Pe}).
+El \textit{Pe} es un número adimensional que relaciona la velocidad de advección de un flujo y la velocidad de difusión, y está relacionado con el número de \textit{Reynolds} (\textit{Re}).
+En las ecuaciones de \textit{Navier-Stokes}, el método estabiliza las evoluciones con alto \textit{Re},
+y consiste en la adición de una difusividad extra en la dirección de las líneas de corriente.
+El método \textit{PSPG} (Pressure Stabilizing Petrov-Galerkin) se utiliza para evadir la condición \textit{LBB},
+que básicamente impone restricciones sobre los espacios de elementos utilizados en el problema de \textit{Stokes}.
+
+Las paredes imponen condiciones de no deslizamiento para las ecuaciones de \textit{Navier-Stokes} y de flujo de energía nulo para la ecuación de energía.
+En las interfaces de acople, deben definirse una serie de condiciones de borde.
+En las ecuaciones de \textit{Navier-Stokes}, en cada interfaz pueden setearse valores de velocidades normales, suponiendo velocidades tangenciales nulas (bajo la hipótesis de flujo paralelo),
+o valores de fuerzas normales (presión), suponiendo que las fuerzas tangenciales son nulas.
+En la ecuación de energía, cada borde necesita o bien un perfil de temperaturas o bien un perfil de flujo de calor.
+Los cálculos se realizaron implementando diferentes estrategias y verificando que los mismos convergieran.
 
 La malla de cálculo se genera con \textbf{Gmsh} \cite{gmsh} y se discretiza el dominio en $43874$ elementos triangulares con un tamaño medio de arista de $\Delta x \approx 0.005m$. 
 
@@ -173,8 +210,8 @@ Como se mencionó previamente, no existe necesidad de que ambos códigos utilice
 Sin embargo en ambos modelos se utiliza $\Delta t=0.01s$, debido a que ninguno requiere una mayor discretización temporal.
 
 Los cálculos cero-dimensionales se realizan con un programa escrito para este propósito.
-Los cálculos bi-dimensionales se realizan con el programa de elementos finitos de propósito general paralelizado
-(\textbf{Par-GPFEP} por sus siglas en ingés, \textit{Parallel General Purpose Finite Element Program})
+Los cálculos bi-dimensionales se realizan con \textbf{Par-GPFEP} (programa de elementos finitos de propósito general paralelizado, el nombre se debe a sus siglas
+en inglés, \textit{Parallel General Purpose Finite Element Program})
 desarrollado en el Departamento de Mecánica Computacional de la Comisión Nacional de Energía Atómica (\cite{gpfep}, \cite{pargpfep}).
 
 \subsection*{Resultados del cálculo}
@@ -254,15 +291,17 @@ Los métodos \textit{Broyden} y \textit{Broyden ortonormal} tinen comportamiento
 El método \textit{Dirichlet-to-Neumann} es el que mayor cantidad de iteraciones necesita por cada paso temporal, 
 excediendo el doble de los pasos requeridos por los métodos \textit{quasi-Newton}.
 
-\section{Análisis del segundo sistema de parada del reactor RA-10}
-\label{3:ra10}
+\section{Análisis del segundo sistema de parada de un reactor de investigación}
+\label{3:mock-up}
 
 \subsection*{Presentación del problema}
-La estrategia de análisis presentada puede aplicarse al estudio del vaciado del tanque reflector del reactor RA-10 como Segundo Sistema de Parada (SSP).
+El Departamento de Mecánica Computacional de CNEA tuvo a cargo el análisis del segundo sistema de parada (SSP) del reactor RA-10.
+El SSP consiste en el accionamiento del vaciado del tanque reflector.
 El drenado del material reflector (agua pesada) disminuye drásticamente la reactividad, apagando el reactor.
-Es de interés verificar si el diseño cumple con el criterio de éxito,
+La tarea consistió en verificar si el diseño cumple con el criterio de éxito,
 a saber, completar el 55\% del vaciado en un tiempo inferior a los 15 segundos,
 ante una falla simple del sistema (falla de apertura de cualquiera de las válvulas).
+Este requerimiento pudo verificarse tras el análisis \cite{cnea-informe-ra10}.
 
 \begin{figure}[ht]
 \centering{}\includegraphics[scale = 0.8]{SSP.pdf}
@@ -271,17 +310,17 @@ ante una falla simple del sistema (falla de apertura de cualquiera de las válvu
 
 La Figura \ref{fig:SSP} esquematiza el SSP. 
 En el mismo pueden destacarse tres grandes subsistemas: el tanque del reflector, la red hidráulica de descarga y
-la red hidráulica de ecualización de presiones. En operación normal del reactor las
+la red hidráulica de ecualización de presiones. 
+En operación normal del reactor las
 válvulas que pueden observarse en la red hidráulica permanecen cerradas, y el agua pesada rellena las cañerías y el tanque de reflector. 
 El resto del sistema es rellenado con gas Helio, excepto una porción del tanque de expansión que también permanece rellena con líquido. 
 Cuando es accionado el SSP se abren las válvulas y el líquido comienza a drenar hacia el tanque de descarga, acelerado por la fuerza gravitatoria. 
 Asimismo, el Helio circula en el mismo sentido en el resto del sistema, rellenando el volumen desplazado de líquido.
 
-La simulación del problema completo demandaría elevados recursos computacionales debido a los requerimientos de malla. 
-Por ello se propone desarrollar un modelo multiescala del sistema,
-desacoplándolo en subsistemas que pueden estudiarse por separado, 
-aplicando la estrategia presentada en este trabajo para acoplarlos mediante condiciones de borde apropiadas.
-El SSP del RA10 se divide en tres subsistemas:
+El análisis del problema completo hubiera demandado elevados recursos computacionales debido a los requerimientos de malla.
+Por ello se propuso desarrollar un modelo multiescala del sistema,
+desacoplándolo en subsistemas que pudieron estudiarse por separado con estrategias de acoplamiento mediante condiciones de borde apropiadas.
+El SSP del RA10 se dividió en tres subsistemas:
 
 \begin{itemize}
 \item Subsistema del tanque del reflector,
@@ -289,30 +328,32 @@ El SSP del RA10 se divide en tres subsistemas:
 \item Subsistema de la red hidráulica de ecualización de presiones.
 \end{itemize}
 
-Como validación de las herramientas para el cálculo de la evolución de la descarga,
-se estudia un problema muy similar en el que se conocen datos experimentales del tiempo de vaciado,
-y sirve a modo de problema modelo para contrastar los resultados obtenidos.
-Este problema es el vaciado del tanque del reflector del mockup del reactor OPAL, 
+En el trabajo presentado los subsistemas se acoplaron mediante una estrategia de acoplamiento débil \cite{ra10-paper} \cite{ra10-enief}.
+Durante el trabajo se realizaron tareas de validación de las herramientas de cálculo.
+Para ello se estudió un sistema similar para el que se conocían datos experimentales de tiempo de vaciado.
+Estos datos sirvieron para contrastar los resultados obtenidos con las herramientas de cálculo.
+El sistema analizado fue el tanque del reflector del mockup del reactor OPAL, 
 montado por INVAP en San Carlos de Bariloche, \cite{invap-mockup}.
 
-Debido a que el mockup del OPAL está abierto a la atmósfera, la línea de ecualización de presiones no está presente y
-por lo tanto no es considerada en este estudio.
+Debido a que el mockup del OPAL está abierto a la atmósfera, no cuenta con línea de ecualización de presiones y por lo tanto no se consideró en el modelo.
+
+En un estudio \cite{cnea-informe-mockup} se analizó el detalle fluídico tridimensional en el tanque reflector durante la descarga,
+modelando con ecuaciones cero-dimensionales la pérdida de carga en la red hidráulica 
+y acoplando los subsistemas de forma débil.
+En el estudio aquí presentado se analiza con mayor detalle la distribución de caudales a través del arreglo de válvulas,
+modelando el comportamiento del resto del sistema con ecuaciones cero-dimensionales.
+El propósito de este estudio es investigar si existe algún efecto que podría no estar siendo considerado en el otro modelo.
 
 \subsection*{Subsistemas de estudio}
 
-En un estudio previo \cite{rechiman-paper} se analizó el detalle fluídico tridimensional en el tanque reflector durante la descarga,
-modelando con ecuaciones cero-dimensionales la pérdida de carga en la red hidráulica 
-y acoplando los subsistemas de forma débil.
-Es de interés ahora estudiar con mayor detalle la distribución de caudales a través del arreglo de válvulas,
-ya que si bien existen factores de pérdida de carga concentrada tabulados para diferentes geometrías,
-no existe un valor tabulado para el arreglo de codos y tuberías presente en la configuración de válvulas del SSP.
-La pérdida de carga se construyó a partir de un modelo sencillo de tés y codos.
-
-Se proponen entonces dos subsistemas de estudio:
+Se proponen dos subsistemas de estudio:
 el primero incluye el tanque del reflector acoplado a una porción de la red hidráulica en la descarga,
 y el segundo modela el arreglo de válvulas.
 Ambos están conectados a través de una sección de la tubería,
-en la cual quedan acoplados los valores de caudal y presión.
+en la cual quedan acoplados los valores de velocidades y fuerzas.
+La estretegia implementada es similar a la utilizada en \ref{3:ff} ya que se utilizan como variables de acoplamiento el caudal volumétrico y la presión promedio.
+Las fuerzas tagenciales se consideran nulas.
+A fines de cumplir con esta hipóteisis, la interfaz de acople se selecciona lejos de los codos.
 El subsistema tanque del reflector tiene como incógnitas la presión $p_1^1$ y el caudal $Q_1^1$ en la interfaz de acople $I_1^1$.
 Asimismo, el subsistema arreglo de válvulas tiene como incógnitas $p_2^1$ y $Q_2^1$ en $I_{2_1}$.
 Las ecuaciones de continuidad implican que:
@@ -327,7 +368,12 @@ Q_1^1 &=& Q_2^1
 
 Se utiliza la siguiente estrategia:
 condiciones de borde de tipo \textit{Neumann} en la interfaz de acople para el subsistema tanque del reflector,
-y condiciones de borde de tipo \textit{Dirichlet} para el subsistema arreglo de válvulas.
+y condiciones de borde de tipo \textit{Dirichlet} para el subsistema arreglo de válvulas\footnote{
+Se podrían haber definido otras estrategias.
+La estrategia implementada permite resolver las ecuaciones en ambos subdominios de una forma cómoda.
+En el modelo tri-dimensional, por ejemplo, el valor de caudal recibido es útil para construir valores para las condiciones de borde del modelo turbulento utilizado.
+}.
+En base al caudal recibido en este subsistema se calcula un perfil de velocidades.
 Las ecuaciones de residuos quedan entonces:
 
 \begin{equation}
@@ -366,6 +412,8 @@ donde $v_D$ es la velocidad del fluido en la línea de descarga,
 $\frac {f_D*l_D}{D}$ es el factor de pérdida de carga distribuida en las tuberías,
 (en función del factor de Darcy $f_D$, la longitud de tuberías $l_D$ y el diámetro de las mismas $D$)
 y $\sum_i K_i$ es la sumatoria de factores de pérdida de carga concetrada.
+
+CB
 
 La Tabla \ref{tabla-tanque} reúne los parámetros del subsistema.
 Los datos geométricos pueden consultarse en las referencias \cite{invap-mockup}.
@@ -407,14 +455,16 @@ pero durante el accionamiento del sistema de parada las mismas se abren dejando 
 Las válvulas esféricas instaladas no presentan pérdidas de carga concentrada y por lo tanto no son modeladas.
 Como es de interés el análisis ante falla simple del sistema,
 se supone que una de las válvulas no abre y por ello ese caño tampoco se modela.
+En los primeros cálculos se supone que la válvula en falla es la ubicada en la última rama del arreglo.
 Como otra simplificación del problema se supone que inicialmente el agua rellena todas las cañerías en forma estática.
 Más adelante se estudia la validez de éstas aproximaciones.
 Los datos dimensionales de las cañerías pueden consultarse en las referencias \cite{invap-mockup}.
 
 Debido a que el régimen del fluido es turbulento durante la mayor parte de la descarga,
 y una simulación DNS demandaría elevados recursos computacionales,
-se utiliza el modelo de turbulencia de tipo RANS $\kappa-\epsilon$ para modelar la fricción interna del fluido.
-Las ecuaciones se estabilizan mediante un método de control de coeficientes \cite{k-e-realizable}.
+se utiliza un modelo de turbulencia de tipo RANS para modelar la fricción interna del fluido.
+El modelo utilizado es el modelo $\kappa-\epsilon$ \textit{realizable}, en el que
+las ecuaciones se estabilizan mediante un método de control de coeficientes \cite{k-e-realizable}.
 El sistema de ecuaciones resultantes en el segundo subsistema es:
 
 \begin{equation}
@@ -438,15 +488,19 @@ Las variables mayúsculas refieren a valores medios estadísticos.
 Los parámetros de las ecuaciones de transporte de $\kappa$ y $\epsilon$ toman los siguientes valores:
 $c_\mu=0.09$, $c_1=0.126$, $c_2=1.92$ y $c_\epsilon=0.07$ \cite{durbin}.
 
+En las ecuaciones de \textit{Navier-Stokes}, cada borde necesita un perfil de velocidades normales o de fuerzas normales,
+y otro de velocidades tangenciales o de fuerzas tangenciales \cite{gunzburger}.
+Las condiciones de borde al ingreso de la cañería dependen del valor $Q_2^1$ impuesto,
+a partir del cual se define un perfil de velocidades plano del fluido.
+En base a estas velocidades se calcula un valor para la intensidad turbulenta $I_T$,
+y con ella se aproximan los valores de $\kappa$ y $\epsilon$ en la interfaz.
+En la descarga de la cañería se impone una fuerza normal que depende de la presión atmosférica,
+despreciando las fuerzas tangenciales.
+Las ecuaciones de $\kappa$ y $\epsilon$ no requieren condiciones contorno en esta interfaz.
 Para evitar la resolución de la capa límite en las paredes de las tuberías se implementa un modelo de pared,
 en el que se reemplaza la misma por una tracción tangencial equivalente a la que realizaría la misma sobre la corriente externa
 \cite{k-e}.
 Este modelo impone condiciones de tipo \textit{Dirichlet} para $\kappa$ y $\epsilon$ en la frontera en que se impone la ley de pared.
-Las condiciones de borde al ingreso de la cañería dependen del valor $Q_2^1$ impuesto,
-que define las velocidades del fluido.
-En base a estas velocidades se calcula un valor para la intensidad turbulenta $I_T$,
-y con ella se aproximan los valores de $\kappa$ y $\epsilon$ en la interfaz.
-En la descarga de la cañería se impone una fuerza normal que depende de la presión atmosférica.
 
 El sistema de ecuaciones (\ref{eq-mani}) es resuelto en pasos fraccionados \cite{lew} mediante una formulación de elementos finitos con elementos lineales, 
 estabilizada mediante \textit{SUPG} \cite{supg} y \textit{PSPG} \cite{pspg}.
@@ -454,10 +508,11 @@ En el primer paso fraccionado se resuelve el transporte de $\kappa$,
 en el segundo paso se resuelve el transporte de $\epsilon$,
 y en el último paso se resuelven en forma monolítica las ecuaciones de \textit{Navier-Stokes}.
 
-Una vez resueltas las ecuaciones es posible calcular el valor de la presión $p_2^1$ en la interfaz $I_{2_1}$:
+Una vez resueltas las ecuaciones es posible calcular el valor de la presión promedio $<p_2^1>$ en la interfaz $I_{2_1}$,
+a partir de los valores $<P^*_{I_2^1}>$ y $<\kappa_{I_2^1}>$ promediados en ella:
 
 \begin{equation}
-p_2^1 = P^*_{I_2^1} - \frac {2}{3} \kappa_{I_2^1}
+<p_2^1> = <P^*_{I_2^1}> - \frac {2}{3} <\kappa_{I_2^1}>
 \end{equation}
 
 Los cálculos cero-dimensionales se realizan con un programa escrito para este propósito.
@@ -499,11 +554,11 @@ En la Figura \ref{qpvst} se reportan los resultados obtenidos para la evolución
 %~ \label{qpvst}
 %~ \end{figure}
 
-En la Figura \ref{hvst} se observa la evolución de la altura de la superficie libre del líquido en el tanque obtenida en diferentes cálculos.
+En la Figura \ref{hvst} se observa la evolución de la altura de la superficie libre del líquido en el tanque durante los primeros quince segundos obtenida en diferentes cálculos.
 La curva azul reporta los resultados obtenidos con la malla más gruesa, la curva roja los resultados obtenidos con la malla intermedia y la curva violeta los resultados obtenidos con la malla más fina.
 La curva verde muestra resultados de análisis estudiando la condición inicial de gas de relleno en las cañerías, que será comentada en la sección \ref{3:level-set}.
-Las curvas cyan y gris muestran resultados del cálculo del modelo tri-dimensional del tanque con acoplamiento débil al modelo cero dimensional de la red hidráulica \cite{rechiman-paper},
-obtenidas sin utilizar modelo de turbulencia, y utilizando el modelo \textit{RANS} $\kappa-\epsilon$ \textit{realizable} respectivamente.
+Las curvas cyan y gris muestran resultados del cálculo del modelo tri-dimensional del tanque con acoplamiento débil al modelo cero dimensional de la red hidráulica \cite{ra10-paper},
+obtenidas sin utilizar modelo de turbulencia, y utilizando el modelo \textit{RANS} previamente comentado.
 Comparativamente se muestran también los valores experimentales reportados en la referencia \cite{invap-mockup}.
 
 \begin{figure}[ht]
@@ -517,13 +572,21 @@ Las curvas cyan y gris muestran resultados del cálculo del modelo tri-dimension
 \label{hvst} 
 \end{figure}
 
-Puede notarse cómo la evolución simulada modela la dinámica hallada experimentalmente.
-Durante los primeros segundos los resultados del cálculo imitan al experimento.
-Luego comienzan a separarse. 
-Sobre el final ésto puede explicarse considerando la geometría del tanque del reflector.
+Los modelos computacionales predicen un comportamiento dinámico similar al reportado experimentalmente.
+Durante los primeros segundos de evolución existe una cierta inercia en la descarga que solo es captada por los modelos que describen el detalle en el arreglo de válvulas.
+Tras este transitorio inicial, todos los modelos predicen una pendiente de vaciado similar.
+Esta pendiente se corresponde con similares caudales de descarga entre los diferentes modelos, 
+con lo que se verifica que la pérdida de carga total considerada en dos modelos independientes (modelo tri-dimensional del tanque acoplado, y modelo cero-dimensional del tanque acoplado) es similar.
+La curva experimental presenta ciertas ondulaciones que se deben al efecto que el oleaje en la superficie del líquido genera sobre el punto de medición.
+Estas variaciones son filtradas en el modelo tri-dimensional del tanque ya que la curva reporta una altura efectiva, calculada a partir del volumen restante de líquido en el tanque.
+Transcurridos los diez segundos de descarga, existe un quiebre en las curvas del modelo tri-dimensional del tanque.
+Este quiebre se corresponde al momento en el que las cañerías succionan tanto gas que es posible desacoplar el modelo cero-dimensional de pérdida de carga,
+basándose en la hipótesis de que se establece una vena gaseosa entre el punto de succión y el orificio de descarga.
+Esta hipótesis es conservativa para el objetivo de estudio previsto,
+ya que si el acoplamiento de la red no fuera realmente despreciable, el tanque se vaciaría a mayor velocidad que la modelada.
 En el tanque existe un cajón que envuelve la entrada a la red hidráulica y no permite el vaciado más allá de los 60 cm,
 por lo que el nivel de líquido, que es medido fuera de este cajón, tiende asintóticamente a este valor.
-Esta dinámica no es considerada en el modelo cero-dimensional del tanque.
+Esta dinámica no es considerada en el modelo cero-dimensional del tanque, lo que explica las diferencias entre las curvas en los últimos segundos.
 
 \subsection*{Análisis de sensibilidad de resultados ante válvula en falla}
 
@@ -539,8 +602,8 @@ ante accionamiento del SSP considerando falla simple en diferentes válvulas.}
 \label{hvstv} 
 \end{figure}
 
-Como puede observarse no se notan diferencias considerables en la evolución de la descarga.
-La pérdida de carga total del arreglo de válvulas apenas llega a ser sensible a la válvula que falla.
+Como puede observarse no es posible notar diferencias considerables en la evolución de la descarga.
+La pérdida de carga total del arreglo de válvulas es levemente sensible a la válvula que falla.
 
 \subsection*{Transporte de superficie libre en las tuberías}
 \label{3:level-set}
@@ -603,7 +666,16 @@ En la Figura \ref{evol-ls} se observa la evolución de la superficie libre duran
 \label{evol-ls}
 \end{figure}
 
+\subsection*{Conclusiones del análisis}
+La herramienta de análisis de acoplamiento fuerte de subsistemas permite incorporar el estudio de la inercia fluídica en la red hidráulica de descarga.
+Este estudio concluye que los modelos que incluyen el fenómeno inercial del fluido en la red hidráulica predicen un retraso de la descarga en un máximo de un segundo 
+respecto a los modelos que no lo incluyen.
+Como la inclusión del efecto inercial modela una dinámica similar a la reportada experimentalmente durante el transitorio inicial y,
+además, es conservativa en función del objetivo de estudio establecido, debería ser considerada en futuros análisis de seguridad.
+
 \subsection*{Análisis de métodos de resolución del sistema de ecuaciones de residuos}
+
+
 
 \begin{figure}[ht]
 \centering
@@ -625,6 +697,11 @@ En la Figura \ref{evol-ls} se observa la evolución de la superficie libre duran
 \caption{.}  
 	\label{nonlinear_fevals_ex}
 \end{figure}
+
+
+
+
+
 
 \section{Resolución de redes hidráulicas de múltiples componentes}
 \label{3:redes}
