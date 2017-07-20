@@ -6,63 +6,61 @@ A level-1 auxiliary file: resumen.aux
 A level-1 auxiliary file: cap1.aux
 A level-1 auxiliary file: cap2.aux
 A level-1 auxiliary file: cap3.aux
-I found no \bibdata command---while reading file template.aux
-Warning--I didn't find a database entry for "coup-0d3d"
-Warning--I didn't find a database entry for "coup-black"
-Warning--I didn't find a database entry for "coup-hyd"
-Warning--I didn't find a database entry for "ddmethod"
-Warning--I didn't find a database entry for "fede-enief2016"
-Warning--I didn't find a database entry for "coup-strong"
-Warning--I didn't find a database entry for "broyden-on"
-Warning--I didn't find a database entry for "broyden"
-Warning--I didn't find a database entry for "maestro-esclavo"
-Warning--I didn't find a database entry for "newton"
-Warning--I didn't find a database entry for "comunicacion"
-Warning--I didn't find a database entry for "fuente-fria"
-Warning--I didn't find a database entry for "iedelchik"
-Warning--I didn't find a database entry for "kays"
-Warning--I didn't find a database entry for "gunzburger"
-Warning--I didn't find a database entry for "supg"
-Warning--I didn't find a database entry for "pspg"
-You've used 0 entries,
+A level-1 auxiliary file: cap4.aux
+A level-1 auxiliary file: conclusiones.aux
+Database file #1: mibib.bib
+Warning--I'm ignoring pargpfep's extra "pages" field
+--line 307 of file mibib.bib
+Warning--empty author in newton
+Warning--missing publisher in iedelchik
+Warning--missing publisher in kays
+Warning--missing publisher in gunzburger
+Warning--empty journal in gmsh
+Warning--empty journal in invap-mockup
+Warning--missing publisher in bird
+Warning--empty journal in salome
+Warning--missing publisher in durbin
+Warning--missing publisher in k-e
+Warning--missing publisher in level-set
+You've used 35 entries,
             2634 wiz_defined-function locations,
-            1046 strings with 9392 characters,
-and the built_in function-call counts, 22 in all, are:
-= -- 0
-> -- 0
-< -- 0
-+ -- 0
-- -- 0
-* -- 2
-:= -- 7
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
+            1217 strings with 14256 characters,
+and the built_in function-call counts, 10738 in all, are:
+= -- 702
+> -- 329
+< -- 4
++ -- 165
+- -- 82
+* -- 471
+:= -- 1229
+add.period$ -- 101
+call.type$ -- 35
+change.case$ -- 27
 chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 1
-format.name$ -- 0
-if$ -- 1
+cite$ -- 46
+duplicate$ -- 1098
+empty$ -- 1096
+format.name$ -- 108
+if$ -- 2387
 int.to.chr$ -- 0
-int.to.str$ -- 0
-missing$ -- 0
-newline$ -- 5
-num.names$ -- 0
-pop$ -- 0
+int.to.str$ -- 35
+missing$ -- 318
+newline$ -- 176
+num.names$ -- 34
+pop$ -- 570
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 1
+skip$ -- 299
 stack$ -- 0
-substring$ -- 0
-swap$ -- 0
-text.length$ -- 0
+substring$ -- 325
+swap$ -- 643
+text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 0
-while$ -- 0
-width$ -- 0
-write$ -- 4
-(There was 1 error message)
+warning$ -- 11
+while$ -- 52
+width$ -- 37
+write$ -- 353
+(There were 12 warnings)

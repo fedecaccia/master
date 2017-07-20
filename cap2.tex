@@ -7,39 +7,26 @@
 
 \section{Paradigma maestro-esclavo}
 \label{2:maestro-esclavo}
-
-El modelo de comunicación utilizado en el trabajo recibe el nombre de \textit{maestro-esclavo} \cite{maestro-esclavo}.
-En este modelo, existe un programa \textit{maestro} que tiene el control unidireccional sobre los demás programas, que actúan bajo el rol de \textit{esclavos}.
-Cada código \textit{esclavo} se encarga de calcular el valor de las incógnitas en las interfaces de acople mediante las ecuaciones \ref{ecuaciones-modelos}.
-El código \textit{maestro} recibe estos valores y con ellos resuelve las ecuaciones de residuos \ref{ecuaciones-residuos}.
+La estrategia general para la resolución de problemas acoplados mediante el método de descomposición disjunta de dominios es comentada a continuación.
+Los problemas parciales pertenecientes a distintos subdominios se resuelven con diferentes códigos específicos.
+Cada uno de estos códigos recibe valores de condiciones de borde y en base a ellos se encarga de calcular el valor de las incógnitas en las interfaces de acople mediante las ecuaciones \ref{ecuaciones-modelos}.
+Existe un único programa que acopla los resultados.
+Este programa se abstrae completamente de la física implicada en cada subsistema.
+Simplemente recibe los valores para las incógnitas calculados por los diferentes programas y con ellos resuelve el sistema de ecuaciones de residuos \ref{ecuaciones-residuos}.
 En base a estos residuos propone\footnote{
 Esta propuesta reside en el método de resolución de ecuaciones no lineales seleccionado, ver sección \ref{1:metodos}.
-} nuevos valores para las inćognitas en las interfaces de acople y se los envía a sus \textit{esclavos}.
-Así también, es función del código \textit{maestro} enviarles órdenes de comenzar el cálculo en un dado paso de evolución, reiniciar el cálculo o incluso abortar.
+} nuevos valores para las inćognitas en las interfaces de acople y los comunica nuevamente a los demás programas.
+Este tipo de comunicación utilizado recibe el nombre de \textit{maestro-esclavo} \cite{maestro-esclavo},
+en el cual existe un programa \textit{maestro} que tiene el control unidireccional sobre los demás programas, que actúan bajo el rol de \textit{esclavos}.
+Además del envío y recepción de valores de variables, son funciones del código \textit{maestro} el envío de órdenes a sus \textit{esclavos} de comenzar el cálculo en un dado paso de evolución, reiniciar el cálculo o incluso abortar.
 
 Cabe notar que cada código \textit{esclavo} podría ejecutarse en varios procesos, paralelizando sus cálculos,
 ya sea mediante memoria compartida como mediante memoria distribuida.
-Incluso podrían lanzarse diversos procesos del código \textit{maestro} en la resolución de algún problema.
+Incluso podrían lanzarse diferentes procesos del código \textit{maestro} en la resolución de algún problema.
 Debido a la complejidad en destinatarios de mensajes, cantidades y tipos de variables a compartir,
 es necesario definir una estrategia clara de comunicación
 que permita acoplar diversos códigos de manera genérica, segura y eficaz.
-La estrategia definida es comentada en la sección \ref{2:estructura}.
-
-\section{Códigos maestros utilizados}
-\label{2:maestros}
-
-En este trabajo se utilizaron dos códigos maestros para la resolución de los problemas.
-El primer código \textit{maestro} utilizado es el código \textbf{Coupling} desarrollado por XYZ en XYZ.
-\textbf{Coupling} permite acoplar códigos mediante funciones del estándard Interfaz de Paso de Mensajes (MPI por sus siglas en inglés, \textit{Message Passing Interface}).
-Esta estrategia requiere el código fuente de los programas \textit{esclavos} para implementar las funciones adecuadas.
-El código maestro está diseñado de tal forma que los códigos acoplados resuelvan ecuaciones del tipo \ref{ecuaciones-modelos}
-para incógnitas en interfaces con condiciones de borde de tipo \textit{Dirichlet} o de tipo \textit{Neumann}.
-
-Con la idea de extender estas capacidades al acoplamiento de programas cuyos códigos fuente no estuvieran disponibles,
-así como a programas cuyos cálculos no dependieran exclusivamente de variables seteadas como condiciones de borde,
-sino de otros parámetros generales del sistema,
-se desarrolló un código más genérico de acoplamiento, el código \textbf{Newton} \cite{newton},
-que será descripto en el Capítulo \ref{chap4}.
+La estrategia definida es comentada en la siguiente sección.
 
 \section{Modelos de comunicación}
 \label{2:comunicacion}
@@ -55,10 +42,11 @@ con el objetivo de no perder generalidad en la herramienta desarrollada.
 Los modos de comunicación implementados son los siguientes:
 \begin{itemize}
 \item Paso de mensajes: este modo es implementado para comunicar procesos de programas en los cuales es posible modificar los códigos fuente.
-\item Lectura y escritura de archivos de entrada y salida: este modo es implementado para comunicar procesos de programas que serán tratados como cajas negras.
+\item Lectura y escritura de archivos de entrada y salida: este modo es implementado para comunicar procesos de programas en los cuales no es posible modificar los códigos fuente.
 \end{itemize}
 
-Si bien este tipo de comunicaciones remotas son mucho más lentas que las
+En ambos casos los programas esclavos se comunican solo con el programa maestro.
+Si bien estos tipo de comunicaciones remotas son más lentas que las
 comunicaciones locales, en general su latencia es despreciable frente al tiempo de cálculo de los procesos \textit{esclavos}.
 
 \subsection*{Paso de mensajes}
@@ -73,7 +61,7 @@ El proceso que envía,
 necesita conocer la localización, el tamaño y el tipo de los datos, así como el
 proceso destino.
 
-Estas funcionalidades se implementaron siguiendo el protocolo MPI. 
+Estas funcionalidades se implementaron siguiendo el protocolo del estándard Interfaz de Paso de Mensajes (MPI por sus siglas en inglés, \textit{Message Passing Interface}). 
 MPI es una especificación de paso de mensajes aceptada como estándar
 por todos los fabricantes de computadores. 
 El objetivo principal de MPI es proporcionar un estándar para escribir
@@ -83,16 +71,16 @@ la disponibilidad de las aplicaciones.
 
 Se utilizaron dos implementaciones alternativas.
 En la primera, cada código \textit{esclavo}, así como el código \textit{maestro},
-son ejecutados de manera independiente en uno (SISD por sus siglas en inglés, Single Instruction, Single Data) o múltiples procesos (SIMD por sus siglas en inglés, Single Instruction, Multiple Data).
+es ejecutado de manera independiente en uno (SISD por sus siglas en inglés, Single Instruction, Single Data) o múltiples procesos (SIMD por sus siglas en inglés, Single Instruction, Multiple Data).
 El código \textit{maestro} publica una serie de puertos a los cuales cada código \textit{esclavo} puede conectarse\footnote{
 Para que los programas puedan encontrar los puertos publicados, es necesario que todos ellos pertenezcan a un mismo servicio de comunicación generado por el \textit{ompi-server}.
 }.
-Una vez aceptadas las conexiones, los programas pueden intercambiar mensajes siguiendo una lógica preestablecida.
-Cuando ya no es necesario que dos programas continúen comunicándose, se cierran las conexiones.
+Una vez aceptadas las conexiones, los programas pueden intercambiar mensajes con él siguiendo una lógica preestablecida.
+Cuando ya no es necesario que los programas continúen comunicándose, se cierran las conexiones.
 
-En la otra implementación, todos los programas son ejecutados al mismo tiempo (MIMD por sus siglas en inglés, Multiple Instruction, Multiple Data).
+En la otra implementación, todos los programas son ejecutados al mismo tiempo en uno (MISD por sus siglas en inglés, Multiple Instruction, Single Data) o varios procesos (MIMD por sus siglas en inglés, Multiple Instruction, Multiple Data).
 En este tipo de ejecuciones todos los procesos cuentan con un único comunicador original, \textit{MPI\_COMM\_WORLD}, y por ello es necesario crear nuevos grupos de procesos y de comunicadores.
-Una vez establecidos los comunicadores, los programas pueden intercambiar mensajes siguiendo la misma lógica preestablecida en el modelo previo.
+Una vez establecidos los comunicadores, los programas ya pueden intercambiar mensajes con el código \textit{maestro} siguiendo la misma lógica que se establecerá para ambos modelos.
 Si bien esta implementación no es posible para nuevas conexiones una vez que los programas han sido ejecutados,
 son mucho más seguras, ya que no dependen del éxito de encontrar los puertos requeridos para las conexiones.
 
@@ -125,7 +113,7 @@ Además, requiere la programación de rutinas extras específicas dedicadas a la
 \subsection*{Estructura de comunicación implementada}
 \label{2:estructura}
 
-Se desarrollaron funciones híbridas para códigos maestros con la finalidad de cubrir todas las formas de comunicación descriptas en la sección previa.
+Se desarrollaron funciones híbridas con la finalidad de cubrir todas las formas de comunicación descriptas en la sección previa.
 En el caso de comunicación por intercambio de mensajes, 
 la estrategia definida establece comunicaciones siempre entre un único proceso del código \textit{maestro}, el proceso \textit{raíz},
 y un único proceso de cada código \textit{esclavo} (sus propios procesos \textit{raíces}\footnote{
@@ -250,27 +238,48 @@ En este modelo, la comunicación se establece solo mediante lectura y escritura 
 \label{esquema-comunicacion}
 \end{figure}
 
+\section{Códigos maestros utilizados}
+\label{2:maestros}
+
+En este trabajo se utilizaron dos códigos maestros que cumplen con la estrategia de acoplamiento descripta previamente.
+El primer código \textit{maestro} utilizado es el código \textbf{Coupling} \cite{coup-0d3d} \cite{coup-black} \cite{coup-hyd}.
+\textbf{Coupling} utiliza los modelos de comunicación por paso de mensaje entre programas ejecutados en modos SISD y SIMD.
+El código maestro está diseñado de tal forma que los códigos acoplados resuelvan las ecuaciones \ref{ecuaciones-modelos}
+para incógnitas en interfaces con condiciones de borde de tipo \textit{Dirichlet} o de tipo \textit{Neumann}.
+Con la idea de extender estas capacidades al acoplamiento de programas en modos MISD y MIMD,
+al acoplamiento de programas por lectura y escritura de archivos,
+así como a programas cuyos cálculos no dependieran exclusivamente de variables seteadas como condiciones de borde,
+sino de otros parámetros generales del sistema,
+se desarrolló un código más genérico de acoplamiento, el código \textbf{Newton} \cite{newton}.
+En los apéndices \ref{couping} y \ref{newton} se describen las principales características de ambos códigos.
+
 \section{Arquitectura de acoplamiento montada en códigos \textit{esclavos} comunicados por paso de mensajes}
 \label{2:arquitectura-mpi}
 
 En general, los códigos \textit{esclavos} son programas de cálculo particulares que no han sido diseñados para mantenerse acoplados a otros códigos.
-En esta sección se demuestra cómo mediante unas mínimas modificaciones en sus rutinas es posible implementar un acoplamiento eficiente.
-Las acciones de acoplamiento deben ser llamadas en cuatro instancias diferentes:
+En esta sección se demuestra cómo mediante unas mínimas modificaciones en sus rutinas es posible implementar un acoplamiento eficiente por paso de mensajes.
+
+Las acciones de acoplamiento se reúnen en cuatro instancias diferentes:
 \begin{enumerate}
 \item al principio del programa;
-\item al principio de cada paso de evolución;
-\item al finalizar cada paso de evolución;
+\item al principio de cada paso de evolución acoplado;
+\item al finalizar cada paso de evolución acoplado;
 \item al finalizar el programa.
 \end{enumerate}
-El programador podría definir una nueva variable \textit{booleana} que a modo de bandera indique cuándo se está realizando un cálculo acoplado para ingresar o no en las instancias nombradas.
+En cada una de estas instancias el programa \textit{esclavo} debe llamar a una función específica de acoplamiento.
+El programador podría definir una nueva variable \textit{booleana} que a modo de bandera indique cuándo se está realizando un cálculo acoplado para realizar el llamado o evadirlo.
 Los problemas que no involucran evolución de variables pueden ser tratados como problemas con un solo paso de evolución.
 A continuación se describen las instancias de acoplamiento.
-
 
 \subsection*{Acoplamiento en instancia 1: al principio del programa}
 
 En esta instancia es necesario establecer la comunicación \textit{MPI} entre el proceso \textit{raíz} del código \textit{esclavo} y el código maestro.
-Si ambos programas han sido ejecutados en el esquema \textit{MIMD} los pasos a realizar son los siguientes:
+Si ambos programas han sido ejecutados en los esquemas SISD o SIMD los pasos a realizar son los siguientes:
+\begin{itemize}
+\item búsqueda del puerto publicado por el el proceso \textit{raíz} del programa \textit{maestro};
+\item conexión del proceso \textit{raíz} del programa esclavo a este puerto y creación del comunicador.
+\end{itemize}
+Si, en cambio, los programas han sido ejecutados en los modos MISD o MIMD, los pasos a realizar son los siguientes:
 \begin{itemize}
 \item creación de grupo global de procesos;
 \item creación de subgrupo local de procesos;
@@ -278,29 +287,26 @@ Si ambos programas han sido ejecutados en el esquema \textit{MIMD} los pasos a r
 \item creación de un grupo entre el proceso \textit{raíz} del programa esclavo y el proceso \textit{raíz} del programa \textit{maestro};
 \item creación de un comunicador en el grupo previo, necesario para el paso de mensajes de acople.
 \end{itemize}
-Si, en cambio, el programa ha sido ejecutado en forma independiente, los pasos a realizar son los siguientes:
-\begin{itemize}
-\item búsqueda del puerto publicado por el el proceso \textit{raíz} del programa \textit{maestro};
-\item conexión del proceso \textit{raíz} del programa esclavo a este puerto y creación del comunicador.
-\end{itemize}
 Una vez implementada la comunicación, el código \textit{esclavo} puede recibir datos generales 
 (como parámetros de evolución iniciales, cantidad de pasos de evolución, cantidad de incógnitas en interfaces de acople, cantidad de interfaces de acople, etc.),
 y chequear la consistencia con los datos propios del programa.
 Si es necesario, los datos locales pueden ser cambiados notificando al usuario.
 
-\subsection*{Acoplamiento en instancia 2: al principio de cada paso de evolución}
+\subsection*{Acoplamiento en instancia 2: al principio de cada paso de evolución acoplado}
 
 La estrategia de acoplamiento se define entre el parámetro de evolución inicial $t_{coup,0}$ y el parámetro final $t_{coup,N}$,
 con $N+1$ pasos de acoplamiento cada $\Delta t_{coup}=\frac{t_{coup,N} - t_{coup,0}}{N}$.
-Si bien el código \textit{esclavo} debe intercambiar mensajes en cada uno de estos pasos, es posible que además utilice subpasos de evolución $\Delta t_{local}$ locales, como se explicó en el apartado \ref{1:evolucion}  \textbf{Problemas de evolución}. En estos casos, se implementa una estrategia de interpolación de los valores de las variables en las interfaces de acoplamiento entre los pasos de evolución acoplados.
+La solución para $t_{coup,0}$ es la condición inicial del problema, y es dato para todos los programas.
+En este paso se llama a la instancia 2, en la cual se recibe valores de condiciones de borde para el primer paso de acoplamiento, en $t_{coup,1}$.
+En base a estos valores, el programa \textit{esclavo} resuelve las ecuaciones implicadas en el subdominio correspondiente.
+Es posible que además utilice subpasos de evolución $\Delta t_{local}$ locales (como se explicó en el apartado \ref{1:evolucion}  \textbf{Problemas de evolución}),
+por lo cual requerirá valores extras para las condiciones de borde en estos pasos. 
+En estos casos, se implementa una estrategia de interpolación de valores entre la solución acoplada previa, y los valores recibidos para el siguiente paso acoplado.
+Este proceso se repite al principio de cada paso de acople.
 
-Al principio de cada paso acoplado de cálculo el código \textit{esclavo} recibe valores supuestos para las incógnitas que se toman como dato en las interfaces de acople,
-en función de la estretegia implementada (ver sección \ref{1:abordaje}).
-El programa resuelve el paso $\Delta t_{coup}$ en base a ellos.
+\subsection*{Acoplamiento en instancia 3: al finalizar cada paso de evolución acoplado}
 
-\subsection*{Acoplamiento en instancia 3: al finalizar cada paso de evolución}
-
-Una vez resuelto cada $\Delta t_{coup}$, el programa envía al programa \textit{maestro} los valores de las variables que se han definido como incógnitas en las interfaces de acoplamiento.
+Una vez resuelto cada $\Delta t_{coup}$, el programa \textit{esclavo} envía al programa \textit{maestro} los valores de las incógnitas calculadas en las interfaces de acoplamiento.
 Tras este envío, el programa queda en espera de la órden para continuar.
 Mientras, el programa \textit{maestro} recepciona los valores de las incógnitas calculados por los demás códigos \textit{esclavos}.
 Con estos valores resuelve las ecuaciones de residuos \ref{sistema-simple}.
@@ -592,9 +598,13 @@ Es necesario resaltar que el esquema también aplica para el caso de comunicaci�
 
 La Figura \ref{esquema-evolucion} esquematiza lo comentado para un caso sencillo en que se acoplan dos programas \textit{esclavos} al programa \textit{maestro}.
 En este ejemplo, las variables $x,y$ son las incógnitas en las interfaces de acople.
-El programa \textbf{Esclavo 1} resuelve cada paso de evolución acoplado en función de un valor $x_{guess}$ recibido desde el código \textit{maestro}, y le devuelve el valor $y$ calculado a partir de él.
-El programa \textbf{Esclavo 2} calcula, en cambio, $x$ en función de $y_{guess}$.
+La estrategia definida consiste en imponer al primer subdominio un valor \textit{guess} para $x$ y al segundo subdominio un valor \textit{guess} para $y$.
+\textbf{Maestro} es el programa que se ocupa de proponer estos valores $guess$ y de enviarlos a los \textit{esclavos}.
+El programa \textbf{Esclavo 1} resuelve cada paso de evolución acoplado en función del valor $x_{guess}$ recibido, y envía a \textbf{Maestro} el valor $y$ calculado a partir de él.
+El programa \textbf{Esclavo 2} calcula $x$ en función de $y_{guess}$ y también envía el resultado a \textbf{Maestro}.
+\textbf{Maestro} entonces resuelve las ecuaciones de residuos, y decide si los resultados están convergidos o si es necesario continuar con las iteraciones.
 
 \subsection*{Acoplamiento en instancia 4: al finalizar el programa}
 
 Antes de finalizar el programa, es necesario cerrar las conexiones, liberar los grupos y los comunicadores establecidos.
+Cada programa \textit{esclavo} debe recibir una order para ejecutar estas acciones.

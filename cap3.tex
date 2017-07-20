@@ -190,7 +190,7 @@ donde $\rho_0$ es la densidad del fluido a la temperatura de referencia $T_{ref}
 Las ecuaciones (\ref{eq-cavidad}) se resuelven mediante una formulación de elementos finitos, 
 con elementos lineales para aproximar los campos de presiones, velocidades y temperaturas, 
 estabilizando con los métodos \textit{SUPG} \cite{supg} y \textit{PSPG} \cite{pspg}.
-El método \textit{SUPG} (\textit{Streamline Upwind Petrov-Galerkin) se utiliza para estabilizar problemas de transporte con alto número de \textit{Peclet} (\textit{Pe}).
+El método \textit{SUPG} (\textit{Streamline Upwind Petrov-Galerkin}) se utiliza para estabilizar problemas de transporte con alto número de \textit{Peclet} (\textit{Pe}).
 El \textit{Pe} es un número adimensional que relaciona la velocidad de advección de un flujo y la velocidad de difusión, y está relacionado con el número de \textit{Reynolds} (\textit{Re}).
 En las ecuaciones de \textit{Navier-Stokes}, el método estabiliza las evoluciones con alto \textit{Re},
 y consiste en la adición de una difusividad extra en la dirección de las líneas de corriente.
