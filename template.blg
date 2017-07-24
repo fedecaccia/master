@@ -6,11 +6,10 @@ A level-1 auxiliary file: resumen.aux
 A level-1 auxiliary file: cap1.aux
 A level-1 auxiliary file: cap2.aux
 A level-1 auxiliary file: cap3.aux
-A level-1 auxiliary file: cap4.aux
 A level-1 auxiliary file: conclusiones.aux
 Database file #1: mibib.bib
 Warning--I'm ignoring pargpfep's extra "pages" field
---line 307 of file mibib.bib
+--line 306 of file mibib.bib
 Warning--empty author in newton
 Warning--missing publisher in iedelchik
 Warning--missing publisher in kays
@@ -22,45 +21,45 @@ Warning--empty journal in salome
 Warning--missing publisher in durbin
 Warning--missing publisher in k-e
 Warning--missing publisher in level-set
-You've used 35 entries,
+You've used 34 entries,
             2634 wiz_defined-function locations,
-            1217 strings with 14256 characters,
-and the built_in function-call counts, 10738 in all, are:
-= -- 702
-> -- 329
+            1211 strings with 14162 characters,
+and the built_in function-call counts, 10487 in all, are:
+= -- 686
+> -- 321
 < -- 4
-+ -- 165
-- -- 82
-* -- 471
-:= -- 1229
-add.period$ -- 101
-call.type$ -- 35
-change.case$ -- 27
++ -- 161
+- -- 80
+* -- 463
+:= -- 1198
+add.period$ -- 98
+call.type$ -- 34
+change.case$ -- 26
 chr.to.int$ -- 0
-cite$ -- 46
-duplicate$ -- 1098
-empty$ -- 1096
-format.name$ -- 108
-if$ -- 2387
+cite$ -- 45
+duplicate$ -- 1068
+empty$ -- 1071
+format.name$ -- 105
+if$ -- 2333
 int.to.chr$ -- 0
-int.to.str$ -- 35
-missing$ -- 318
-newline$ -- 176
-num.names$ -- 34
-pop$ -- 570
+int.to.str$ -- 34
+missing$ -- 310
+newline$ -- 171
+num.names$ -- 33
+pop$ -- 554
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 299
+skip$ -- 293
 stack$ -- 0
 substring$ -- 325
-swap$ -- 643
+swap$ -- 628
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 11
-while$ -- 52
-width$ -- 37
-write$ -- 353
+while$ -- 51
+width$ -- 36
+write$ -- 343
 (There were 12 warnings)
