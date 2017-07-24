@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \documentclass[12pt,papel,twoside]{ibtesis}
-%\documentclass[12pt,screen,twoside,pagebackref]{ibtesis}
+\documentclass[12pt,screen,twoside,pagebackref]{ibtesis}
 % \documentclass[12pt,papel,singlespace,oneside]{ibtesis}
-\documentclass[12pt,papel,preprint,singlespace,oneside]{ibtesis}
+%\documentclass[12pt,papel,preprint,singlespace,oneside]{ibtesis}
 
 
 %%%%%%%%%%%%%%%%%%%%% Paquetes extra %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -20,6 +20,12 @@
 \usepackage{mathrsfs}
 \usepackage{verbatim}
 \usepackage[T1]{fontenc}%Ahora puedo escribir con acentos
+\usepackage[dvipsnames]{xcolor}
+% Code lines
+%\usepackage{lmodern}
+%\usepackage{listings}
+%\usepackage{alltt}
+\usepackage{fancyvrb}
 %\usepackage[latin1]{inputenc}
 \usepackage{scrextend} % add extra margins in paragraph
 \usepackage{tikz} % Scientific schemes
@@ -120,7 +126,7 @@ Dr.P. Zanocco (Instituto Balseiro, Universidad Nacional de Cuyo)\\
 \include{cap3} % ejemplos de aplicación
 \include{conclusiones} % conclusiones
 
-%\appendix
+\appendix
 \include{apend1}
 \include{apend2}
 \include{apend3}

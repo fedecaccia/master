@@ -7,6 +7,9 @@ A level-1 auxiliary file: cap1.aux
 A level-1 auxiliary file: cap2.aux
 A level-1 auxiliary file: cap3.aux
 A level-1 auxiliary file: conclusiones.aux
+A level-1 auxiliary file: apend1.aux
+A level-1 auxiliary file: apend2.aux
+A level-1 auxiliary file: apend3.aux
 Database file #1: mibib.bib
 Warning--I'm ignoring pargpfep's extra "pages" field
 --line 306 of file mibib.bib
@@ -23,7 +26,7 @@ Warning--missing publisher in k-e
 Warning--missing publisher in level-set
 You've used 34 entries,
             2634 wiz_defined-function locations,
-            1211 strings with 14162 characters,
+            1214 strings with 14192 characters,
 and the built_in function-call counts, 10487 in all, are:
 = -- 686
 > -- 321

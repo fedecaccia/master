@@ -1,3 +1,229 @@
 \chapter{Descripción del código maestro \textbf{Coupling}}
-\label{C:ap1}
-\chapterquote{Negociemos Don Inodoro}{Fernando de la R\'{u}a, 2001}
+\label{C:coupling}
+%\chapterquote{Negociemos Don Inodoro}{Fernando de la R\'{u}a, 2001}
+
+\textbf{Coupling} es un código escrito en \textit{fortran 90}, desarrollado por Jorge Leiva, Pablo Blanco y Gustavo Buscaglia.
+El mismo fue diseñado como programa \textit{maestro} en las funciones de acoplamiento explícito e implícito,
+estableciendo la comunicación con diversos programas \textit{esclavos} mediante funciones de MPI.
+Su desempeño fue validado en diversos trabajos de acoplamiento \cite{coup-0d3d} \cite{coup-black} \cite{coup-hyd} \cite{coup-strong}.
+
+\section{Modelado de problemas acoplados}
+\label{ap1:definicion}
+El programa \textbf{Coupling} resuelve problemas que fueron formulados mediante el Método de Descomposición Disjunta de Dominios descripto en el \hyperlink{chapter.1}{Capítulo 1}.
+El esquema de resolución fue diseñado de tal forma que se permite que las interfaces de acoplamiento cuenten con múltiples pares de incógnitas vectoriales en diferentes nodos.
+Las principales variables en la definición de un problema son las siguientes:
+\begin{itemize}
+\item Cantidad de subdominios acoplados (variable \textit{Ncomp}).
+\item Cantidad de uniones globales (variable \textit{Nbond}).
+\item Cantidad de superficies en cada subdominio (variable \textit{Nsupc}).
+\item Matriz de conectividades entre las interfaces de diferentes subdominios (variable con numeraciones locales \textit{Localsur} y globales \textit{Incid}.
+\item Cantidad de pares de variables incógntias en cada interfaz (variable \textit{Npair}).
+Se supone que cada incógnita de cada interfaz está acompañada de otra variable incógnita relacionada con su gradiente.
+Por ejemplo, \textit{temperatura} y \textit{flujo de calor}, o \textit{velocidad} y \textit{presión}.
+\item Cantidad de nodos con incógnitas en cada interfaz (variable \textit{Nodpair}).
+\item Cantidad de componentes escalares en cada nodo (variable \textit{Npairc}).
+\item Tipo de condición de borde para cada nodo (variable \textit{indexbc}).
+Las opciones posibles son condiciones de borde \textit{esenciales} (tipo \textit{Dirichlet}) o \textit{naturales} (tipo \textit{Neumann}), y deben establecerse por separado para cada subdominio.
+\end{itemize}
+Para que el problema de acoplamiento quede bien definido,
+todos estos datos deben ser provistos en el archivo de configuración \texttt{mesh.cfg} utilizando palabras claves específicas.
+Además, debe proveerse un archivo de configuración extra, el arhivo \texttt{couple.cfg}.
+En este archivo se detalla el método de acoplamiento a utilizar en la resolución del problema,
+y sus diferentes parámetros específicos.
+También se detallan los parámetros necesarios en problemas de evolución.
+
+En la sección \ref{ap1:ejemplo} se describe como ejemplo la formulación utilizada en una de las aplicaciones analizadas en el \hyperlink{chapter.3}{Capítulo 3}.
+
+\section{Metodología de resolución}
+\label{ap1:resolucion}
+
+El archivo \texttt{src/couple\_ddm.for} contiene la estructura principal del programa.
+El modelo de comunicación entre programas implementado es el de paso de mensajes entre programas ejecutados en modos SISD o SIMD.
+Conforme a la estrategia de acoplamiento descripta en el \hyperlink{chapter.2}{Capítulo 2}, se siguen los siguientes pasos:
+\begin{enumerate}
+\item Lectura de archivos de datos \texttt{mesh.cfg} y \texttt{couple.cfg}.
+\item Inicialización de las funciones de MPI y publicación de puertos de conexión.
+\item Establecimiento de la comunicación con los diferentes programas esclavos.
+\item Envío de datos generales del problema para chequeo interno en cada programa.
+\item Ingreso en el \textit{loop} de evolución.
+\begin{enumerate}
+\item Envío de valores \textit{guess} para las condiciones de borde de cada subdominio a cada programa \textit{esclavo}.
+\item Recepción de valores calculados para las incógnitas de cada subdominio de cada programa \textit{esclavo}.
+\item Resolución de las ecuaciones de residuos \ref{ecuaciones-residuos}.
+\item Evaluación de la convergencia:
+\begin{itemize}
+\item si los resultados están convergidos el problema puede continuar con el siguiente paso de evolución;
+\item si los resultados no están convergidos, es necesario reiniciar el cálculo.
+\end{itemize}
+\item Envío de orden de avance o de reinicio a cada programa \textit{esclavo}.
+\end{enumerate}
+\item Finalización de \textit{loop} de evolución.
+\item Cierre de las conexiones con los programas \textit{esclavos} y finalización.
+\end{enumerate}
+Los pasos descriptos requieren una arquitectura de acoplamiento específica montada en los códigos \textit{esclavos}, la cual fue comentada en la sección \ref{2:arquitectura-mpi}.
+
+\section{Ejemplo de uso}
+\label{ap1:ejemplo}
+
+A continuación se comenta la formulación del problema analizado en la sección \ref{3:mock-up}:
+\textit{Análisis del segundo sistema de parada de un reactor de investigación}.
+Se definen dos subdominios: el primero es el subsistema tri-dimensional arreglo de válvulas y el segundo es el subsistema cero-dimensional del tanque del reactor y porción superior de la red hidráulica.
+Existe una única unión entre ambos subdominios, la \textit{Unión 1}.
+Es necesario definir una numeración global de interfaces de acoplamiento.
+El subsistema tri-dimensional contiene la interfaz global \textit{Interfaz 1} y el subsistema cero-dimensional contiene la interfaz global \textit{Interfaz 2}.
+En cada interfaz existe un solo par de variables acopladas, el par \textit{caudal-presión}.
+El \textit{caudal} es impuesto como condición de borde \textit{esencial} al \textit{Subdominio 1} y la \textit{presión} como condición de borde \textit{natural} al \textit{Subdominio 2}.
+La Figura \ref{ra10-coupling} resume las definiciones previas.
+
+\begin{figure}[h]
+\centering{}
+\begin{tikzpicture}
+
+% Dummy
+%\node at (0,6em) (dummy) {}; % blank space
+
+% Unión
+\node at (-3em,0em) (u0) {};
+\node at ( 3em,0em) (u1) {};
+\draw[line width=1pt, o-o] (u0) -- (u1) node [midway, sloped, anchor=center, above]{\footnotesize \textit{Unión 1}};
+
+% Box 1
+\node at (-15em,4em) (b0) {};
+\node at (-15em,-4em) (b1) {};
+\node at (-7em,-4em) (b2) {};
+\node at (-7em,4em) (b3) {};
+\draw[line width=1pt, -] (b0.center) -- (b1.center) -- (b2.center) -- (b3.center) -- (b0.center);
+\node [text width=7em, align=center] at (-11em,0) (s1) {\footnotesize \textit{Subdominio 1} \scriptsize(condición de borde \textit{esencial})};
+
+% Box 2
+\node at (15em,4em) (b0) {};
+\node at (15em,-4em) (b1) {};
+\node at (7em,-4em) (b2) {};
+\node at (7em,4em) (b3) {};
+\draw[line width=1pt, -] (b0.center) -- (b1.center) -- (b2.center) -- (b3.center) -- (b0.center);
+\node [text width=7em, align=center] at (11em,0) (s2) {\footnotesize \textit{Subdominio 2} \scriptsize(condición de borde \textit{natural})};
+
+% Interfaz global 1
+\node at (-7em,0em) (i10) {};
+\node at (-5em,0em) (i11) {};
+\draw[line width=1pt, -|] (i10.center) -- (i11.center) node [pos=1.0, text width=3em, above]{\footnotesize \textit{Interfaz local 1}}
+node [pos=1.0, text width=3em, below]{\footnotesize \textit{Interfaz global 1}};
+
+% Interfaz global 2
+\node at (7em,0em) (i10) {};
+\node at (5em,0em) (i11) {};
+\draw[line width=1pt, -|] (i10.center) -- (i11.center) node [pos=1.0, text width=3em, above]{\footnotesize \textit{Interfaz local 1}}
+node [pos=1.0, text width=3em, below]{\footnotesize \textit{Interfaz global 2}};
+
+\end{tikzpicture}
+\caption[Definición del problema de acoplamiento en el SSP de un reactor de investigación]
+{Definición del problema de acoplamiento en el Segundo Sistema de Parada del reactor de investigación investigado en la sección \ref{3:mock-up}.}
+\label{ra10-coupling}
+\end{figure}
+
+Las siguientes líneas conforman el archivo de configuración \texttt{mesh.cfg}:
+
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Gray}{! Nombre del problema}
+\textcolor{Red}{*TITLE}
+\textcolor{OliveGreen}{manifold mockup OPAL}
+
+\textcolor{Gray}{! Número de subdominios}
+\textcolor{Red}{*NUMBER_OF_COMPONENTS}
+\textcolor{OliveGreen}{2     }\textcolor{Gray}{! Subdominio 3D y subdominio 0D}
+
+\textcolor{Gray}{! Cantidad de interfaces en cada subdominio}
+\textcolor{Red}{*NUMBER_OF_COMPONENT_INTERFACES}
+\textcolor{OliveGreen}{1     }\textcolor{Gray}{! Subdominio (1): 1 interfaz}
+\textcolor{OliveGreen}{1     }\textcolor{Gray}{! Subdominio (2): 1 interfaz}
+
+\textcolor{Gray}{! Uniones en cada componente}
+\textcolor{Red}{*CONECTIVITY_BETWEEN_COMPONENT_INTERFACES}
+\textcolor{OliveGreen}{1 1   }\textcolor{Gray}{! Subdominio (1); Interfaz local (1): Unión 1}
+\textcolor{OliveGreen}{2 1   }\textcolor{Gray}{! Subdominio (2); Interfaz local (1): Unión 1}
+
+\textcolor{Gray}{! Pares de variables en cada componente}
+\textcolor{Red}{*PAIR_VARIABLES_NUMBER_BY_COMPONENT_INTERFACE}
+\textcolor{OliveGreen}{1     }\textcolor{Gray}{! Subdominio (1); interfaz local (1): 1 par}
+\textcolor{OliveGreen}{1     }\textcolor{Gray}{! Subdominio (2); interfaz local (1): 1 par}
+
+\textcolor{Gray}{! Componentes escalares en cada par de variables}
+\textcolor{Red}{*PAIR_VARIABLES_NUMBER_OF_COMPONENTS}
+\textcolor{OliveGreen}{1     }\textcolor{Gray}{! Subdominio (1); interfaz (1); par (1): 1 componente escalar}
+\textcolor{OliveGreen}{1     }\textcolor{Gray}{! Subdominio (2); interfaz (1); par (1): 1 componente escalar}
+
+\textcolor{Gray}{! Tipo de condición de borde en cada par}
+\textcolor{Red}{*BOUNDARY_CONDITION_TYPE_BY_COMPONENT_PAIRS}
+\textcolor{OliveGreen}{1     }\textcolor{Gray}{! Subdominio (1); interfaz (1); par (1): tipo Dirichlet (1)}
+\textcolor{OliveGreen}{-1    }\textcolor{Gray}{! Subdominio (2); interfaz (1); par (1): tipo Neumann (-1)}
+
+\textcolor{Gray}{! Cantidad de nodos en cada par de variables}
+\textcolor{Red}{*PAIR_VARIABLES_NUMBER_OF_NODES}
+\textcolor{OliveGreen}{1     }\textcolor{Gray}{! Subdominio (1); interfaz (1); par (1): 1 nodo}
+\textcolor{OliveGreen}{1     }\textcolor{Gray}{! Subdominio (2); interfaz (1); par (1): 1 nodo}
+
+\textcolor{Gray}{! Finalización}
+\textcolor{Red}{*END}
+\end{Verbatim}
+
+Las siguientes líneas en el archivo de configuración \texttt{couple.cfg} definen la metodología numérica de resolución:
+
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Gray}{! Parámetro de evolución inicial}
+\textcolor{Red}{*INITIAL_CONTINUATION_PARAMETER}
+\textcolor{OliveGreen}{0.0}
+
+\textcolor{Gray}{! Parámetro de evolución final}
+\textcolor{Red}{*FINAL_CONTINUATION_PARAMETER}
+\textcolor{OliveGreen}{15.0}
+
+\textcolor{Gray}{! Cantidad de pasos de evolución}
+\textcolor{Red}{*NUMBER_OF_CONTINUATION_STEPS}
+\textcolor{OliveGreen}{1500}
+
+\textcolor{Gray}{! Maxima cantidad de iteraciones del método de acoplamiento en cada}
+\textcolor{Gray}{paso}
+\textcolor{Red}{*MAXIMUM_NONLINEAR_ITERATIONS}
+\textcolor{OliveGreen}{800}
+
+\textcolor{Gray}{! Método de acoplamiento}
+\textcolor{Red}{*NONLINEAR_SOLVER}
+\textcolor{OliveGreen}{2} \textcolor{Gray}{! Broyden}
+
+\textcolor{Gray}{! Tolerancia absoluta en residuos de variables acopladas}
+\textcolor{Red}{*ABSOLUTE_TOLERANCE}
+\textcolor{OliveGreen}{1.0e-15}
+
+\textcolor{Gray}{! Tolerancia relativa en residuos de variables acopladas}
+\textcolor{Red}{*TOLERANCE_NONLINEAR}
+\textcolor{OliveGreen}{1.0e-08}
+
+\textcolor{Gray}{! Iteraciones lineales máximas en la resolución de sistemas}
+\textcolor{Gray}{algebraicos definidos en métodos implícitos}
+\textcolor{Red}{*MAXIMUM_LINEAR_ITERATIONS}
+\textcolor{OliveGreen}{800}
+
+\textcolor{Gray}{! Pasos entre las reinicializaciones de la matriz jacobiana}
+\textcolor{Red}{*JACOBIAN_INITIALIZATION}
+\textcolor{OliveGreen}{100}
+
+\textcolor{Gray}{! Parámetro de perturbación en cálculo de la matriz jacobiana mediante}
+\textcolor{Gray}{diferencias finitas}
+\textcolor{Red}{*JACOBIAN_PERTURBATION_PARAMETER}
+\textcolor{OliveGreen}{0.1}
+
+\textcolor{Gray}{! Máxima cantidad de evaluaciones de funciones en cada paso}
+\textcolor{Red}{*MAXIMUM_FUNCTION_EVALUATIONS}
+\textcolor{OliveGreen}{10000}
+
+\textcolor{Gray}{! Órden de extrapolación de variables incógnitas}
+\textcolor{Red}{*STATE_VARS_EXTRAPOLATION_ORDER}
+\textcolor{OliveGreen}{1}
+
+\textcolor{Gray}{! Órden de extrapolación de matriz jacobiana}
+\textcolor{Red}{*JACOBIAN_EXTRAPOLATION_ORDER}
+\textcolor{OliveGreen}{0}
+
+\textcolor{Gray}{! Finalización}
+\textcolor{Red}{*END}
+\end{Verbatim}
