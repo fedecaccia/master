@@ -191,4 +191,21 @@ Ausas, R., Buscaglia, G., Idelsohn, S.
   in multi-fluid flows.
 \newblock \emph{International Journal for Numerical Methods in Fluids}, 2011.
 
+\bibitem{github}
+GitHub, Inc.
+\newblock Plataforma de desarrollo colaborativo.
+\newblock \emph{\url{https://github.com}}, 2008.
+
+\bibitem{newton-user-manual}
+Newton: a multiphysics coupling master code user's manual.
+\newblock \emph{Repositorio GitHub:
+  \url{https://github.com/fedecaccia/newton/doc/newton-u-m.pdf}}, 2017.
+
+\bibitem{petsc-web-page}
+Balay, S., Abhyankar, S., Adams, M.~F., Brown, J., Brune, P., Buschelman, K.,
+  \emph{et~al.}
+\newblock {PETS}c {W}eb page.
+\newblock \url{http://www.mcs.anl.gov/petsc}, 2016.
+\newblock \urlprefix\url{http://www.mcs.anl.gov/petsc}.
+
 \end{thebibliography}

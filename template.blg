@@ -12,7 +12,7 @@ A level-1 auxiliary file: apend2.aux
 A level-1 auxiliary file: apend3.aux
 Database file #1: mibib.bib
 Warning--I'm ignoring pargpfep's extra "pages" field
---line 306 of file mibib.bib
+--line 312 of file mibib.bib
 Warning--empty author in newton
 Warning--missing publisher in iedelchik
 Warning--missing publisher in kays
@@ -24,45 +24,46 @@ Warning--empty journal in salome
 Warning--missing publisher in durbin
 Warning--missing publisher in k-e
 Warning--missing publisher in level-set
-You've used 34 entries,
+Warning--empty author in newton-user-manual
+You've used 37 entries,
             2634 wiz_defined-function locations,
-            1214 strings with 14192 characters,
-and the built_in function-call counts, 10487 in all, are:
-= -- 686
-> -- 321
+            1227 strings with 14842 characters,
+and the built_in function-call counts, 11321 in all, are:
+= -- 736
+> -- 358
 < -- 4
-+ -- 161
-- -- 80
-* -- 463
-:= -- 1198
-add.period$ -- 98
-call.type$ -- 34
-change.case$ -- 26
++ -- 180
+- -- 89
+* -- 498
+:= -- 1292
+add.period$ -- 107
+call.type$ -- 37
+change.case$ -- 29
 chr.to.int$ -- 0
-cite$ -- 45
-duplicate$ -- 1068
-empty$ -- 1071
-format.name$ -- 105
-if$ -- 2333
+cite$ -- 49
+duplicate$ -- 1157
+empty$ -- 1152
+format.name$ -- 116
+if$ -- 2515
 int.to.chr$ -- 0
-int.to.str$ -- 34
-missing$ -- 310
-newline$ -- 171
-num.names$ -- 33
-pop$ -- 554
+int.to.str$ -- 37
+missing$ -- 335
+newline$ -- 186
+num.names$ -- 35
+pop$ -- 602
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 293
+skip$ -- 321
 stack$ -- 0
 substring$ -- 325
-swap$ -- 628
+swap$ -- 679
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 11
-while$ -- 51
-width$ -- 36
-write$ -- 343
-(There were 12 warnings)
+warning$ -- 12
+while$ -- 53
+width$ -- 39
+write$ -- 373
+(There were 13 warnings)

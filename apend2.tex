@@ -1,3 +1,218 @@
 \chapter{Descripción del código maestro \textbf{Newton}}
 \label{C:newton}
-\chapterquote{Negociemos Don Inodoro}{Fernando de la R\'{u}a, 2001}
+%\chapterquote{Negociemos Don Inodoro}{Fernando de la R\'{u}a, 2001}
+
+\textbf{Newton} es un código escrito en \texttt{C++} desarrollado durante la maestría,
+publicado en \textbf{Github} \cite{github} bajo Licencia Pública General (GPL por sus siglas en inglés, \textit{Public General License}) del Proyecto GNU colaborativo de software libre.
+Fue diseñado como programa \textit{maestro} con un propósito general, de forma que permita resolver cualquier tipo de ecuaciones acopladas,
+parcialmente resueltas por códigos \textit{esclavos}.
+Algunos ejemplos de los problemas que pueden resolverse con \textbf{Newton} son los siguientes:
+\begin{itemize}
+\item Cálculos formulados con el Método de Doscomposición Disjunta de Dominios: 
+acoplamientos fluidodinámicos multiescala, con o sin transferencia de calor, como los presentados en las secciones \ref{3:ff}, \ref{3:mock-up} y \ref{3:redes}.
+\item Cálculos multifísicos: acoplamiento fluido-estructura, acoplamiento neutrónico-termohidráulico, como el presentado en la sección \ref{3:nt}.
+También podrían pensarse modelos de núcleo completo (\textit{full core models}), acoplando el comportamiento de los materiales a la dinámica neutrónica-termohidráulica y otros fenómenos de interés.
+\end{itemize}
+
+\section{Principales características}
+\label{ap2:main-features}
+
+\subsection*{Archivo de configuración}
+\label{ap2:parser}
+
+La ejecución de \textbf{Newton} requiere el archivo de configuración \texttt{newton.config} en el que debe detallarse la formulación del problema a resolver,
+la forma de comunicación con cada código \textit{esclavo}, los mapeos utilizados, y métodos numéricos y demás parámetros asociados a la resolución del sistema \ref{sistema-simple}.
+El formato de entrada fue pensado de forma tal que resulte simple e intuitivo al usuario.
+Las funciones implementadas en la clase \texttt{Parser} se encargan de analizar las diferentes palabras claves ingresadas y sus atributos.
+Se desarrolló un manual de comandos de entrada \cite{newton-user-manual}.
+
+\subsection*{Mapeos}
+\label{ap2:mappers}
+
+En ciertas formulaciones las variables de acoplamiento pueden ser expresadas bajo transformaciones en las diferentes ecuaciones acopladas.
+Por ejemplo, en acoplamientos fluidodinámicos es común que en un subsistema utilice velocidades en la interfaz y que otro utilice un valor de caudal en la interfaz acoplada.
+El caudal se define como la integral del perfil de velocidades normal a la interfaz de acople, sobre toda esta sección.
+Esta integral puede pensarse como un mapeo \textit{velocidad-caudal}.
+En otros tipos de problemas también es necesario realizar mapeos.
+En acoplamiento neutrónico-termohidráulico, por ejemplo, las variables de cálculo del programa termohidráulico podrían ser densidades y termperaturas,
+pero el programa neutrónico utiliza como variables secciones eficaces, que dependen de ellas.
+Además, las variables transformadas podrían ser condensadas o multiplicadas.
+Aquí podría pensarse un mapeo \textit{termohidráulico-secciones eficaces}.
+
+En general, los mapeos son transformaciones simples de las variables de acoplamiento, y pueden extraerse de la resolución de las ecuaciones parciales,
+definiendo ecuaciones extras que pueden ser resueltas por el programa \textit{maestro}.
+Debido a esta generalización, es necesario definir cuál va a ser la variable acoplada utilizada para resolver el sistema de residuos \ref{sistema-simple}.
+Diferentes mapeos pueden ser utilizados para diferentes códigos \textit{esclavos}, ya sea para adecuar variables \textit{guess} o variables calculadas.
+Su implementación requiere una mínima programación en funciones listas para ser utilizadas pertenecientes a la clase \texttt{Mapper}.
+Luego deben ser incluidos mediante palabras claves en el archivo de configuración \texttt{newton.config}.
+
+\subsection*{Modelos de comunicación}
+\label{ap2:comm}
+
+Con la finalidad de poder establecer conexiones con programas \textit{esclavos} cuyos códigos fuente no están disponibles,
+se incorporaron diferentes modos de comunicación, conforme a la estrategia descripta en el \hyperlink{chapter.2}{Capítulo 2}:
+\begin{itemize}
+\item Comunicación por MPI en modos SISD, SIMD, MISD y MIMD con programas con acceso al código fuente.
+\item Comunicación por lectura y escritura de archivos con programas sin acceso al código fuente.
+\end{itemize}
+Todas estas funciones fueron implementadas en la clase \texttt{Communicator}.
+\textbf{Newton} puede ser ejecutado en múltiples procesos de modo que la conexión mediante manejo de archivos sea paralelizada.
+Las tareas se distribuyen automáticamente de forma eficiente conforme a la cantidad de procesos lanzdos por el usuario.
+
+\subsection*{Métodos numéricos}
+\label{ap2:num-met}
+
+\textbf{Newton} puede resolver acoplamientos utilizando diferentes métodos numéricos:
+\begin{itemize}
+\item Métodos explícitos:
+\begin{itemize}
+\item método \textit{Piccard} simple;
+\item método \textit{Piccard} combinado.
+\end{itemize}
+\item Métodos implícitos:
+\begin{itemize}
+\item método de \textit{Newton-Raphson};
+\item método de la secante para sistemas de ecuaciones;
+\item método de \textit{Broyden}.
+\end{itemize}
+\end{itemize}
+A futuro sería posible implementar otros métodos en la clase \texttt{Solver}.
+Los sistemas algebraicos resultantes en los métodos implícitos son resueltos mediante la biblioteca \textbf{petsc-web-page} \cite{petsc-web-page} altamente eficiente para este tipo de cálculos.
+
+\subsection*{Manejo de errores}
+\label{ap2:error}
+
+El manejo eficiente de errores fue pensado como una de las características principales durante el diseño del programa,
+debido a la complejidad de conexiones y consecuente diversidad en origen de fallas.
+Cualquier error generado comienza la siguiente cascada de eventos:
+\begin{enumerate}
+\item Devolución de un mensaje correspondiente en la salida estandard.
+\item Comunicación del error a todos los procesos de \textbf{Newton}.
+\item Envío de órden de aborto a los programas \textit{esclavos} por parte del proceso \textit{raiz}.
+\item Finalización de las tareas.
+\end{enumerate}
+
+\subsection*{Depuración}
+\label{ap2:debug}
+
+Se desarrolló un visualizador genérico en la clase \texttt{Debugger} para realizar seguimiento de la evolución de las variables pertenecientes a las diferentes clases implementadas.
+El usuario puede requerir su uso en clases específicas mediante palabras claves ingresadas en el archivo de configuración para la ejecución de \textbf{Newton}.
+\texttt{Debugger} va imprimiendo la salida requerida en archivos particulares para cada clase.
+
+\subsection*{Validación}
+\label{ap2:bench}
+
+Las funciones implementadas y la metodología de cálculo fueron puestas a prueba exitosamente en la resolución de sistemas de ecuaciones lineales y no lineales acoplados.
+Los mismos pueden encontrarse dentro de la carpeta \texttt{examples} en el directorio principal de \textbf{Newton}.
+Se verificó el correcto funcionamiento de los diferentes tipos de comunicación, de las intancias de mapeos y de los distintos métodos numéricos implementados para la resolución del sistema e ecuaciones de residuos.
+
+\section{Modelado de problemas acoplados}
+\label{ap1:definicion}
+
+\textbf{Newton} resuelve problemas que comprenden algún sistema de ecuaciones acopladas, en el que las ecuaciones son resueltas por separado por diferentes programas.
+Conforme a la estrategia de acoplamiento extendida comentada en la sección \ref{3:strategy-extended}, 
+es necesario definir qué variables van a ser datos y qué variables van a ser incógnitas para cada subsistema de análisis.
+Como existe la posibilidad de transformaciones previas o posteriores a la resolución del sistema de ecuaciones de residuos característico de cada problema,
+es necesario además definir en forma clara cuáles van a ser las variables transformadas y los mapeos.
+Para organizar esta formulación en forma clara \texttt{Newton} trabaja con cuatro instancias de variables para cada programa \textit{esclavo}:
+las instancias $\alpha$, $\beta$, $\gamma$ y $\delta$.
+
+\subsection*{Alfas, betas, gammas y deltas}
+\label{ap1:abgd}
+
+Existen cuatro instancias de variables para cada programa \textit{esclavo}:
+\begin{enumerate}
+\item Instancia $\alpha$: corresponde al valor crudo de las variables calculadas por el programa.
+\item Instancia $\beta$: corresponde al valor transformado de las variables $\alpha$.
+En el caso de que no se haya definido una transformación, se utiliza la transformación de identidad por defecto.
+Las variables $\beta$ están listas para ser utilizadas en el cálculo de residuos.
+\item Instancia $\gamma$: corresponde a los valores \textit{guesses} generados por \textbf{Newton} para ese programa.
+\item Instancia $\delta$: corresponde a los valores $\gamma$ transformados, utilizando también la transformación de identidad por defecto.
+\end{enumerate}
+La Figura \ref{fig:abgd} esquematiza lo expresado.
+
+\begin{figure}[h]
+\centering{}
+\begin{tikzpicture}[
+block1/.style={
+	draw,
+	fill=white,
+	rectangle, 
+	minimum width={width("Esclavo 1")+3pt},
+	minimum height={17pt},
+	font=\small, 
+  align=center},
+arrow1/.style={
+  -{Latex[length=3mm, width=1mm]}
+  }
+]
+
+% residuos
+\node [block1, text width=6em] at (0,6em) (res) {\textbf{Resolución de residuos}};
+
+
+% programa 1
+\node[block1, above of=res, yshift=6em] (e1) {\textbf{Esclavo 1}};
+
+% alpha 1
+\node [block1, below left of=e1, yshift=-0.8em, xshift=-9em] (alpha1) {\textbf{variables} $\alpha_1$};
+
+% beta 1
+\node [block1, above left of=res, yshift=0.8em, xshift=-9em] (beta1) {\textbf{variables} $\beta_1$};
+
+% gamma 1
+\node [block1, above right of=res, yshift=0.8em, xshift=9em] (gamma1) {\textbf{variables} $\gamma_1$};
+
+% delta 1
+\node [block1, below right of=e1, yshift=-0.8em, xshift=9em] (delta1) {\textbf{variables} $\delta_1$};
+
+
+% programa 2
+\node [block1, below of=res, yshift=-6em] (e2) {\textbf{Esclavo 2}};
+
+% alpha 2
+\node [block1, above left of=e2, yshift=0.8em, xshift=-9em] (alpha2) {\textbf{variables} $\alpha_2$};
+
+% beta 2
+\node [block1, below left of=res, yshift=-0.8em, xshift=-9em] (beta2) {\textbf{variables} $\beta_2$};
+
+% gamma 2
+\node [block1, below right of=res, yshift=-0.8em, xshift=9em] (gamma2) {\textbf{variables} $\gamma_2$};
+
+% delta 2
+\node [block1, above right of=e2, yshift=0.8em, xshift=9em] (delta2) {\textbf{variables} $\delta_2$};
+
+% Conexiones 1
+\draw[arrow1] ($(e1.west)$) to[out=180, in=70, distance=2em] (alpha1.north);
+\draw[arrow1] ($(alpha1.south)$) to node [midway, anchor=center, left]{\textit{mapeo $\alpha_1-\beta_1$}} (beta1.north);
+\draw[arrow1] ($(beta1.south)$) to[out=-70, in=-180, distance=1.7em] ($(res.west)+(0,0.2em)$);
+
+\draw[arrow1] ($(res.east)+(0,0.2em)$) to[out=10, in=-110, distance=1.7em] ($(gamma1.south)$);
+\draw[arrow1] ($(gamma1.north)$) to node [midway, anchor=center, right]{\textit{mapeo $\gamma_1-\delta_1$}} (delta1.south);
+\draw[arrow1] ($(delta1.north)$) to [out=110, in=-10, distance=2em] ($(e1.east)$);
+
+\end{tikzpicture}
+\caption[Instancias de cálculo de las variables relacionadas con cada programa \textit{esclavo}]
+{Instancias de cálculo de las variables relacionadas con cada programa \textit{esclavo}, en un ejemplo en el que dos programas \textit{esclavos} se comunican con el programa \textit{maestro}}
+\label{fig:abgd}
+\end{figure}
+
+\subsection*{Configuración del problema}
+\label{ap1:abgd}
+
+Una vez deinidas estas instancias para cada subsistema de análisis, debe completarse el archivo de configuración \texttt{newton.config}.
+En el mismo deben definirse \textit{clientes}, que son los diferentes programas \textit{esclavos}.
+Para cada \textit{cliente} es necesario ingresar el nombre de las variables de instancia $\beta$ depués de la palabra clave \texttt{CALCS},
+y de instancia $\gamma$ después de la palabra clave \texttt{GUESSES}.
+En el caso de que no sean requeridos mapeos no debe especificarse nada sobre las instancias $\alpha$ y $\delta$.
+Si se requieren transformaciones, éstas deben ser ingresadas en otra instancia del archivo, bajo la palabra clave \texttt{MAPPER}.
+Allí se detalla el \textit{cliente}, si corresponde a una transformación $\alpha-\beta$ o a una transformación $\gamma-\delta$, y la cantidad de variables implicadas en la transformación.
+
+Para cada \textit{cliente} también es necesario ingresar el tipo de comunicación con \textbf{Newton}, y otras opciones de conexión en el caso de manejo de archivos.
+
+Finalmente, es necesario definir el método de acoplamiento a utilizar y sus parámetros específicos.
+
+\section{Metodología de resolución}
+\label{ap2:metodologia-newton}
+
+
