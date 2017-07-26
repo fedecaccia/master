@@ -77,7 +77,7 @@ Las tareas se distribuyen automáticamente de forma eficiente conforme a la cant
 \end{itemize}
 \end{itemize}
 A futuro sería posible implementar otros métodos en la clase \texttt{Solver}.
-Los sistemas algebraicos resultantes en los métodos implícitos son resueltos mediante la biblioteca \textbf{petsc-web-page} \cite{petsc-web-page} altamente eficiente para este tipo de cálculos.
+Los sistemas algebraicos resultantes en los métodos implícitos son resueltos mediante la biblioteca \textbf{PETSc} \cite{petsc-web-page} altamente eficiente para este tipo de cálculos.
 
 \subsection*{Manejo de errores}
 \label{ap2:error}
@@ -130,6 +130,9 @@ Las variables $\beta$ están listas para ser utilizadas en el cálculo de residu
 \item Instancia $\delta$: corresponde a los valores $\gamma$ transformados, utilizando también la transformación de identidad por defecto.
 \end{enumerate}
 La Figura \ref{fig:abgd} esquematiza lo expresado.
+
+\pgfdeclarelayer{bg}    % declare background layer
+\pgfsetlayers{bg,main}  % set the order of the layers (main is the standard laye
 
 \begin{figure}[h]
 \centering{}
@@ -187,20 +190,44 @@ arrow1/.style={
 \draw[arrow1] ($(alpha1.south)$) to node [midway, anchor=center, left]{\textit{mapeo $\alpha_1-\beta_1$}} (beta1.north);
 \draw[arrow1] ($(beta1.south)$) to[out=-70, in=-180, distance=1.7em] ($(res.west)+(0,0.2em)$);
 
-\draw[arrow1] ($(res.east)+(0,0.2em)$) to[out=10, in=-110, distance=1.7em] ($(gamma1.south)$);
+\draw[arrow1] ($(res.east)+(0,0.2em)$) to[out=0, in=-110, distance=1.7em] ($(gamma1.south)$);
 \draw[arrow1] ($(gamma1.north)$) to node [midway, anchor=center, right]{\textit{mapeo $\gamma_1-\delta_1$}} (delta1.south);
-\draw[arrow1] ($(delta1.north)$) to [out=110, in=-10, distance=2em] ($(e1.east)$);
+\draw[arrow1] ($(delta1.north)$) to [out=110, in=0, distance=2em] ($(e1.east)$);
+
+% Conexiones 2
+\draw[arrow1] ($(e2.west)$) to[out=180, in=-70, distance=2em] (alpha2.south);
+\draw[arrow1] ($(alpha2.north)$) to node [midway, anchor=center, left]{\textit{mapeo $\alpha_2-\beta_2$}} (beta2.south);
+\draw[arrow1] ($(beta2.north)$) to[out=70, in=-180, distance=1.7em] ($(res.west)-(0,0.2em)$);
+
+\draw[arrow1] ($(res.east)-(0,0.2em)$) to[out=0, in=110, distance=1.7em] ($(gamma2.north)$);
+\draw[arrow1] ($(gamma2.south)$) to node [midway, anchor=center, right]{\textit{mapeo $\gamma_1-\delta_1$}} (delta2.north);
+\draw[arrow1] ($(delta2.south)$) to [out=-110, in=0, distance=2em] ($(e2.east)$);
+
+% Fondo
+\begin{pgfonlayer}{bg}    % select the background layer
+  % Newton frame
+  \draw [blue, rounded corners, thick, dashed, opacity=0.5, fill=blue!10] 
+  ($(alpha1.west) + (-5em, 1.2em)$)
+  -- ($(alpha2.west) + (-5em,-1.2em)$)
+  -- ($(delta2.east) + (5em,-1.2em)$)
+  -- ($(delta1.east) + (5em,1.2em)$)
+  -- ($(alpha1.west) + (-5em,1.2em)$);
+  % newton
+  \node [draw,blue, rounded corners, thick, dashed, opacity=0.5, fill=blue!10] 
+  at ($(beta1.west) + (-2em, -2.5em)$) (newton) {\textbf{Newton}};
+\end{pgfonlayer}
 
 \end{tikzpicture}
 \caption[Instancias de cálculo de las variables relacionadas con cada programa \textit{esclavo}]
-{Instancias de cálculo de las variables relacionadas con cada programa \textit{esclavo}, en un ejemplo en el que dos programas \textit{esclavos} se comunican con el programa \textit{maestro}}
+{Instancias de cálculo $\alpha$, $\beta$, $\gamma$ y $\delta$ de las variables relacionadas con cada programa \textit{esclavo}.
+En este ejemplo los programas \textbf{Esclavo 1} y \textbf{Esclavo 2} se comunican con \textbf{Newton}.}
 \label{fig:abgd}
 \end{figure}
 
 \subsection*{Configuración del problema}
 \label{ap1:abgd}
 
-Una vez deinidas estas instancias para cada subsistema de análisis, debe completarse el archivo de configuración \texttt{newton.config}.
+Una vez definidas estas instancias para cada subsistema de análisis, debe completarse el archivo de configuración \texttt{newton.config}.
 En el mismo deben definirse \textit{clientes}, que son los diferentes programas \textit{esclavos}.
 Para cada \textit{cliente} es necesario ingresar el nombre de las variables de instancia $\beta$ depués de la palabra clave \texttt{CALCS},
 y de instancia $\gamma$ después de la palabra clave \texttt{GUESSES}.
@@ -213,6 +240,139 @@ Para cada \textit{cliente} también es necesario ingresar el tipo de comunicaci�
 Finalmente, es necesario definir el método de acoplamiento a utilizar y sus parámetros específicos.
 
 \section{Metodología de resolución}
-\label{ap2:metodologia-newton}
+\label{ap2:resolucion}
 
+El archivo \texttt{src/main.cpp} contiene la estructura principal del programa.
+En el mismo se crea un objeto de clase \texttt{Newton} y se ejecutan sus tres funciones principales:
+\begin{enumerate}
+\item Función de inicio: \texttt{Newton::initialize}.
+\item Función de ejecución: \texttt{Newton::run}.
+\item Función de finalización: \texttt{Newton::finish}.
+\end{enumerate}
 
+A continuación se describen brevemente las tareas desarrolladas en cada función.
+
+\subsection*{Función de inicio}
+\label{ap2:newton-init}
+
+La función \texttt{Newton::initialize} ejecuta todas las tareas necesarias para comenzar el cálculo:
+\begin{enumerate}
+\item Creación de objetos de uso interno.
+\item Lectura del archivo de configuración.
+\item Creación de comunicadores con procesos \textit{raíces} de programas ejecutados en modos MISD o MIMD junto con \textbf{Newton}.
+\item Publicación de puertos y establecimiento de conexiones con procesos \textit{raíces} de programas que necesitan establecer comunicación por MPI.
+\item Envío de datos generales del problema a los programas \textit{esclavos} para chequeo de compatibilidad de datos.
+\item Asignación de espacio en memoria a los arreglos de uso interno dependientes del problema.
+\end{enumerate}
+
+\subsection*{Función de ejecución}
+\label{ap2:newton-run}
+
+La función \texttt{Newton::run} ejecuta todas las tareas necesarias para completar el cálculo:
+\begin{enumerate}
+\item Ingreso en el \textit{loop} de evolución.
+  \begin{enumerate}
+  \item Comunicación de valores \textit{guess} para las condiciones de borde de cada subdominio a cada programa \textit{esclavo}:
+    \begin{enumerate}
+    \item escritura de los valores en archivos de entrada y ejecución de los programa \textit{esclavos} conectados por manejo de archivos;
+    \item envío de valores por MPI a aquellos programas conectados por paso de mensajes.
+    \end{enumerate}
+  \item Recepción de valores calculados para las incógnitas de cada subdominio de cada programa \textit{esclavo}:
+    \begin{enumerate}
+    \item lectura de los valores en archivos de salida de los programa \textit{esclavos} conectados por manejo de archivos;
+    \item recepción de valores por MPI desde aquellos programas conectados por paso de mensajes.
+    \end{enumerate}
+  \item Resolución de las ecuaciones de residuos \ref{ecuaciones-residuos}.
+  \item Evaluación de la convergencia:
+  \begin{itemize}
+  \item si los resultados están convergidos el problema puede continuar con el siguiente paso de evolución;
+  \item si los resultados no están convergidos, es necesario proponer nuevos valores \textit{guess} y reiniciar el cálculo.
+  \end{itemize}
+  \item Envío de orden de avance o de reinicio a cada programa \textit{esclavo} conectado por MPI.
+  \end{enumerate}
+\item Finalización del \textit{loop} de evolución.
+\end{enumerate}
+
+\subsection*{Función de finalización}
+\label{ap2:newton-finish}
+
+La función \texttt{Newton::finish} ejecuta todas las tareas necesarias para terminar el programa de forma segura:
+\begin{enumerate}
+\item Desconexión de programas comunicados por MPI.
+\item Liberación de comunicadores.
+\item Finalización de \textbf{PETSc} y de MPI.
+\item Cierre de archivos de depuración.
+\end{enumerate}
+
+\section{Ejemplo de uso}
+\label{ap2:ejemplo}
+
+A continuación se comenta la resolución de uno de los problemas utilizados para la validación de las funciones desarrolladas.
+Se quiere resolver el siguiente sistema de ecuaciones:
+
+\begin{equation}
+\left\{\begin{matrix}
+  1w +  2x +  3y +  4z = 17 \\
+ 12w + 13x + 14y +  5z = 18 \\
+ 11w + 16x + 15y +  6z = 19 \\
+ 10w +  9x +  8y +  7z = 20
+\end{matrix}\right.
+\label{eq:linear2}
+\end{equation}
+Uno de los programas \textit{esclavos} calcula $(w,x,y)$ en función de algún valor $z_{guess}$ poporcionado, y resuelve las primeras tres ecuaciones:
+\begin{equation}
+\left\{\begin{matrix}
+ w = (17 -  2x -  3y - 4z_{guess})/ 1 \\
+ x = (18 - 12w - 14y - 5z_{guess})/13 \\
+ y = (19 - 11w - 16x - 6z_{guess})/15
+\end{matrix}\right.
+\label{eq:linear2a}
+\end{equation}
+
+El otro programa \textit{esclavo} calcula $z$ como función de los valores $(w_{guess},x_{guess},y_{guess})$ proporcionados, resolviendo la última ecuación de \ref{eq:linear2}:
+
+\begin{equation}
+ z = (20 - 10w_{guess} -  9x_{guess} - 8y_{guess})/ 7
+ \label{eq:linear2b}
+\end{equation}
+La solución analítica para este problema es la siguiente:
+\begin{equation}
+\left\{\begin{matrix}
+ w = -0.70909 \\
+ x = -1.89091 \\
+ y = 2.36364 \\
+ z = 3.60000
+\end{matrix}\right.
+\label{eq:linear2-sol}
+\end{equation}
+
+Para formular este problema comunicando los programas por MPI,
+mediante una ejecución en modo MISD de \textbf{Newton} y los dos programas \textit{esclavos},
+el archivo de configuración \texttt{newton.config} se completa como sigue:
+
+\begin{Verbatim}[frame=single,commandchars=\\\{\}, backgroundcolor=\color{yellow}]
+
+\textcolor{Gray}{ # Métodos numéricos}
+
+\textcolor{Red}{METHOD} \textcolor{OliveGreen}{secant} \textcolor{Gray}{# Método selecionado}
+\textcolor{Red}{ABS_TOL} \textcolor{OliveGreen}{1e-15} \textcolor{Red}{MAX_ITER} \textcolor{OliveGreen}{10} \textcolor{Gray}{# Parámetros de iteración}
+\textcolor{Red}{X_INI} \textcolor{OliveGreen}{w 1 x 2 y 3 z 4} \textcolor{Gray}{# Semilla inicial}
+
+\textcolor{Gray}{ # Especificaciones para códigos esclavos}
+
+\textcolor{Red}{CLIENT} \textcolor{OliveGreen}{linear1} \textcolor{Gray}{# Apodo del primer programa esclavo}
+\textcolor{Red}{ROOT_GLOBAL_RANK} \textcolor{OliveGreen}{2} \textcolor{Gray}{# Rango global del proceso raíz}
+\textcolor{Red}{CALCS} \textcolor{OliveGreen}{w x y} \textcolor{Red}{GUESSES} \textcolor{OliveGreen}{z} \textcolor{Gray}{# Variables de cálculo y variables dato}
+\textcolor{Red}{CONNECTION} \textcolor{OliveGreen}{mpi_comm} \textcolor{Gray}{# Tipo de conexión}
+
+\textcolor{Red}{CLIENT} \textcolor{OliveGreen}{linear2} \textcolor{Gray}{# Apodo del primer programa esclavo}
+\textcolor{Red}{ROOT_GLOBAL_RANK} \textcolor{OliveGreen}{3}  \textcolor{Gray}{# Rango global del proceso raíz}
+\textcolor{Red}{CALCS} \textcolor{OliveGreen}{z} \textcolor{Red}{GUESSES} \textcolor{OliveGreen}{w x y} \textcolor{Gray}{# Variables de cálculo y variables dato}
+\textcolor{Red}{CONNECTION} \textcolor{OliveGreen}{mpi_comm} \textcolor{Gray}{# Tipo de conexión}
+
+\end{Verbatim}
+
+Notar que en este modo de ejecución \textbf{Newton} debe conocer 
+cuál es la numeración global de los procesos raíces de los programas \textit{esclavos} para poder establecer los comunicadores con ellos.
+Con el método de resolución seleccionado, \textbf{Newton} construye la matriz jacobiana del sistema y luego converge a la solución \ref{eq:linear2-sol} en una sola iteración,
+utilizando en total  6 evaluaciones de funciones.

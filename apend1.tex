@@ -44,7 +44,7 @@ Conforme a la estrategia de acoplamiento descripta en el \hyperlink{chapter.2}{C
 \item Lectura de archivos de datos \texttt{mesh.cfg} y \texttt{couple.cfg}.
 \item Inicialización de las funciones de MPI y publicación de puertos de conexión.
 \item Establecimiento de la comunicación con los diferentes programas esclavos.
-\item Envío de datos generales del problema para chequeo interno en cada programa.
+\item Envío de datos generales del problema a los programas \textit{esclavos} para chequeo de compatibilidad de datos.
 \item Ingreso en el \textit{loop} de evolución.
 \begin{enumerate}
 \item Envío de valores \textit{guess} para las condiciones de borde de cada subdominio a cada programa \textit{esclavo}.
@@ -53,11 +53,11 @@ Conforme a la estrategia de acoplamiento descripta en el \hyperlink{chapter.2}{C
 \item Evaluación de la convergencia:
 \begin{itemize}
 \item si los resultados están convergidos el problema puede continuar con el siguiente paso de evolución;
-\item si los resultados no están convergidos, es necesario reiniciar el cálculo.
+\item si los resultados no están convergidos, es necesario proponer nuevos valores \textit{guess} y reiniciar el cálculo.
 \end{itemize}
 \item Envío de orden de avance o de reinicio a cada programa \textit{esclavo}.
 \end{enumerate}
-\item Finalización de \textit{loop} de evolución.
+\item Finalización del \textit{loop} de evolución.
 \item Cierre de las conexiones con los programas \textit{esclavos} y finalización.
 \end{enumerate}
 Los pasos descriptos requieren una arquitectura de acoplamiento específica montada en los códigos \textit{esclavos}, la cual fue comentada en la sección \ref{2:arquitectura-mpi}.
