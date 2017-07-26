@@ -210,9 +210,8 @@ Como se mencionó previamente, no existe necesidad de que ambos códigos utilice
 Sin embargo en ambos modelos se utiliza $\Delta t=0.01s$, debido a que ninguno requiere una mayor discretización temporal.
 
 Los cálculos cero-dimensionales se realizan con un programa escrito para este propósito.
-Los cálculos bi-dimensionales se realizan con \textbf{Par-GPFEP} (programa de elementos finitos de propósito general paralelizado, el nombre se debe a sus siglas
-en inglés, \textit{Parallel General Purpose Finite Element Program})
-desarrollado en el Departamento de Mecánica Computacional de la Comisión Nacional de Energía Atómica (\cite{gpfep}, \cite{pargpfep}).
+Los cálculos bi-dimensionales se realizan con \textbf{Par-GPFEP} \cite{gpfep} \cite{pargpfep}.
+Las modificaciones necesarias para implementar el acoplamiento de \textbf{Par-GPFEP} son comentadas en el Apéndice \ref{C:pargpfep}.
 
 \subsection*{Resultados del cálculo}
 
@@ -754,7 +753,7 @@ Turbulent flow
 \label{3:strategy-extended}
 
 
-\subsection{Acople neutrónico-termohidráulico}
+\subsection*{Acople neutrónico-termohidráulico}
 \label{3:neut-th}
 breve descripción de los códigos utilizados
 

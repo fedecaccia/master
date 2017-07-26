@@ -1,3 +1,138 @@
-\chapter{Implementación de la arquitectura de acoplamiento en el código esclavo \textbf{Par-GPFEP}}
+\chapter{Acoplamiento de \textbf{Par-GPFEP}}
 \label{C:pargpfep}
 %\chapterquote{Negociemos Don Inodoro}{Fernando de la R\'{u}a, 2001}
+
+\textbf{Par-GPFEP} (programa de elementos finitos de propósito general paralelizado, el nombre se debe a sus siglas
+en inglés, \textit{Parallel General Purpose Finite Element Program})
+es un código escrito en \texttt{Fortran 90} y en \texttt{C},
+desarrollado inicialmente por G. Buscaglia, S. Felicelli, E. Dari, A. Lew y M. Raschi,
+y que ha ido teniendo contribuciones a partir de diferentes trabajos y tesis realizadas
+en el Departamento de Mecánica Computacional de la Comisión Nacional de Energía Atómica (\cite{gpfep}, \cite{pargpfep}).
+
+En el presente trabajo se utilizaron y modificaron las rutinas relacionadas con el bucle de resolución general
+y el ensamblaje de matrices para las ecuaciones de \textit{Navier-Stokes}, de modelos de turbulencia, flujo multifase y transporte de energía.
+Además, se implementaron las rutinas necesarias para realizar el acoplamiento mediante el modelo de comunicación por paso de mensajes
+a partir de la conexión a puertos publicados por el código \textit{maestro}, de modo que pudiera comunicarse con \textbf{Coupling} y con \textbf{Newton} de forma exitosa.
+Éstos trabajos son comentados en la sección \ref{pargpfep-impl}.
+También se desarrolló un programa para la identificación de condiciones de borde sobre conjuntos de nodos específicos, el cual es comentado en la sección \ref{genbco}.
+
+\section{Implementación de la arquitectura de acoplamiento en \textbf{Par-GPFEP}}
+\label{pargpfep-impl}
+
+La estructura principal de acoplamiento se compone de cuatro instancias genéricas.
+Estas cuatro instancias fueron descriptas en la sección \ref{2:arquitectura-mpi} y se programaron en la rutina \texttt{pargpfep\_control.for}.
+Cada una de estas intancias es llamada desde el bucle de resolución general en momentos adecuados.
+Pero para que este acoplamiento resultara exitoso, fue necesario además implementar una serie de funciones extra:
+\begin{itemize}
+\item Análisis de palabras clave del archivo de configuración \texttt{gpfep.cfg} específicas a la formulación del problema de acoplamiento (implementado en el archivo \texttt{cfgreadingCoup.for}).
+\item Seteo paralelizado de variables sobre grupos de superficie conforme a perfiles previstos:
+  \begin{itemize} 
+  \item para condiciones de borde \textit{esenciales} (modificaciones en el archivo \texttt{bcfemco.for});
+  \item para condiciones de borde \textit{naturales} (modificaciones en el archivo \texttt{nssurf.for});
+  \end{itemize}
+\item Cálculo integral paralelizado de variables sobre grupos de superficie (implementado en el archivo \texttt{sendValuesCoupling.for}).
+\item Cálculo de campos vectoriales gradientes a partir de campos escalares (modificaciones en el archivo \texttt{gpmain.F}).
+\item Condicionamiento sobre el avance evolutivo para respetar las órdenes de reinicio o continuación recibidas desde programa \textit{maestro} (modificaciones en el archivo \texttt{gpmain.F}).
+\item Resguardo (\textit{back-up}) de las soluciones calculadas debido a la posibilidad de reinicio en determinados pasos de cálculo (modificaciones en el archivo \texttt{gpmain.F}).
+\end{itemize}
+
+\section{El programa \textbf{genbco}}
+\label{genbco}
+
+Normalmente, las condiciones de borde de tipo \textit{Dirichlet} se establecen con los programas \textbf{genbcc} y \textbf{gpboco}.
+Estos programas imponen para alguna variable dada, el mismo valor a todos los nodos que pertenecen a un grupo de superficie seleccionado.
+Durante el trabajo realizado, resultó necesario diferenciar los nodos sobre los que se aplicaba las condiciones de borde.
+Por ejemplo, era necesario sustraer los nodos de las aristas a los nodos de una cara, englobar varias aristas en un mismo grupo, englobar varias caras en un mismo grupo, etc.
+Con estos fines fue desarrollado el código \textbf{genbco}.
+\textbf{genbco} unifica las funciones previamente desempeñadas por los códigos \textbf{genbcc} y \textbf{gpboco}.
+Los archivos de entrada necesarios para su uso son el archivo de nodos de superficie y conectividades \texttt{.sur} específico de \textbf{Par-GPFEP}
+y el archivo de configuración \texttt{genbco.cfg}.
+En \texttt{genbco.cfg} se especifican los conjuntos de nodos sobre los que se desea imponer condiciones de borde de tipo \textit{Dirichlet} para cada variable de cálculo.
+Esta especificación se realiza a partir de operaciones \textit{booleanas} sobre los grupos originales de superficie.
+Las operaciones permitidas son:
+\begin{itemize}
+\item unión (U);
+\item intersección (I);
+\item sustracción (m).
+\end{itemize}
+Sobre cada uno de los conjuntos se especifican, además, los valores iniciales de contorno.
+El archivo de salida \texttt{gp.bco} contiene una lista con todos los nodos y sus condiciones de borde para cada variable y está listo para ser leído posteriormente por \textbf{Par-GPFEP}.
+
+
+\section{Ejemplo de uso de \textbf{Par-GPFEP} en forma acoplada}
+\label{pargpfep-coup}
+
+A continuación se comentan las consideraciones necesarias en \textbf{Par-GPFEP}
+para la resolución del problema \textit{Análisis del segundo sistema de parada de un reactor de investigación} analizado en \ref{3:mock-up}.
+
+En primer lugar, es necesario notificar en el archivo de configuración \texttt{gpfep.cfg} que las condiciones de borde de algunas interfaces están acopladas.
+El llamado a las funciones de acoplamiento se activa con la siguiente bandera:
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Gray}{! Switch para acople}
+\textcolor{Red}{*COUPLING_SWITCH}
+\textcolor{OliveGreen}{1}
+\end{Verbatim}
+
+El método de comunicación utilizado es el de conexión a puertos previamente publicados por el programa \textit{maestro}.
+En este método es necesario definir un código de identificación para cada programa \textit{esclavo}:
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Gray}{! ID del código}
+\textcolor{Red}{*CODE_ID}
+\textcolor{OliveGreen}{1}
+\end{Verbatim}
+
+Las siguientes tarjetas se utilizan para definir las interfaces y las variables de acople:
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Gray}{! Cantidad de interfaces de acople}
+\textcolor{Red}{*INTERFACES}
+\textcolor{OliveGreen}{1}
+
+\textcolor{Gray}{! Área [m2] de cada interfaz}
+\textcolor{Red}{*INTERFACES_AREAS}
+\textcolor{OliveGreen}{0.05067}
+
+\textcolor{Gray}{! Grupo de la malla correspondiente a cada interfaz}
+\textcolor{Red}{*INTERFACES_GROUPS}
+\textcolor{OliveGreen}{3}
+
+\textcolor{Gray}{! Pares de variables en cada interfaz}
+\textcolor{Red}{*UNKNOWN_PAIRS_PER_INTERFACE}
+\textcolor{OliveGreen}{1}
+
+\textcolor{Gray}{! Tipo de par intercambiado en cada interfaz:}
+\textcolor{Gray}{! (Tipo 1: caudal-presión; Tipo 2: temperatura-flujo de calor)}
+\textcolor{Red}{*INTERFACES_PAIRS_TYPES}
+\textcolor{OliveGreen}{1}
+\end{Verbatim}
+
+A continuación es necesario definir el tipo de perfil que va a ser utilizado para calcular los vectores de velocidades en cada interfaz con condición de borde de tipo \textit{Dirichlet}.
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Gray}{! Tipo de perfil de velocidades para la componente x, componente y,}
+\textcolor{Gray}{! componente z, en cada interfaz con seteo de caudal}
+\textcolor{Gray}{! (Tipo 0: nulo; Tipo 1: uniforme; Tipo 2: parabólico 2D; Tipo 3:}
+\textcolor{Gray}{! parabólico 3D )}
+\textcolor{Red}{*FLOW_PROFILES}
+\textcolor{OliveGreen}{1} \textcolor{Gray}{! Cantidad de perfiles}
+\textcolor{OliveGreen}{1 0 0} \textcolor{Gray}{! Tipo para cada componente escalar (x,y,z)}
+\end{Verbatim}
+
+Si bien en el modelado del problema se utiliza un perfil de velocidades plano, en ciertas ocasiones puede requerirse el uso de perfiles parabólicos.
+Para calcular estos perfiles es necesario proveer algunas coordenadas de referencia.
+Si se hubiera utilizado un perfil parabólico tri-dimensional,
+y dado que la sección es circular,
+debe proveerse la posición del centro de la misma y el valor de su radio del siguiente modo:
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Gray}{! Coordenadas del punto de referencia de cada interfaz con seteo de}
+\textcolor{Gray}{! caudal}
+\textcolor{Red}{*INTERFACES_REFERENCES}
+\textcolor{OliveGreen}{0.0 0.0 0.0}
+
+\textcolor{Gray}{! Radio en cada interfaz con seteo de caudal}
+\textcolor{Red}{*INTERFACES_RADIUS}
+\textcolor{OliveGreen}{0.127}
+\end{Verbatim}
+
+Previo al modelado de futuros problemas acoplados, debe verificarse la implementación de ciertas particularidades
+bajo la palabra clave \texttt{USUARIO} en los archivos comentados en la sección \ref{pargpfep-impl}.
+Por ejemplo, cuando la variable de acople en una interfaz dada es una fuerza, ésta puede recibirse con diferentes signos según la formulación del problema,
+por lo que es responsabilidad del usuario su correcto uso.

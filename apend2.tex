@@ -270,7 +270,7 @@ La función \texttt{Newton::initialize} ejecuta todas las tareas necesarias para
 
 La función \texttt{Newton::run} ejecuta todas las tareas necesarias para completar el cálculo:
 \begin{enumerate}
-\item Ingreso en el \textit{loop} de evolución.
+\item Ingreso en el bucle de evolución.
   \begin{enumerate}
   \item Comunicación de valores \textit{guess} para las condiciones de borde de cada subdominio a cada programa \textit{esclavo}:
     \begin{enumerate}
@@ -290,7 +290,7 @@ La función \texttt{Newton::run} ejecuta todas las tareas necesarias para comple
   \end{itemize}
   \item Envío de orden de avance o de reinicio a cada programa \textit{esclavo} conectado por MPI.
   \end{enumerate}
-\item Finalización del \textit{loop} de evolución.
+\item Finalización delbucle de evolución.
 \end{enumerate}
 
 \subsection*{Función de finalización}
@@ -350,7 +350,7 @@ Para formular este problema comunicando los programas por MPI,
 mediante una ejecución en modo MISD de \textbf{Newton} y los dos programas \textit{esclavos},
 el archivo de configuración \texttt{newton.config} se completa como sigue:
 
-\begin{Verbatim}[frame=single,commandchars=\\\{\}, backgroundcolor=\color{yellow}]
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
 
 \textcolor{Gray}{ # Métodos numéricos}
 
