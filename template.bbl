@@ -48,6 +48,11 @@ Broyden, C.
 \newblock A class of methods for solving nonlinear simultaneous equations.
 \newblock \emph{American Mathematical Society}, \textbf{19}, 577--593, 1965.
 
+\bibitem{kelley}
+Kelley, C.
+\newblock Iterative Methods for Linear and Nonlinear Equations.
+\newblock siam, 1995.
+
 \bibitem{maestro-esclavo}
 Hendrickson, B., Devine, K.
 \newblock Dynamic load balancing in computational mechanics.
@@ -113,7 +118,7 @@ Buscaglia, G., Felicelli, S.
 \bibitem{pargpfep}
 Buscaglia, G., Dari, E., Lew, A., Raschi, M.
 \newblock Un programa general de elementos finitos en paralelo.
-\newblock \emph{Mecánica Computacional}, p\'ag. XIX, 1999.
+\newblock \emph{Mecánica Computacional}, p\'ags. 845--854, 1999.
 
 \bibitem{richardson}
 Buscaglia, G., Dari, E.
@@ -194,6 +199,11 @@ Ausas, R., Buscaglia, G., Idelsohn, S.
 \bibitem{white}
 White, F.
 \newblock Fluid Mechanics, 4th edition.
+\newblock Mc Graw Hill Education, 1998.
+
+\bibitem{griewank}
+Griewank, A.
+\newblock Broyden updating, the good and the bad!, 2000.
 
 \bibitem{github}
 GitHub, Inc.

@@ -11,14 +11,6 @@ A level-1 auxiliary file: apend1.aux
 A level-1 auxiliary file: apend2.aux
 A level-1 auxiliary file: apend3.aux
 Database file #1: mibib.bib
-Warning--I'm ignoring pargpfep's extra "pages" field
---line 312 of file mibib.bib
-Warning--string name "mc" is undefined
---line 329 of file mibib.bib
-I was expecting a `,' or a `}'---line 329 of file mibib.bib
- :   publisher = mc 
- :                  Graw Hill Education,
-I'm skipping whatever remains of this entry
 Warning--empty author in newton
 Warning--missing publisher in iedelchik
 Warning--missing publisher in kays
@@ -30,48 +22,46 @@ Warning--empty journal in salome
 Warning--missing publisher in durbin
 Warning--missing publisher in k-e
 Warning--missing publisher in level-set
-Warning--empty publisher in white
-Warning--empty year in white
 Warning--empty author in newton-user-manual
-You've used 38 entries,
+You've used 40 entries,
             2634 wiz_defined-function locations,
-            1230 strings with 14884 characters,
-and the built_in function-call counts, 11494 in all, are:
-= -- 745
-> -- 362
+            1236 strings with 15030 characters,
+and the built_in function-call counts, 12001 in all, are:
+= -- 779
+> -- 370
 < -- 4
-+ -- 182
-- -- 90
-* -- 502
-:= -- 1313
-add.period$ -- 109
-call.type$ -- 38
-change.case$ -- 29
++ -- 186
+- -- 92
+* -- 515
+:= -- 1368
+add.period$ -- 115
+call.type$ -- 40
+change.case$ -- 30
 chr.to.int$ -- 0
 cite$ -- 52
-duplicate$ -- 1173
-empty$ -- 1176
-format.name$ -- 117
-if$ -- 2555
+duplicate$ -- 1215
+empty$ -- 1245
+format.name$ -- 119
+if$ -- 2679
 int.to.chr$ -- 0
-int.to.str$ -- 38
-missing$ -- 340
-newline$ -- 190
-num.names$ -- 36
-pop$ -- 611
+int.to.str$ -- 40
+missing$ -- 354
+newline$ -- 200
+num.names$ -- 38
+pop$ -- 643
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 328
+skip$ -- 345
 stack$ -- 0
-substring$ -- 325
-swap$ -- 686
+substring$ -- 347
+swap$ -- 710
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 14
-while$ -- 54
-width$ -- 40
-write$ -- 380
-(There was 1 error message)
+warning$ -- 12
+while$ -- 57
+width$ -- 42
+write$ -- 399
+(There were 12 warnings)

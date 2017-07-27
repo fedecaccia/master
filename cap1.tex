@@ -299,7 +299,9 @@ donde $\Delta{\bar{r}_n}=\bar{r}_n - \bar{r}_{n-1}$ y $\Delta{\bar{x}_n}=x_n - \
 Existe una variante del método, el método \textit{Broyden ortonormal}, que aproxima la matriz $\mathbb{B}_n$ en función de una base vectorial de residuos previos calculados.
 Este método asegura la convergencia en una cantidad finita de iteraciones para sistemas lineales \cite{broyden-on}, (la cantidad de iteraciones requerida es la dimensión de la matriz jacobiana).
 
-Existe también un conjunto de métodos conocidos como métodos \textit{Newton-Krylov} para la resolución del sistema \ref{sistema-simple}. Estos métodos no requieren el cálculo de matriz jacobiana ya que resuelven el sistema mediante técnicas de gradientes descendentes. Sin embargo, en cada paso de descenso requieren evaluaciones de residuos, y por tanto son altamente costosos.
+Existe también un conjunto de métodos conocidos como métodos \textit{Newton-Krylov} \cite{kelley} para la resolución del sistema \ref{sistema-simple}.
+Estos métodos no requieren el cálculo de matriz jacobiana ya que resuelven el sistema mediante técnicas de gradientes descendentes.
+Sin embargo, en cada paso de descenso requieren evaluaciones de residuos, y por tanto son altamente costosos.
 
 Notar que los métodos presentados en el presente apartado resuelven el sistema de ecuaciones \ref{sistema-simple} de forma monolítica,
 y es por este motivo que permiten incluir estrategias para la selección de condiciones de borde prohibidas al método \textit{Dirichlet-to-Neumann}.

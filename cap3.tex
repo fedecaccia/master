@@ -725,7 +725,7 @@ Estas extrapolaciones son válidas solo cuándo $n>k_{\bar{x}}+1$ y $n>k_{\mathb
 \includegraphics[scale = 1]{nonlinear_fevals_ex.pdf}
 \caption[Eficiencia para diferentes esquemas de extrapolación en la generación de semillas]
 {Eficiencia para diferentes esquemas de extrapolación en la generación de semillas para $\bar{x}_n$ y $\mathbb{B}_n$ en cada paso temporal.
-$P$ indica el órden de extrapolación para $\bar{x}_n$ o para $\mathbb{B}_n$ utilizado en cada esquema.
+$k_{\bar{x}}$ indica el órden de extrapolación para $\bar{x}_n$ y $k_{\mathbb{B}}$ indica el órden de extrapolación para $\mathbb{B}_n$ utilizado en cada esquema.
 Los métodos con alto órden de extrapolación para $\mathbb{B}_n$ requieren menor cantidad de iteraciones para converger el cálculo en la primer etapa,
 pero a su vez requieren excesivas iteraciones ante alguna perturbación en los resultados.
 Los métodos con algún órden de extrapolación para $\bar{x}_n$ son más eficientes en estas instancias.}
@@ -756,10 +756,16 @@ comenzando con alto $k_{\mathbb{B}}$ y bajo $k_{\bar{x}}$, y tendiendo a $k_{\ma
 \section{Resolución de redes hidráulicas de múltiples componentes}
 \label{3:redes}
 
+\subsection*{Presentación del problema}
+\label{3:redes-presentacion}
+
 Con el interés de conocer el comportamiento de la metodología de resolución
 para problemas abordados mediante el Método de Descomposición Dijsunta de Dominios en sistemas con grandes cantidades de incógnitas,
 se propuso analizar redes hidráulicas de múltiples componentes interconectados.
 La idea es utilizar modelos sencillos para describir el comportamiento de cada componente particular para poder centrar el análisis solo en el estudio de convergencia.
+
+\subsection*{Subsistemas de estudio}
+\label{3:redes-subsistemas}
 
 Se proponen sistemas de redes hidráulicas ramificadas divergentes.
 Debido a la metodología de abordaje propuesta en el trabajo, las interfaces deben seleccionarse de forma que cada una de ellas solo conecte dos subdominios contiguos.
@@ -873,12 +879,10 @@ Bajo esta aproximación, la ecuación \ref{du} queda lineal en $v_i$ y en $v_j$ 
 \label{du}
 \end{equation}
 
-Conforme a la estrategia de resolución descripta en la sección \ref{1:abordaje},
+Conforme al esquema de resolución descripto en la sección \ref{1:abordaje},
 es necesario definir una estrategia para las condiciones de borde en las interfaces de acoplamiento de cada subsistema.
 La estrategia propuesta es establecer condiciones de tipo \textit{Dirichlet} sobre las interfaces ubicadas a la izquierda de cada subdominio (fijando $v$)
 y condiciones de tipo \textit{Neumann} sobre las interfaces ubicadas a la derecha (fijando $P$).
-
-% Laminar flow
 
 Cada subdominio es modelado con funciones \textit{esclavas} sencillas escritas en \texttt{Octave}.
 Los parámetros geométricos de cada subsistema se sortean aleatoriamente entre valores típicos.
@@ -887,62 +891,104 @@ Los códigos esclavos calculan el valor de las incógnitas en cada una de las in
 El sistema de ecuaciones de residuos \ref{sistema-simple} resultante tras aplicar las ecuaciones de continuidad \ref{continuidad} entre subdominios,
 es resuelto por una función \textit{maestra}.
 
-\begin{figure}[ht]
-\centering
-\includegraphics[scale = 1]{net_linear_its.pdf}
-\caption{.}  
-	\label{net_linear_its}
-\end{figure}
+\subsection*{Redes hidráulicas con regímenes de flujo laminar}
+\label{laminar}
 
-\begin{figure}[ht]
-\centering
-\includegraphics[scale = 1]{net_linear_fevals.pdf}
-\caption{.}  
-	\label{net_linear_fevals}
-\end{figure}
-
-En la Figura \ref{net_linear_its} se pueden observar la cantidad de iteraciones requeridas por diferentes métodos para la convergencia de resultados
+En la Figura \ref{net_linear} (a) se pueden observar la cantidad de iteraciones requeridas por diferentes métodos para la convergencia de resultados
 en sistemas hidráulicos laminares sin pérdidas de carga concentrada,
 variando la cantidad de subsistemas acoplados.
 La cantidad de incógnitas en el eje $x$ corresponde a una simplificación obtenida tras aplicar las ecuaciones de continuidad.
+
+\begin{figure}[ht]
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.55]{net_linear_its.pdf}
+	\end{minipage}
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.55]{net_linear_fevals.pdf}
+	\end{minipage}
+	\caption[Comparación de diferentes métodos numéricos para la resolución de sistemas de redes hidráulicas]
+  {Comparación de diferentes métodos numéricos para la resolución de sistemas de redes hidráulicas:
+  (a) iteraciones requeridas y (b) evaluaciones de funciones requeridas.}
+  \label{net_linear}
+\end{figure}
+
 El método del punto fijo reportado es un método explícito.
 En este método se genera una semilla inicial $\bar{x}_0$ para las incógnitas y se las envía a los códigos \textit{esclavos}.
 Los resultados que ellos devuelven conforman directamente el vector de iteración $\bar{x}_1$.
 El método del punto fijo podría pensarse como una combinación múltiple de métodos \textit{Dirichlet-to-Neumann},
 en el que los residuos se computan directamente entre vectores de iteración contiguos.
-En la Figura se observa que este método requiere excesiva cantidad de iteraciones.
+En la figura se observa que este método requiere excesiva cantidad de iteraciones.
 Las mismas ascienden hasta 1000 para sistemas con 16 incógnitas reducidas,
 pero este valor puede variar dependiendo de las semillas iniciales y de los parámetros del sistema.
 El método de \textit{Broyden} requiere decenas de iteraciones para cada sistema.
-El método de \textit{Newton-Raphson} y el método de la \textit{secante} requieren solo una iteración, debido a que los sistemas de cálculo son lineales.
-Sin embargo
+El método de \textit{Newton-Raphson}, el método de la \textit{secante} (construye la matriz jacobiana solo en la primera iteración y luego la utiliza sin cambios en las siguientes iteraciones)
+y el método de \textit{Shamanskii} (construye la matriz jacobiana cada $m$ iteraciones)
+requieren solo una iteración, debido a que los sistemas de cálculo son lineales
+(las tres curvas se encuentran superpuestas).
+Sin embargo, el parámetro de comparación de interés en estos casos para medir la eficiencia de cada método es la cantidad total de evaluaciones que requiere.
+En la Figura \ref{net_linear} (b) se observa que la ventaja obtenida por los métodos que construyen la matriz jacobiana es despreciable frente al método de \textit{Broyden}.
 
-
-\begin{figure}[ht]
-\centering
-\includegraphics[scale = 1]{net_linear_fevals_broy.pdf}
-\caption{.}  
-	\label{net_linear_fevals_broy}
-\end{figure}
-
-
-
-
-% Turbulent flow
+Debido a que los métodos \textit{quasi-Newton} han presentado elevada confiabilidad en la resolución de sistemas acoplados a lo largo de todo el trabajo,
+se investigaron formulaciones alternativas al método de \textit{Broyden},
+y en la Figura \ref{net_linear_its_broy} se reportan los resultados.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[scale = 1]{net_nonLinear_its.pdf}
-\caption{.}  
-	\label{net_nonLinear_its}
+\includegraphics[scale = 1]{net_linear_its_broy.pdf}
+\caption[Comparación de diferentes esquemas \textit{quasi-Newton} para la resolución de sistemas de redes hidráulicas con regímenes de flujo laminar]
+{Comparación de diferentes esquemas \textit{quasi-Newton} para la resolución de sistemas de redes hidráulicas con regímenes de flujo laminar.}
+	\label{net_linear_its_broy}
 \end{figure}
+
+Además del método \textit{Broyden ortonormal}, que en este estudio se comporta con igual eficiencia que el método de \textit{Broyden} (ambas curvas se solapan),
+existen formulaciones que aproximan directamente la inversa de la matriz jacobiana (\textit{Broyden inverso 1} y \textit{Broyden inverso 2}).
+Estos métodos se conocen en la bibliografía como \textit{bad Broyden update} (\textit{mala actualización de Broyden}) \cite{griewank} y en la figura puede verse que tienen eficiencia inferior.
+
+El método de \textit{Broyden} se utilizó también mejorando la semilla inicial para la matriz $\mathbb{B}_n$.
+En todos los estudios reportados se venía utilizando la matriz identidad,
+pero aquí se reemplazó por una matriz con \textit{unos} en los elementos que corresponden a posiciones llenas de la matriz jacobiana original,
+y \textit{ceros} en el resto de los elementos.
+Este llenado es sencillo de implementar ya que simplemente depende de las relaciones de dependecia de las residuos y las incógnitas, que \textit{a priori} son conocidas.
+Con esta implementación puede observarse en la curva de \textit{Broyden con} $B_{0,aprox}$ que la convergencia mejora a medida que la cantidad de incógnitas aumenta.
+
+La curva \textit{Broyden / residuos desordenados} corresponde a un esquema en el que el residuo $i$ se corresponde con alguna incógnita $j$ distinta de $i$.
+Utilizar la matriz identidad como semilla para $\mathbb{B}_n$ es una mala propuesta en este caso,
+ya que para cada fila $i$, el \textit{uno} debería ubicarse en la posición $j$.
+Esto genera mayor dificultad para la convergencia.
+Por lo tanto puede comprenderse que la diferencia entre las curvas \textit{azul} y \textit{roja} (que representan los resultados para el mismo método de \textit{Broyden})
+depende exclusivamente de una elección inteligente en la forma de proponer la semilla para la matriz $\mathbb{B}_n$.
+Esta diferencia asciende a 10 iteraciones en un sistema con 16 incógnitas reducidas.
+
+\subsection*{Redes hidráulicas con regímenes de flujo turbulento}
+\label{turbulent}
+
+Habiendo investigado sistemas de redes hidráulicas con regímenes de flujo laminar,
+el siguiente paso de estudio consiste en analizar sistemas de redes hidráulicas con regímenes de flujo turbulento.
+En estos modelos se utiliza directamente la ecuación \ref{du} para representar la pérdida de carga entre dos extremos de un dado subdominio,
+por lo que el sistema de ecuaciones global ahora es un sistema de ecuaciones no lineales.
+Aquí los métodos estudiados en el apartado anterior se comportan de forma diferente.
+El método de \textit{Newton-Raphson} ya no converge en una única iteración como lo hace en sistemas lineales.
+La Figura \ref{net_nonLinear_fevals} detalla la cantidad de evaluaciones de funciones requerida por distintos métodos
+para la convergencia de los resultados en sistemas con diferente cantidad de incógnitas reducidas.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{net_nonLinear_fevals.pdf}
-\caption{.}  
-	\label{net_nonLinear_fevals}
+\caption[Comparación de diferentes métodos numéricos para la resolución de sistemas de redes hidráulicas con regímenes de flujo turbulento]
+{Comparación de diferentes métodos numéricos para la resolución de sistemas de redes hidráulicas con regímenes de flujo turbulento.}  
+\label{net_nonLinear_fevals}
 \end{figure}
+
+Los métodos \textit{Newton-Krylov} toman demasiadas evaluaciones para converger.
+El método de \textit{Broyden localemente convergente}, que no es otro sino el método de \textit{Broyden} que hasta ahora se venía utilizando,
+solo se comporta bien a baja cantidad de incógnitas, y cuando la cantidad de incógnitas es elevada diverge.
+Los métodos de \textit{Newton-Raphson} y \textit{Shamanskii} tienen buena convergencia.
+De estos dos el último presenta mayor ventaja ya que elude el cálculo de la matriz jacobiana en iteraciones contiguas.
+El método que mejor se comporta es el método de \textit{Broyden globalmente convergente},
+que realiza búsquedas del mínimo a lo largo de la dirección de cambio en cada iteración (empleando evaluaciones de funciones extras).
+Estas búsquedas son conocidas en la bibliografía como \textit{line searching} \cite{kelley}.
 
 \section{Extensión al problema neutrónico-termohidráulico}
 \label{3:nt}
