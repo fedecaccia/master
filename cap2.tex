@@ -228,7 +228,7 @@ El esquema \ref{esquema-comunicacion} resume la estrategia de comunicación.
 	\draw[arrow1] (masterpN.south) to[out=-90, in=105, distance=2em] node [midway, sloped, anchor=center, above]{\textit{Ejecución}} (slave5.north);
 
 \end{tikzpicture}
-\caption[Esquema de comunicación implementado]{Esquema de comunicación entre los programas \textit{esclavos} y el programa \textit{maestro} implementado en el acoplamiento de códigos.
+\caption[Esquema de comunicación entre programas implementado]{Esquema de comunicación entre los programas \textit{esclavos} y el programa \textit{maestro} implementado en el acoplamiento de códigos.
 Los \textit{esclavos} se comunican solo con el \textit{maestro} y no intercambian datos entre sí.
 Se utilizan dos modelos de comunicación diferentes.
 En el primero, cada código \textit{esclavo} es comunicado con el código \textit{maestro} a través de intercambio de mensajes por \textit{MPI}.
@@ -578,7 +578,7 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
   \end{pgfonlayer}
 
 \end{tikzpicture}
-\caption[Esquema de acoplamiento implementado]{Esquema de acoplamento entre el programa \textit{maestro} y los programas \textit{esclavos}.
+\caption[Esquema de acoplamiento entre programas implementado]{Esquema de acoplamento entre el programa \textit{maestro} y los programas \textit{esclavos}.
 En el ejemplo, cada código \textit{esclavo} resuelve ecuaciones diferenciales en distintos subsitemas.
 Estos subsistemas están acoplados entre sí en alguna interfaz en las que las variables \{$x,y$\} son incógnitas.
 Los cálculos se acoplan cada $\Delta t_{coup}$, pero cada programa utiliza subpasos de cálculos locales.

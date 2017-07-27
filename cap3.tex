@@ -21,7 +21,8 @@ En la Figura \ref{esquemaFuenteFria} puede apreciarse un diagrama del sistema.
 
 \begin{figure}[ht]
 \centering{}\includegraphics[scale = 0.25]{acople_ri_enief.png}
-\caption{Esquema del sistema analizado. 
+\caption[Modelo de la fuente fría compuesto por un subsistemas cero-dimensional y otro subsistema bi-dimensional.]
+{Modelo de la funete fría analizada. 
 El subsistema de la izquierda es un intercambiador de calor y se estudia con un código cero-dimensional.
 El modelo de la derecha es una cavidad con una fuente de energía interna y se estudia con un código bi-dimensional.
 El sistema completo es abordado con una estrategia de acoplamiento mediante condiciones de borde dinámicas.
@@ -219,16 +220,17 @@ Las modificaciones necesarias para implementar el acoplamiento de \textbf{Par-GP
 	\begin{minipage}{0.5\linewidth}
 		\centering
 		\includegraphics[scale=0.32]{acople_ri28_t0.png}
-		\caption{t=0 s}
+		\caption[]{t=0 s}
 		\label{asd}	
 	\end{minipage}
 	\begin{minipage}{0.5\linewidth}
 		\centering
 		\includegraphics[scale=0.315]{acople_ri28_t40.png}
-		\caption{t=40 s}
+		\caption[]{t=40 s}
 		\label{asd}	
 	\end{minipage}
-	\caption{Evolución del fluido dentro de la cavidad bidimensional con fuente interna.
+	\caption[Evolución en el transitorio inicial del fluido dentro de la cavidad bidimensional con fuente interna]
+  {Evolución del fluido dentro de la cavidad bidimensional con fuente interna.
 	El número de Richardson del fluido $Ri=28.34$.
 	Pueden apreciarse las líneas de corriente que se establecen al comienzo de la simulación.} 
 	\label{acople_ri28_1}
@@ -238,16 +240,17 @@ Las modificaciones necesarias para implementar el acoplamiento de \textbf{Par-GP
 	\begin{minipage}{0.5\linewidth}
 		\centering
 		\includegraphics[scale=0.32]{acople_ri28_t80.png}
-		\caption{t=80 s}
+		\caption[]{t=80 s}
 		\label{asd}	
 	\end{minipage}
 	\begin{minipage}{0.5\linewidth}
 		\centering
 		\includegraphics[scale=0.315]{acople_ri28_t250.png}
-		\caption{t=250 s}
+		\caption[]{t=250 s}
 		\label{asd}	
 	\end{minipage}
-	\caption{Evolución del fluido dentro de la cavidad bidimensional con fuente interna.
+	\caption[Evolución hacia el estado estacionario del fluido dentro de la cavidad bidimensional con fuente interna]
+  {Evolución del fluido dentro de la cavidad bidimensional con fuente interna.
 	El número de Richardson del fluido $Ri=28.34$.
 	Pueden apreciarse las líneas de corriente serpenteantes y la estratificación del fluido alcanzando un estado estacionario.}  
 	\label{acople_ri28_2}
@@ -275,7 +278,8 @@ Puede observarse que la cantidad de iteraciones del método para converger es en
 
 \begin{figure}[ht]
 \centering{}\includegraphics[scale = 1]{evaluaciones-ff.pdf}
-\caption{Evaluaciones de residuos requeridas por diversos métodos numéricos para resolver los sistemas de ecuaciones planteados
+\caption
+{Evaluaciones de residuos requeridas por diversos métodos numéricos para resolver los sistemas de ecuaciones planteados
  en el problema doblemente acoplado descripto de la fuente fría de neutrones.} \label{iteraciones_ri} 
 \end{figure}
 
@@ -291,7 +295,7 @@ El método \textit{Dirichlet-to-Neumann} es el que mayor cantidad de iteraciones
 excediendo el doble de los pasos requeridos por los métodos \textit{quasi-Newton}.
 
 \section{Análisis del segundo sistema de parada de un reactor de investigación}
-\label{3:mock-up}
+\label{3:mockup}
 
 \subsection*{Presentación del problema}
 El Departamento de Mecánica Computacional de CNEA tuvo a cargo el análisis del segundo sistema de parada (SSP) del reactor RA-10.
@@ -331,7 +335,7 @@ En el trabajo presentado los subsistemas se acoplaron mediante una estrategia de
 Durante el trabajo se realizaron tareas de validación de las herramientas de cálculo.
 Para ello se estudió un sistema similar para el que se conocían datos experimentales de tiempo de vaciado.
 Estos datos sirvieron para contrastar los resultados obtenidos con las herramientas de cálculo.
-El sistema analizado fue el tanque del reflector del mockup del reactor OPAL, 
+El sistema analizado fue el tanque del reflector del \textit{mockup} del reactor OPAL, 
 montado por INVAP en San Carlos de Bariloche, \cite{invap-mockup}.
 
 Debido a que el mockup del OPAL está abierto a la atmósfera, no cuenta con línea de ecualización de presiones y por lo tanto no se consideró en el modelo.
@@ -542,7 +546,8 @@ En la Figura \ref{qpvst} se reportan los resultados obtenidos para la evolución
 		%\caption{t=250 s}
 		\label{asd}	
 	\end{minipage}
-	\caption{Evolución de la presión y del caudal volumétrico en la interfaz de acople entre los dos subsistemas.
+	\caption[Evolución de la presión y del caudal volumétrico en la interfaz de acople]
+  {Evolución de la presión y del caudal volumétrico en la interfaz de acople entre los dos subsistemas.
   La presión atmosférica es de 92000 Pa.}  
 	\label{qpvst}
 \end{figure}
@@ -563,7 +568,8 @@ Comparativamente se muestran también los valores experimentales reportados en l
 \begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{hvst.pdf}
-\caption{Evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP.
+\caption[Evolución del nivel de líquido en el \textit{mockup} del tanque del reflector del reactor OPAL ante accionamiento del SSP]
+{Evolución del nivel de líquido en el \textit{mockup} del tanque del reflector del reactor OPAL ante accionamiento del SSP.
 La curva negra está construida con datos experimentales proporcionados por INVAP S.E.
 Las curvas azul, roja, verde y violeta reportan datos calculados mediante diferentes mallas para el modelo tri-dimensional del arreglo de válvulas, 
 con acoplamiento fuerte al modelo cero-dimensional del resto del sistema.
@@ -596,8 +602,8 @@ En la Figura \ref{hvstv} se compara la evolución de la superficie libre ante fa
 \begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{hvstv.pdf}
-\caption{Comparación de la evolución del nivel de líquido en el mockup del tanque del reflector
-ante accionamiento del SSP considerando falla simple en diferentes válvulas.}
+\caption[Evolución del nivel de líquido en el \textit{mockup} del tanque del reflector del OPAL ante accionamiento del SSP considerando falla simple en diferentes válvulas]
+{Evolución del nivel de líquido en el \textit{mockup} del tanque del reflector del OPAL ante accionamiento del SSP considerando falla simple en diferentes válvulas.}
 \label{hvstv} 
 \end{figure}
 
@@ -627,6 +633,15 @@ Esta ecuación también es resuelta mediante una formulación de elementos finit
 Se utiliza, además, un enriquecimiento del espacio de presiones en los elementos de la interfaz \cite{enriq}.
 El campo del level set es reinicializado mediante cálculos geométricos cada 10 pasos temporales.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[scale = 1]{hvstlsZoom.pdf}
+\caption[Evolución del nivel de líquido en el \textit{mockup} del tanque del reflector del reactor OPAL ante accionamiento del SSP]
+{Evolución del nivel de líquido en el \textit{mockup} del tanque del reflector del reactor OPAL ante accionamiento del SSP durante el transitorio inicial.
+  Se comparan la solución obtenida despreciando el gas en la cañería y la obtenida con transporte de superficie libre mediante la técnica de \textit{level-set}.}  
+	\label{hvstls}
+\end{figure}
+
 En la Figura \ref{hvst} se compara la evolución obtenida de la superficie libre con los resultados anteriores,
 y en la Figura \ref{hvstls} se compara la evolución durante el transitorio inicial.
 Puede observarse que al modelar el transporte del gas la descarga se acelera durante el primer instante, debido a la menor pérdida de carga.
@@ -634,17 +649,10 @@ Sin embargo, este efecto no tiene mayor peso.
 La evolución posterior es similar a la obtenida sin el modelado de la superficie libre,
 y por lo tanto la aproximación realizada inicialmente es conservativa, ya que considera una mayor pérdida de carga.
 
-\begin{figure}[ht]
-\centering
-\includegraphics[scale = 1]{hvstlsZoom.pdf}
-\caption{Evolución del nivel de líquido en el mockup del tanque del reflector ante accionamiento del SSP durante el transitorio inicial.
-  Se comparan la solución obtenida despreciando el gas en la cañería y la obtenida con transporte de superficie libre mediante la técnica de \textit{level-set}.}  
-	\label{hvstls}
-\end{figure}
 
 En la Figura \ref{evol-ls} se observa la evolución de la superficie libre durante los primeros instantes de tiempo.
 
-\begin{figure}[ht]
+\begin{figure}[h]
 \begin{minipage}[t]{.48\textwidth}
 \centering
 \subfloat[t = 0 s]{\includegraphics[scale=0.15]{0ms.png}}\\
@@ -657,7 +665,8 @@ En la Figura \ref{evol-ls} se observa la evolución de la superficie libre duran
 \subfloat[t = 0.9 s]{\includegraphics[scale=0.15]{900ms.png}}\\
 \subfloat[t = 2.0 s]{\includegraphics[scale=0.15]{2000ms.png}}
 \end{minipage}
-\caption{Transitorio inicial de la descarga del tanque a través del arreglo de válvulas, con falla simple en la última válvula
+\caption[Transitorio inicial de la descarga del tanque a través del arreglo de válvulas del \textit{mockup} del reactor OPAL, con detalle de la evolución de la superficie libre]
+{Transitorio inicial de la descarga del tanque a través del arreglo de válvulas, con falla simple en la última válvula
   (no se modela).
 	El corte horizontal en la geometría permite observar el detalle de la evolución de la superficie libre.
   El líquido (azul) se encuentra inicialemente en condición estática rellenando las cañerías hasta la posición de las válvulas.
@@ -674,38 +683,209 @@ además, es conservativa en función del objetivo de estudio establecido, deber�
 
 \subsection*{Análisis de métodos de resolución del sistema de ecuaciones de residuos}
 
-
+A fines de comparar la efectividad de diferentes métodos numéricos se realizaron distintos cálculos utilizando la malla más gruesa.
+El parámetro de interés aquí no es la cantidad de iteraciones de cada método sino la cantidad de evaluaciones de funciones que cada uno requiere,
+ya que el tiempo de cálculo está directamente relacionado con ellas.
+La Figura \ref{nonlinear_fevals} compara la cantidad de evaluación de funciones en función de paso temporal para diferentes métodos de resolución.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{nonlinear_fevals.pdf}
-\caption{.}  
-	\label{nonlinear_fevals}
+\caption[Evaluación de diferentes métodos numéricos no lineales en el problema del vaciado del tanque reflector del \textit{mockup} del reactor OPAL]
+{Evaluación de diferentes métodos numéricos en la resolución del sistema de ecuaciones de residuos resultante para el problema del vaciado del tanque reflector del \textit{mockup} del reactor OPAL.
+El método explícito \textit{Dirichlet-to-Neumann} requiere excesiva cantidad de evaluaciones en cada paso de tiempo,
+mientras que los métodos implícitos \textit{quasi-Newton} son los más eficientes.}
+\label{nonlinear_fevals}
 \end{figure}
 
-\begin{figure}[ht]
-\centering
-\includegraphics[scale = 1]{nonlinear_fevals_d2n.pdf}
-\caption{.}  
-	\label{nonlinear_fevals_d2n}
-\end{figure}
+El método explícito \textit{Dirichlet-to-Neumann} es el que mayor cantidad de evaluaciones consume, debido a que requiere una excesiva cantidad de iteraciones para converger.
+Los métodos de tipo \textit{Newton-Krylov}: \textit{Newton-GMRES} y \textit{Newton-CG} (\textit{Newton-Gradientes Conjugados}) requieren baja cantidad de iteraciones, 
+pero debido a la forma de resolución toman más evaluaciones que los métodos \textit{quasi-Newton}: \textit{Broyden} y \textit{Broyden ortonormal},
+los cuales convergen con baja cantidad de iteraciones y de evaluaciones asociadas.
+El método de \textit{Newton-Raphson} toma tantas evaluaciones como los métodos \textit{Newton-Krylov},
+sin embargo, estas evaluaciones están asociadas a muy baja cantidad de iteraciones,
+ya que consume evaluaciones en la construcción de la matriz jacobiana.
+
+En conclusión, al igual que en los resultados presentados en la sección \ref{3:mockup}, los métodos \textit{Broyden} y \textit{Broyden ortonormal} resultaron ser los más eficientes.
+A fines de acelerar aún más el cálculo, se estudió la forma de optimizarlos.
+Se ensayaron diferentes métodos para la propuesta de semillas del vector de incógnitas $\bar{x}_n$ y de la matriz $\mathbb{B}_n$ para cada paso temporal de resolución.
+Hasta ahora las semillas para el primer paso temporal eran el vector de ceros $\bar{x}_1=\bar{0}$ y la matriz identidad $\mathbb{B}_1=\mathbb{I}$,
+y las semillas para cualquier paso temporal próximo eran el vector $\bar{x}_{n-1}$ de la solución convergida en el paso previo,
+y la matriz $\mathbb{B}_{n-1}$ de la última iteración correspondiente a ese paso.
+Ahora el objetivo radica en intentar generar semillas que aceleren la convergencia.
+
+Se propone utilizar un método de extrapolación, a partir de la información de los resultados que se van obteniendo en los sucesivos pasos.
+La semillas para $\bar{x}_n$ y para $\mathbb{B}_n$ podrían tener órdenes de extrapolación $k_{\bar{x}}$ y $k_{\mathbb{B}}$ diferentes.
+En el paso $n$, se van a utilizar los valores de los vectores $\bar{x}_i$ , con $i  \in  \left \{ n-1-k_{\bar{x}}, n-1\right \}$,
+y los valores de las matrices $\mathbb{B}_j$, con $j  \in  \left \{ n-1-k_{\mathbb{B}}, n-1\right \}$.
+Estas extrapolaciones son válidas solo cuándo $n>k_{\bar{x}}+1$ y $n>k_{\mathbb{B}+1}$ respectivamente.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{nonlinear_fevals_ex.pdf}
-\caption{.}  
-	\label{nonlinear_fevals_ex}
+\caption[Eficiencia para diferentes esquemas de extrapolación en la generación de semillas]
+{Eficiencia para diferentes esquemas de extrapolación en la generación de semillas para $\bar{x}_n$ y $\mathbb{B}_n$ en cada paso temporal.
+$P$ indica el órden de extrapolación para $\bar{x}_n$ o para $\mathbb{B}_n$ utilizado en cada esquema.
+Los métodos con alto órden de extrapolación para $\mathbb{B}_n$ requieren menor cantidad de iteraciones para converger el cálculo en la primer etapa,
+pero a su vez requieren excesivas iteraciones ante alguna perturbación en los resultados.
+Los métodos con algún órden de extrapolación para $\bar{x}_n$ son más eficientes en estas instancias.}
+\label{nonlinear_fevals_ex}
 \end{figure}
+La Figura \ref{nonlinear_fevals_ex} reporta la cantidad de evaluaciones de funciones requeridas para la convergencia en cada paso temporal,
+jugando con diferentes órdenes de extrapolación para $\bar{x}_n$ y $\mathbb{B}_n$.
+Las evaluaciones de funciones aquí están directamente relacionadas con las iteraciones para la convergencia,
+ya que el método de \textit{Broyden} realiza una sola evaluación en cada iteración.
+Al comienzo del cálculo todos los esquemas numéricos requieren excesivas iteraciones para converger,
+y luego comienzan a converger con menor cantidad.
+El cálculo con órden nulo de extrapolación para ambas variables es el que más tarda en bajar la cantidad de iteraciones.
+Le siguen todos aquellos esquemas sin extrapolación para la matriz $\mathbb{B}_n$.
+Los esquemas con $k_{\mathbb{B}}=3$ y $k_{\mathbb{B}}=5$ son los que más rápidamente bajan la cantidad de iteraciones,
+por lo que se deduce que la extrapolación para la generación de semillas para $\mathbb{B}_n$ es altamente útil para arrancar el cálculo.
+En etapas avanzadas la matriz $\mathbb{B}_n$ se estabiliza y comienza a converger a resultados similares en los sucesivos pasos.
+Es decir, la tasa de cambio del vector solución $\bar{x}_n$ se vuelve aproximadamente constante (como puede observarse en la Figura \ref{qpvst}).
+Ante una pequeño cambio, los esquemas de extrapolación para $\mathbb{B}_n$ amplifican esta perturbación y comienzan a generar malas semillas,
+por lo que comienzan a requerir mayor cantidad de iteraciones para converger.
+Este efecto puede observarse a partir de los $10s$ de cálculo.
+Por el contrario, los esquemas con bajo órden de extrapolación para $\mathbb{B}_n$ y algún órden de extrapolación para $\bar{x}_n$ son más eficientes en esta etapa.
+Aquí podría pensarse que los esquemas de extrapolación son inestables ante perturbaciones en $\mathbb{B}_n$, pero estables para perturbaciones en $\bar{x}_n$.
 
-
-
-
-
+En base a estos resultados, se deduce que el esquema de generación de semillas ideal
+requeriría órdenes de extrapolación $k_{\bar{x}}$ y $k_{\mathbb{B}}$ dependientes del tiempo,
+comenzando con alto $k_{\mathbb{B}}$ y bajo $k_{\bar{x}}$, y tendiendo a $k_{\mathbb{B}}=0$ y alto $k_{\bar{x}}$ a medida que avanza el cálculo.
 
 \section{Resolución de redes hidráulicas de múltiples componentes}
 \label{3:redes}
 
-Laminar flow
+Con el interés de conocer el comportamiento de la metodología de resolución
+para problemas abordados mediante el Método de Descomposición Dijsunta de Dominios en sistemas con grandes cantidades de incógnitas,
+se propuso analizar redes hidráulicas de múltiples componentes interconectados.
+La idea es utilizar modelos sencillos para describir el comportamiento de cada componente particular para poder centrar el análisis solo en el estudio de convergencia.
+
+Se proponen sistemas de redes hidráulicas ramificadas divergentes.
+Debido a la metodología de abordaje propuesta en el trabajo, las interfaces deben seleccionarse de forma que cada una de ellas solo conecte dos subdominios contiguos.
+Por lo tanto, cada porción del sistema que comprende una ramificación es pensada como un subdominio diferente,
+de modo que cada subdominio contenga tres interfaces de acoplamiento.
+La Figura \ref{net16} esquematiza un modelo de estudio con 5 subsistemas acoplados.
+Cada subdominio es modelado con balances cero-dimensionales de conservación de masa y energía.
+Las ecuaciones resultantes para un subsistema genérico que no contiene bordes del dominio original son las siguientes:
+\begin{equation}
+\left \{
+\begin{array}{rcl}
+\frac{p_1}{\rho} + \frac{{v_1}^2}{2} &=& \frac{p_2}{\rho} + \frac{{v_2}^2}{2} + gz_2 + \Delta u_{12} \\
+\frac{p_1}{\rho} + \frac{{v_1}^2}{2} &=& \frac{p_3}{\rho} + \frac{{v_3}^2}{2} + gz_3 + \Delta u_{13} \\
+A_1 v_1 &=& A_2 v_2 + A_3 v_3
+\end{array}
+\right .
+\label{net-eq}
+\end{equation}
+donde los subíndices $1$, $2$ y $3$ refieren a diferentes extremos locales del contorno del subdominio,
+$p_i$, $v_i$, $z_i$, y $A_i$ indican \textit{presión}, \textit{velocidad}, \textit{altura} y \textit{área} de la sección en el extremo $i$ respectivamente,
+y $\Delta u_{ij}$ refiere a la diferencia de energía del flujo entre los exremos $i$ y $j$.
+El extremo 1 siempre corresponde al izquierdo de cada subdominio, y las otros se numeran en forma horaria creciente.
+Deben prestarse algunas consideraciones extras en las ecuaciones para los subsistemas que requieren condiciones $CB_{k,l}$ sobre extremos que pertenecían al borde original del sistema completo,
+donde $k$ indica el subsistema y $l$ el extremo local.
+
+\begin{figure}
+\centering{}
+\begin{tikzpicture}
+
+% Nodos
+\node [label={\small $S_3$}] at (0em,0em) (n8) {};
+
+\node [right of=n8, xshift=3em, yshift=-2em, align=center] (n13) {\small $v_{3,3}, \quad v_{5,1},$ \\ $P_{3,3}$ \quad $P_{5,1}$};
+\node [right of=n13, xshift=3em, yshift=-2em, label={\small $S_5$}] (n14) {};
+\node [right of=n14, xshift=2em, yshift=-2em] (n16) {\small $CB_{5,3}$};
+\node [right of=n14, xshift=2em, yshift=2em] (n15) {\small $CB_{5,2}$};
+
+\node [right of=n8, xshift=3em, yshift=2em, align=center] (n9) {\small $v_{3,2}, \quad v_{4,1},$ \\ $P_{3,2}$ \quad $P_{4,1}$};
+\node [right of=n9, xshift=3em, yshift=0em, label={\small $S_4$}] (n10) {};
+\node [right of=n10, xshift=2em, yshift=-2em] (n12) {\small $CB_{4,3}$};
+\node [right of=n10, xshift=2em, yshift=2em] (n11) {\small $CB_{4,2}$};
+
+\node [left of=n8, xshift=-3em, yshift=2em, align=center] (n7) {\small $v_{1,3}, \quad v_{3,1},$ \\ $P_{1,3}$ \quad $P_{3,1}$};
+\node [left of=n7, xshift=-4em, yshift=3em, label={\small $S_1$}] (n2) {};
+\node [left of=n2, xshift=-1em, yshift=-0em] (n1) {\small $CB_{1}$};
+
+\node [right of=n2, xshift=4em, yshift=3em, align=center] (n3) {\small $v_{1,2}, \quad v_{2,1},$ \\ $P_{1,2}$ \quad $P_{2,1}$};
+\node [right of=n3, xshift=3em, yshift=0em, label={\small $S_2$}] (n4) {};
+\node [right of=n4, xshift=2em, yshift=2em] (n5) {\small $CB_{2,2}$};
+\node [right of=n4, xshift=2em, yshift=-2em] (n6) {\small $CB_{2,3}$};
+
+% Conexiones
+\draw[|-] (n1.east) to [in=180, out=0] (n2.center);
+\draw[-o] (n2.center) to[in=180, out=0] (n3.west);
+\draw[-o] (n2.center) to[in=180, out=0] (n7.west);
+
+\draw[o-] (n3.east) to[in=180, out=0] (n4.center);
+\draw[-|] (n4.center) to[in=180, out=0] (n5.west);
+\draw[-|] (n4.center) to[in=180, out=0] (n6.west);
+
+\draw[o-] (n7.east) to[in=180, out=0] (n8.center);
+\draw[-o] (n8.center) to[in=180, out=0] (n9.west);
+\draw[-o] (n8.center) to[in=180, out=0] (n13.west);
+
+\draw[o-] (n9.east) to[in=180, out=0] (n10.center);
+\draw[-|] (n10.center) to[in=180, out=0] (n11.west);
+\draw[-|] (n10.center) to[in=180, out=0] (n12.west);
+
+\draw[o-] (n13.east) to[in=180, out=0] (n14.center);
+\draw[-|] (n14.center) to[in=180, out=0] (n15.west);
+\draw[-|] (n14.center) to[in=180, out=0] (n16.west);
+
+
+\end{tikzpicture}
+\caption[Descomposición disjunta de dominios en el modelado de redes hidráulicas]
+{Descomposición disjunta de dominios en un modelo de red hidráulica con 16 incógnitas en las interfaces de acoplamiento.
+La incógnita $v_{i,j}$ refiere a la velocidad en el extremo $j$ del subsistema $i$.
+La incógnita $P_{i,j}$ agrupa las presiones estática y dinámica en el extremo $j$ del subsistema $i$.
+Las incógnitas pueden reducirse rápidamente a la mitad aplicando las relaciones de continuidad \ref{continuidad}.}
+\label{net16}
+\end{figure}
+
+Los términos de presión estática $\frac{p_i}{\rho}$ y presión dinámica $\frac{{v_i}^2}{2}$ para el extremo $i$ pueden agruparse en una única incógnita $P_i$ para simplificar el cálculo:
+
+\begin{equation}
+P_i = \frac{p_i}{\rho} + \frac{{v_i}^2}{2}
+\label{p-eyd}
+\end{equation}
+
+El término $\Delta u_{ij}$ puede aproximarse mediante una función de pérdida de carga como \cite{white}:
+\begin{equation}
+\Delta u_{ij} = \frac{{v_i}^2}{2} \left ( \frac{f_{D_i} L_{i}}{D_i} + \sum_t K_{i,t} \right ) + \frac{{v_j}^2}{2} \left ( \frac{f_{D_j} L_{j}}{D_j} + \sum_t K_{j,t} \right )
+\label{du}
+\end{equation}
+En esta ecuación, el primer término está modelando la pérdida de carga total entre el extremo $i$ y el nodo de divergencia,
+y el segundo extremo modela la pérdida de carga total entre este nodo y el extremo $j$.
+Las variables $D_i$ y $L_i$ corresponden al \textit{diámetro} y a la \textit{longitud} de la cañería desde el extremo $i$ hasta el nodo de divergencia,
+$f_{D_i}$ corresponde al \textit{factor de Darcy} del flujo en esa porción
+y $K_{i,t}$ corresponde al \textit{factor de pérdida de carga concentrada t} de cualquier componente hidráulico presente lo largo de algún punto de esa porción de cañería.
+Bajo algunas modificaciones sería posible incorporar cambios en las secciones a lo largo de estas porciones, pero no se realizó por simplicidad.
+
+Considerando que el flujo corre por la red hidráulica en régimen laminar, $f_{D_i}$ puede modelarse como \cite{white}:
+\begin{equation}
+f_{D_{{i},lam}} = \frac{64}{Re_{D_i}}
+\label{f-lam}
+\end{equation}
+donde $Re_{D_i}=\frac{\rho v_i D_i} {\mu_i}$, siendo $\mu$ la viscocidad dinámica del fluido.
+Bajo esta aproximación, la ecuación \ref{du} queda lineal en $v_i$ y en $v_j$ para aquellos subsistemas en los que pudiera despreciarse la pérdida de carga concentrada:
+\begin{equation}
+\Delta u_{ij,lam} = \frac{{v_i}}{2} \left ( \frac{64 \mu L_{i}}{\rho {D_i}^{2}} \right ) + \frac{{v_j}}{2} \left ( \frac{64 \mu L_{j}}{\rho {D_j}^{2}} \right )
+\label{du}
+\end{equation}
+
+Conforme a la estrategia de resolución descripta en la sección \ref{1:abordaje},
+es necesario definir una estrategia para las condiciones de borde en las interfaces de acoplamiento de cada subsistema.
+La estrategia propuesta es establecer condiciones de tipo \textit{Dirichlet} sobre las interfaces ubicadas a la izquierda de cada subdominio (fijando $v$)
+y condiciones de tipo \textit{Neumann} sobre las interfaces ubicadas a la derecha (fijando $P$).
+
+% Laminar flow
+
+Cada subdominio es modelado con funciones \textit{esclavas} sencillas escritas en \texttt{Octave}.
+Los parámetros geométricos de cada subsistema se sortean aleatoriamente entre valores típicos.
+El fluido de trabajo es agua a temperatura y presión ambiente.
+Los códigos esclavos calculan el valor de las incógnitas en cada una de las interfaces de acoplamiento a partir de los datos recibidos como condiciones de borde.
+El sistema de ecuaciones de residuos \ref{sistema-simple} resultante tras aplicar las ecuaciones de continuidad \ref{continuidad} entre subdominios,
+es resuelto por una función \textit{maestra}.
 
 \begin{figure}[ht]
 \centering
@@ -716,20 +896,39 @@ Laminar flow
 
 \begin{figure}[ht]
 \centering
-\includegraphics[scale = 1]{net_linear_fevals_broy.pdf}
-\caption{.}  
-	\label{net_linear_fevals_broy}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
 \includegraphics[scale = 1]{net_linear_fevals.pdf}
 \caption{.}  
 	\label{net_linear_fevals}
 \end{figure}
 
+En la Figura \ref{net_linear_its} se pueden observar la cantidad de iteraciones requeridas por diferentes métodos para la convergencia de resultados
+en sistemas hidráulicos laminares sin pérdidas de carga concentrada,
+variando la cantidad de subsistemas acoplados.
+La cantidad de incógnitas en el eje $x$ corresponde a una simplificación obtenida tras aplicar las ecuaciones de continuidad.
+El método del punto fijo reportado es un método explícito.
+En este método se genera una semilla inicial $\bar{x}_0$ para las incógnitas y se las envía a los códigos \textit{esclavos}.
+Los resultados que ellos devuelven conforman directamente el vector de iteración $\bar{x}_1$.
+El método del punto fijo podría pensarse como una combinación múltiple de métodos \textit{Dirichlet-to-Neumann},
+en el que los residuos se computan directamente entre vectores de iteración contiguos.
+En la Figura se observa que este método requiere excesiva cantidad de iteraciones.
+Las mismas ascienden hasta 1000 para sistemas con 16 incógnitas reducidas,
+pero este valor puede variar dependiendo de las semillas iniciales y de los parámetros del sistema.
+El método de \textit{Broyden} requiere decenas de iteraciones para cada sistema.
+El método de \textit{Newton-Raphson} y el método de la \textit{secante} requieren solo una iteración, debido a que los sistemas de cálculo son lineales.
+Sin embargo
 
-Turbulent flow
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale = 1]{net_linear_fevals_broy.pdf}
+\caption{.}  
+	\label{net_linear_fevals_broy}
+\end{figure}
+
+
+
+
+% Turbulent flow
 
 \begin{figure}[ht]
 \centering

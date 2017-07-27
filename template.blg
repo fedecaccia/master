@@ -13,6 +13,12 @@ A level-1 auxiliary file: apend3.aux
 Database file #1: mibib.bib
 Warning--I'm ignoring pargpfep's extra "pages" field
 --line 312 of file mibib.bib
+Warning--string name "mc" is undefined
+--line 329 of file mibib.bib
+I was expecting a `,' or a `}'---line 329 of file mibib.bib
+ :   publisher = mc 
+ :                  Graw Hill Education,
+I'm skipping whatever remains of this entry
 Warning--empty author in newton
 Warning--missing publisher in iedelchik
 Warning--missing publisher in kays
@@ -24,46 +30,48 @@ Warning--empty journal in salome
 Warning--missing publisher in durbin
 Warning--missing publisher in k-e
 Warning--missing publisher in level-set
+Warning--empty publisher in white
+Warning--empty year in white
 Warning--empty author in newton-user-manual
-You've used 37 entries,
+You've used 38 entries,
             2634 wiz_defined-function locations,
-            1227 strings with 14842 characters,
-and the built_in function-call counts, 11321 in all, are:
-= -- 736
-> -- 358
+            1230 strings with 14884 characters,
+and the built_in function-call counts, 11494 in all, are:
+= -- 745
+> -- 362
 < -- 4
-+ -- 180
-- -- 89
-* -- 498
-:= -- 1292
-add.period$ -- 107
-call.type$ -- 37
++ -- 182
+- -- 90
+* -- 502
+:= -- 1313
+add.period$ -- 109
+call.type$ -- 38
 change.case$ -- 29
 chr.to.int$ -- 0
-cite$ -- 49
-duplicate$ -- 1157
-empty$ -- 1152
-format.name$ -- 116
-if$ -- 2515
+cite$ -- 52
+duplicate$ -- 1173
+empty$ -- 1176
+format.name$ -- 117
+if$ -- 2555
 int.to.chr$ -- 0
-int.to.str$ -- 37
-missing$ -- 335
-newline$ -- 186
-num.names$ -- 35
-pop$ -- 602
+int.to.str$ -- 38
+missing$ -- 340
+newline$ -- 190
+num.names$ -- 36
+pop$ -- 611
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 321
+skip$ -- 328
 stack$ -- 0
 substring$ -- 325
-swap$ -- 679
+swap$ -- 686
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 12
-while$ -- 53
-width$ -- 39
-write$ -- 373
-(There were 13 warnings)
+warning$ -- 14
+while$ -- 54
+width$ -- 40
+write$ -- 380
+(There was 1 error message)
