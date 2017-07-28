@@ -23,45 +23,45 @@ Warning--missing publisher in durbin
 Warning--missing publisher in k-e
 Warning--missing publisher in level-set
 Warning--empty author in newton-user-manual
-You've used 40 entries,
+You've used 41 entries,
             2634 wiz_defined-function locations,
-            1236 strings with 15030 characters,
-and the built_in function-call counts, 12001 in all, are:
-= -- 779
-> -- 370
+            1241 strings with 15091 characters,
+and the built_in function-call counts, 12206 in all, are:
+= -- 790
+> -- 374
 < -- 4
-+ -- 186
-- -- 92
-* -- 515
-:= -- 1368
-add.period$ -- 115
-call.type$ -- 40
++ -- 188
+- -- 93
+* -- 519
+:= -- 1391
+add.period$ -- 118
+call.type$ -- 41
 change.case$ -- 30
 chr.to.int$ -- 0
-cite$ -- 52
-duplicate$ -- 1215
-empty$ -- 1245
-format.name$ -- 119
-if$ -- 2679
+cite$ -- 53
+duplicate$ -- 1234
+empty$ -- 1275
+format.name$ -- 120
+if$ -- 2729
 int.to.chr$ -- 0
-int.to.str$ -- 40
-missing$ -- 354
-newline$ -- 200
-num.names$ -- 38
-pop$ -- 643
+int.to.str$ -- 41
+missing$ -- 361
+newline$ -- 205
+num.names$ -- 39
+pop$ -- 657
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 345
+skip$ -- 352
 stack$ -- 0
 substring$ -- 347
-swap$ -- 710
+swap$ -- 719
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 12
-while$ -- 57
-width$ -- 42
-write$ -- 399
+while$ -- 58
+width$ -- 43
+write$ -- 408
 (There were 12 warnings)

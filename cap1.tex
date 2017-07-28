@@ -158,7 +158,7 @@ Para que cada problema quede bien planteado es necesario imponer una condición 
 Esta decisión depende del método empleado para resolver el acoplamiento.
 
 La forma clásica de resolución es el método \textit{Dirichlet-to-Neumann}.
-Este método es un método explícito de simple implementación, que resuelve el acoplamiento mediante iteraciones de tipo \textit{Piccard}.
+Este método es un método explícito de simple implementación, que resuelve el acoplamiento mediante iteraciones de tipo \textit{Picard}.
 En el método \textit{Dirichlet-to-Neumann}, es necesario decidir qué subsistema va a ser resuelto en primera instancia.
 Si se decidiera, por ejemplo, comenzar con el subsistema de la izquierda, luego es necesario decidir qué tipo de condición de borde se le va a aplicar.
 Estas primeras decisiones son arbitrarias.
@@ -283,8 +283,9 @@ Es decir, en total, se requieren $N_{unk}+1$ evaluaciones.
 Si bien estas evaluaciones son independientes entre sí y por lo tanto altamente paralelizables, este método requeriría excesivos recursos de cálculo.
 
 Una forma alternativa y elegante de resolver el sistema de ecuaciones planteado en \ref{sistema-simple} es mediante métodos \textit{quasi-Newton}.
-La característica principal de estos métodos es que aproximan la matriz jacobiana sin necesidad de realizar evaluaciones extras, y por lo tanto tienen una ventaja fuerte frente al método de \textit{Newton-Raphson}.
-Además, tienen convergencia superlineal \cite{broyden-on}, y por lo tanto también presentan una ventaja frente a los métodos mediante iteraciones de \textit{Piccard}. 
+La característica principal de estos métodos es que aproximan la matriz jacobiana sin necesidad de realizar evaluaciones extras en todas las iteraciones,
+y por lo tanto tienen una ventaja fuerte frente al método de \textit{Newton-Raphson}.
+Además, en general tienen mayor orden de convergencia que los métodos mediante iteraciones de \textit{Picard}.
 
 El método de \textit{Broyden} es uno de estos métodos \cite{broyden}.
 La matriz jacobiana $\mathbb{B}_n$ en la iteración $n$ es aproximada mediante una matriz $\mathbb{B}_n$ que se construye solo en función 
@@ -296,12 +297,21 @@ y de la matriz de la iteración previa $\mathbb{B}_{n-1}$:
 \label{broyden}
 \end{equation}
 donde $\Delta{\bar{r}_n}=\bar{r}_n - \bar{r}_{n-1}$ y $\Delta{\bar{x}_n}=x_n - \bar{x}_{n-1}$.
-Existe una variante del método, el método \textit{Broyden ortonormal}, que aproxima la matriz $\mathbb{B}_n$ en función de una base vectorial de residuos previos calculados.
-Este método asegura la convergencia en una cantidad finita de iteraciones para sistemas lineales \cite{broyden-on}, (la cantidad de iteraciones requerida es la dimensión de la matriz jacobiana).
+Existe una variante del método, el método \textit{Broyden ortonormal} \cite{broyden-on}, que aproxima la matriz $\mathbb{B}_n$ en función de una base vectorial de residuos previos calculados.
+Este método asegura la convergencia en una cantidad finita de iteraciones para sistemas lineales, (la cantidad de iteraciones requerida es la dimensión de la matriz jacobiana).
+Ambos métodos tienen convergencia superlineal \cite{kelley}.
+
+Otro métodos \textit{quasi-Newton} muy utilizados son el método de la secante (\textit{chord method})\cite{kelley} y el método de \textit{Shamanskii}.
+El primero calcula la matriz jacobiana solo en la primer iteración y la utiliza sin actualizaciones en el resto de las iteraciones.
+El segundo también calcula la matriz jacobiana en la primer iteración, y vuelve a calcularla cada $m$ iteraciones.
+Este método también tiene convergencia superlineal \cite{kelley}.
 
 Existe también un conjunto de métodos conocidos como métodos \textit{Newton-Krylov} \cite{kelley} para la resolución del sistema \ref{sistema-simple}.
-Estos métodos no requieren el cálculo de matriz jacobiana ya que resuelven el sistema mediante técnicas de gradientes descendentes.
-Sin embargo, en cada paso de descenso requieren evaluaciones de residuos, y por tanto son altamente costosos.
+Estos métodos no requieren el cálculo de matriz jacobiana (\textit{matrix-free methods}).
+Sin embargo, en cada paso de iteración de resolución del sistema no lineal ({outer iteration}) requieren múltiples iteraciones del método de \textit{Krylov} (\textit{inner iterations},
+y en cada una de ellas calculan variaciones en las direcciones de descenso seleccionadas,
+lo cual implica múltiples evaluaciones de funciones.
+Por este motivo estos métodos resultan altamente costosos.
 
 Notar que los métodos presentados en el presente apartado resuelven el sistema de ecuaciones \ref{sistema-simple} de forma monolítica,
 y es por este motivo que permiten incluir estrategias para la selección de condiciones de borde prohibidas al método \textit{Dirichlet-to-Neumann}.
@@ -360,6 +370,6 @@ Se abordan distintos modelos multiescala del mismo, para estudiar el detalle flu
 acoplando con condiciones de borde dinámicas a modelos cero-dimensionales que representan el resto del sistema.
 El tercer sistema de análisis es un modelo de redes hidráulicas con múltiples componentes.
 Con este estudio se busca demostrar la eficiencia de la herramienta en acoples fluidodinámicos de mayor escala.
-Sobre el final del capítulo se extiende la herramienta a problemas multifísicos.
-Se analiza un ejemplo de aplicación al problema neutrónico-termohidráulico.
+Sobre el final del capítulo se extiende la herramienta a problemas multifísicos que engloban el acoplamiento fuerte de múltiples fenómenos.
+Se analizan dos ejemplos de acoplamiento neutrónico-termohidráulico.
 

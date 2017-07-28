@@ -37,16 +37,16 @@ Leiva, J., Blanco, P.~J., Buscaglia, G.
 \newblock \emph{International Journal for Numerical Methods in Engineering},
   \textbf{81}, 1558--1580, 2009.
 
+\bibitem{broyden}
+Broyden, C.
+\newblock A class of methods for solving nonlinear simultaneous equations.
+\newblock \emph{American Mathematical Society}, \textbf{19}, 577--593, 1965.
+
 \bibitem{broyden-on}
 Dennis, J., Shnabel, R.
 \newblock Numerical Methods for Unconstrained Optimization and Nonlinear
   Equations.
 \newblock Society for industrial and applied mathematics, 1996.
-
-\bibitem{broyden}
-Broyden, C.
-\newblock A class of methods for solving nonlinear simultaneous equations.
-\newblock \emph{American Mathematical Society}, \textbf{19}, 577--593, 1965.
 
 \bibitem{kelley}
 Kelley, C.
@@ -204,6 +204,11 @@ White, F.
 \bibitem{griewank}
 Griewank, A.
 \newblock Broyden updating, the good and the bad!, 2000.
+
+\bibitem{henry}
+Henry, A.
+\newblock Nuclear-reactor analysis.
+\newblock MIT press Cambridge, 1975.
 
 \bibitem{github}
 GitHub, Inc.
