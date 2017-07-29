@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2015/dev/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: template.aux
 The style file: ibtesis.bst
@@ -23,45 +23,45 @@ Warning--missing publisher in durbin
 Warning--missing publisher in k-e
 Warning--missing publisher in level-set
 Warning--empty author in newton-user-manual
-You've used 41 entries,
+You've used 42 entries,
             2634 wiz_defined-function locations,
-            1241 strings with 15091 characters,
-and the built_in function-call counts, 12206 in all, are:
-= -- 790
-> -- 374
+            1245 strings with 15181 characters,
+and the built_in function-call counts, 12411 in all, are:
+= -- 801
+> -- 378
 < -- 4
-+ -- 188
-- -- 93
-* -- 519
-:= -- 1391
-add.period$ -- 118
-call.type$ -- 41
++ -- 190
+- -- 94
+* -- 523
+:= -- 1414
+add.period$ -- 121
+call.type$ -- 42
 change.case$ -- 30
 chr.to.int$ -- 0
-cite$ -- 53
-duplicate$ -- 1234
-empty$ -- 1275
-format.name$ -- 120
-if$ -- 2729
+cite$ -- 54
+duplicate$ -- 1253
+empty$ -- 1305
+format.name$ -- 121
+if$ -- 2779
 int.to.chr$ -- 0
-int.to.str$ -- 41
-missing$ -- 361
-newline$ -- 205
-num.names$ -- 39
-pop$ -- 657
+int.to.str$ -- 42
+missing$ -- 368
+newline$ -- 210
+num.names$ -- 40
+pop$ -- 671
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 352
+skip$ -- 359
 stack$ -- 0
 substring$ -- 347
-swap$ -- 719
+swap$ -- 728
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 12
-while$ -- 58
-width$ -- 43
-write$ -- 408
+while$ -- 59
+width$ -- 44
+write$ -- 417
 (There were 12 warnings)

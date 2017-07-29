@@ -245,7 +245,8 @@ En este trabajo se utilizaron dos códigos maestros que cumplen con la estrategi
 El primer código \textit{maestro} utilizado es el código \textbf{Coupling} \cite{coup-0d3d} \cite{coup-black} \cite{coup-hyd}.
 \textbf{Coupling} utiliza los modelos de comunicación por paso de mensaje entre programas ejecutados en modos SISD y SIMD.
 El código maestro está diseñado de tal forma que los códigos acoplados resuelvan las ecuaciones \ref{ecuaciones-modelos}
-para incógnitas en interfaces con condiciones de borde de tipo \textit{Dirichlet} o de tipo \textit{Neumann}.
+para pares de incógnitas en las inteffaces. 
+Cada par de incógnitas debe contener una variable que corresponda a una condición de borde de tipo \textit{Dirichlet} y otra variable que corresponda a una condición de borde de tipo \textit{Neumann}.
 Con la idea de extender estas capacidades al acoplamiento de programas en modos MISD y MIMD,
 al acoplamiento de programas por lectura y escritura de archivos,
 así como a programas cuyos cálculos no dependieran exclusivamente de variables seteadas como condiciones de borde,
