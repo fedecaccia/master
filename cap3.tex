@@ -1038,8 +1038,10 @@ En caso contrario, debe repetirse el cálculo considerando otra distribución de
 \Delta \bar{\phi} = \frac{1}{k_{eff}}\Sigma \bar{\phi}
 \label{eq-nt}
 \end{equation}
-donde $\bar{\phi}$ es un vector con el valor del flujo neutrónico a diferentes grupos de energía integrado en las celdas de cálculo del reactor,
-$\Sigma$ es la matriz de secciones eficaces que contiene valores asociados a diferentes reacciones para diferentes grupos de energía en cada celda de cálculo,
+donde $\bar{\phi}$ es un vector con el valor del flujo neutrónico a diferentes grupos de energía en cada punto\footnote{
+Los puntos de cálculo pueden corresponder a nodos en formulaciones de diferencias finitas o de elementos finitos, o a celdas integrales en formulaciones de volúmenes finitos.	
+} de cálculo del reactor,
+$\Sigma$ es la matriz de secciones eficaces que contiene valores asociados a diferentes reacciones para diferentes grupos de energía en cada punto de cálculo,
 y $k_{eff}$ es el factor de criticidad del reactor.
 Si bien las secciones eficaces tienen diversas dependencias,
 en el modelo propuesto solo dependen de la densidad del refrigerante $N_{ref}$, de la temperatura del refrigerante $T_{ref}$ y de la temperatura del combustible $T_{comb}$ , de modo que:
@@ -1048,7 +1050,7 @@ en el modelo propuesto solo dependen de la densidad del refrigerante $N_{ref}$, 
 \Sigma = \Sigma \left ( N_{ref}, T_{ref}, T_{comb} \right )
 \label{eq-sigma}
 \end{equation}
-El valor de la potencia $P_i$ en cada celda de cálculo $i$ puede obtenerse a partir del flujo neutrónico \cite{lamarsh} obtenido en esa celda de la siguiente manera:
+El valor de la potencia $P_i$ en cada punto de cálculo $i$ puede obtenerse a partir del flujo neutrónico \cite{lamarsh} obtenido en ese punto de la siguiente manera:
 
 \begin{equation}
 P_i = \sum_j E_{fis,j} \Sigma_{fis,j} \phi_{i,j}
@@ -1056,7 +1058,7 @@ P_i = \sum_j E_{fis,j} \Sigma_{fis,j} \phi_{i,j}
 \end{equation}
 donde $E_{fis,j}$ es la energía liberada por fisión en el grupo de energía $j$,
 $\Sigma_{fis,j}$ es la sección eficaz de fisión condensada en el grupo de energía $j$ y
-$\phi_{i,j}$ es la componente del flujo neutrónico en la celda $i$ y el grupo de energía $j$.
+$\phi_{i,j}$ es la componente del flujo neutrónico en la punto $i$ y el grupo de energía $j$.
 La distribución de potencia $\bar{P}$ hallada es utilizada como fuente de energía en el balance termohidráulico.
 
 
