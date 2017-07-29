@@ -1027,7 +1027,11 @@ Comúnmente este acoplamiento se resuelve mediante iteraciones explícitas de ti
 
 En esta sección se propone un modelo simplificado para el análisis de la dinámica de núcleo de un reactor nuclear
 considerando solo los fenómenos neutrónicos y termohidráulicos.
-El cálculo de núcleo puede efecutarse mediante un modelo de difusión estacionario
+
+\subsection*{Subsistemas de estudio}
+\label{3:subsistemas-nt}
+
+El cálculo de núcleo se efectúa mediante un modelo de difusión estacionario
 \footnote{Al modelar un flujo neutrónico estacionario en realidad se está calculando el flujo en un reactor crítico asociado,
 por lo que la distribución de potencia hallada solo es válida si el $k_{eff}$ calculado es igual a 1.
 En caso contrario, debe repetirse el cálculo considerando otra distribución de secciones eficaces
@@ -1036,40 +1040,217 @@ En caso contrario, debe repetirse el cálculo considerando otra distribución de
 
 \begin{equation}
 \Delta \bar{\phi} = \frac{1}{k_{eff}}\Sigma \bar{\phi}
-\label{eq-nt}
+\label{eq-nucleo}
 \end{equation}
-donde $\bar{\phi}$ es un vector con el valor del flujo neutrónico a diferentes grupos de energía en cada punto\footnote{
+
+donde $\bar{\phi}$ es una función vectorial con el valor del flujo neutrónico en cada punto del espacio para diferentes grupos de energía,
+un vector con el valor del flujo neutrónico a diferentes grupos de energía en cada punto\footnote{
 Los puntos de cálculo pueden corresponder a nodos en formulaciones de diferencias finitas o de elementos finitos, o a celdas integrales en formulaciones de volúmenes finitos.	
 } de cálculo del reactor,
-$\Sigma$ es la matriz de secciones eficaces que contiene valores asociados a diferentes reacciones para diferentes grupos de energía en cada punto de cálculo,
+$\Sigma$ es la matriz de secciones eficaces asociada a diferentes reacciones para diferentes grupos de energía,
 y $k_{eff}$ es el factor de criticidad del reactor.
-Si bien las secciones eficaces tienen diversas dependencias,
-en el modelo propuesto solo dependen de la densidad del refrigerante $N_{ref}$, de la temperatura del refrigerante $T_{ref}$ y de la temperatura del combustible $T_{comb}$ , de modo que:
+En el modelo propuesto las secciones eficaces dependen de la densidad del refrigerante $N_{ref}$, de la temperatura del refrigerante $T_{ref}$ y de la temperatura del combustible $T_{comb}$, 
+para cada punto espacial y cada grupo de energía, de modo que:
 
 \begin{equation}
 \Sigma = \Sigma \left ( N_{ref}, T_{ref}, T_{comb} \right )
 \label{eq-sigma}
 \end{equation}
-El valor de la potencia $P_i$ en cada punto de cálculo $i$ puede obtenerse a partir del flujo neutrónico \cite{lamarsh} obtenido en ese punto de la siguiente manera:
+
+La ecuación \ref{eq-nucleo} requiere condiciones de borde en el contorno del dominio de cálculo.
+Por simplicidad, en este trabajo se utilizan condiciones de borde homogéneas\footnote{
+Imponer un flujo nulo en el contorno del dominio implica utilizar la hipótesis de que el flujo se hace nulo a alguna distancia del borde (en la \textit{distancia extrapolada} \ref{lamarsh}),
+y asumir al mismo tiempo que esta distancia es despreciable, para de esta forma no extender el dominio de cálculo.
+} sobre $\phi$.
+
+Una vez obtenido el flujo neutrónico $\phi$,
+la distribución de potencia $P$ puede calcularse a partir del ritmo de reacciones de fisión \cite{lamarsh}:
 
 \begin{equation}
-P_i = \sum_j E_{fis,j} \Sigma_{fis,j} \phi_{i,j}
+P = \int_{vol} E_{fis,i} \Sigma_{fis,i} \phi_{i}
 \label{power}
 \end{equation}
-donde $E_{fis,j}$ es la energía liberada por fisión en el grupo de energía $j$,
-$\Sigma_{fis,j}$ es la sección eficaz de fisión condensada en el grupo de energía $j$ y
-$\phi_{i,j}$ es la componente del flujo neutrónico en la punto $i$ y el grupo de energía $j$.
-La distribución de potencia $\bar{P}$ hallada es utilizada como fuente de energía en el balance termohidráulico.
+donde $E_{fis,i}$ es la energía liberada por fisiones ocurridas en el rango de energía $i$,
+$\Sigma_{fis,i}$ es la sección eficaz de fisión condensada en el grupo de energía $i$ y
+$\phi_{i}$ es la componente del flujo neutrónico también dondensada en el grupo de energía $i$.
+La distribución de potencia $\bar{P}$ hallada es utilizada como fuente de energía en los cálculos acoplados de transferencia de energía.
 
+Los fenómenos hidrodinámicos y de transferencia de calor se modelan con ecuaciones uni-dimensionales y transitorias.
+La transferencia de calor a través de las estructuras de combustibles se modela con la siguiente ecuación diferencial:
 
+\begin{equation}
+\rho \frac{\partial T_{comb}}{\partial t} = \nabla \left ( k \nabla T \right )  + S
+\label{relap-calor}
+\end{equation}
+donde $\rho$ es la densidad del medio difusivo,
+$T_{comb}$ es la temperatura del combustible,
+$k$ es el coeficiente de conductividad térmica y
+$S$ es la fuente interna de energía.
+Éste último término es el que tiene la información de la distribución de potencia generada en el núcleo del reactor.
+El modelo se completa con condiciones de borde adecuadas.
+El refrigerante fluye alrededor de las estructuras con temperatura media $T_{sk}$ y la energía transferida entre ambos se da por convección:
 
-\subsection*{Acoplamiento neutrónico-termohidráulico utilizando RELAP y FERMI}
+\begin{equation}
+-k \frac{\partial T_{comb}}{\partial n} = h \left ( T - T_{sk} \right )
+\label{relap-conveccion}
+\end{equation}
+donde $h$ es el coeficiente de transferencia de calor que debe obtenerse a partir de algún modelo adecuado para el régimen de flujo,
+y n es la dirección normal al borde del dominio de cálculo de $T_{comb}$.
+
+El modelo hidrodinámico del comportamiento del refrigerante considera una mezcla del fluido en fases líquida y gaseosa.
+Las ecuaciones básicas diferenciales de este modelo son seis \cite{manual-relap-modelos}.
+Las primeras dos son las ecuaciones de continuidad en cada fase:
+
+\begin{equation}
+\left \{
+\begin{array}{r}
+\frac{\partial} {\partial t} \alpha_g \rho_g + \frac{1}{A} \frac{\partial}{\partial x} \left (\alpha_g \rho_g v_g A \right ) = \Gamma_g \\
+\frac{\partial} {\partial t} \alpha_f \rho_f + \frac{1}{A} \frac{\partial}{\partial x} \left (\alpha_f \rho_f v_f A \right ) = \Gamma_f
+\end{array}
+\right .
+\label{relap-masa}
+\end{equation}
+donde los subíndices $g$ y $f$ refieren a las fases gaseosa y líquida respectivamente,
+$x$ es la dirección del flujo, normal a la sección de área $A$,
+$\alpha_i$ refiere a la fracción parcial de área que la fase $i$ ocupa en $A$,
+$\rho_i$ es la densidad del fluido en la fase $i$,
+$v_i$ es la velocidad en la dirección $x$ del fluido en la fase $i$, promediada en la sección y
+$\Gamma_i$ es un término de producción fluídica en la fase $i$.
+Notar que este por continuidad, $\Gamma_g = -\Gamma_f$.
+
+Las siguientes dos ecuaciones son las ecuaciones de momento de cada fase:
+
+\begin{equation}
+\left \{
+\begin{array}{r}
+\alpha_g \rho_g A \frac{\partial v_g}{\partial t} + \frac{1}{2} \alpha_g \rho_g A \frac{\partial v_g^2}{\partial x} = 
+- \alpha_g A \frac{\partial P}{\partial x} + \alpha_g \rho_g B_x A - \left( \alpha_g \rho_g A \right) FWG \left (v_g \right) \\
++ \Gamma_g A \left( v_{gI} - v_g \right ) - \left ( \alpha_g \rho_g A \right ) FIG \left( v_g - v_f \right) \\
+-C\alpha_g\alpha_f\rho_mA \left [ \frac{\partial \left( v_g - v_f \right)}{\partial t} + v_f \frac{\partial v_g}{\partial x} - v_g \frac{\partial v_f}{\partial x} \right ] \\
+
+\alpha_f \rho_f A \frac{\partial v_f}{\partial t} + \frac{1}{2} \alpha_f \rho_f A \frac{\partial v_f^2}{\partial x} = 
+- \alpha_f A \frac{\partial P}{\partial x} + \alpha_f \rho_f B_x A - \left( \alpha_f \rho_f A \right) FWF \left (v_f \right) \\
+- \Gamma_g A \left( v_{fI} - v_f \right ) - \left ( \alpha_f \rho_f A \right ) FIF \left( v_f - v_g \right) \\
+-C\alpha_f\alpha_g\rho_mA \left [ \frac{\partial \left( v_f - v_g \right)}{\partial t} + v_g \frac{\partial v_f}{\partial x} - v_f \frac{\partial v_g}{\partial x} \right ] \\
+\end{array}
+\right .
+\label{relap-momento}
+\end{equation}
+La primera ecuación corresponde a la fase gaseosa y la segunda corresponde a la fase líquida.
+Las ecuaciones son complejas y pueden analizarse separando los términos.
+En cualquiera de ambas, los términos del lado izquierdo representan el transporte de momento.
+Los términos de la derecha representan los agentes que generan el cambio de momento.
+El primer término representa el cambio debido al gradiente de presión $P$.
+El segundo término, debido a las fuerzas de volúmen $B_x$.
+El tercero, debido a la fuerza de fricción en la pared con coeficientes $FWG$ en la fase gaseosa y $FWF$ en la fase líquida.
+El cuarto término representa el momento transferido por intercambio de masa en la interfaz con velocidad $v_{gI}$ o $v_{fI}$.
+El quinto término representa el cambio de momento debido a la fricción \textit{drag} interfacial,
+cuyos coeficientes $FIG$ y $FIF$ dependen del modelo que se use, conforme al régimen de flujo.
+El último término representa una fuerza dada por una masa virtual,
+debido a la aceleración relativa entre las fases.
+El coeficiente $C$ dependen del modelo que se utilice según el régimen de flujo.
+
+Las últimas dos ecuaciones hidrodinámicas son las ecuaciones de conservación de energía $U_i$ para cada fase.
+Considerando algunas simplificaciones\cite{manual-relap-modelos}, las ecuaciones son las siguientes:
+
+\begin{equation}
+\left \{
+\begin{array}{r}
+\frac{\partial}{\partial t} \left( \alpha_g \rho_g U_g\right) + \frac{1}{A} \frac{\partial}{\partial x} \left ( \alpha_g \rho_g U_g v_g A \right ) = 
+-P \frac{\partial \alpha_g}{\partial t} - \frac{P}{A} \frac{\partial}{\partial x} \left( \alpha_g v_g A \right ) \\
++ Q_{wg} + Q_{ig} + \Gamma_{ig}h^*_g + \Gamma_w {h}'_g + DISS_g \\
+
+\frac{\partial}{\partial t} \left( \alpha_f \rho_f U_f\right) + \frac{1}{A} \frac{\partial}{\partial x} \left ( \alpha_f \rho_f U_f v_f A \right ) = 
+-P \frac{\partial \alpha_f}{\partial t} - \frac{P}{A} \frac{\partial}{\partial x} \left( \alpha_f v_f A \right ) \\
++ Q_{wf} + Q_{if} - \Gamma_{ig}h^*_f + \Gamma_w {h}'_f + DISS_f
+\end{array}
+\right .
+\label{relap-energia}
+\end{equation}
+La primera ecuación corresponde a la fase gaseosa y la segunda corresponde a la fase líquida.
+Los términos de la izquierda representan el transporte de energía en cada fase.
+Los dos primeros términos de la derecha representan trabajo por cambio de fase.
+El tercer término de la derecha en cada ecuación representa la transferencia de calor con las paredes de las estructuras,
+y son los términos que acoplan la dinámica fluídica a la distribución de temperatura en los combustibles, (ver ecuación \ref{relap-conveccion}.
+El cuarto término en cada ecuación representa la transferencia de calor en la interfaz entre las fases.
+El quinto término en cada ecuación representa la transferencia de calor debido al cambio de fase en la interfaz.
+El cambio de masa $\Gamma_{ij}$ en la interfaz $i$ y la fase $j$ tiene asociado una entalpía de fase $h^*_j$.
+Los anteúltimos términos representan la transferencia de calor debido al cambio de fase por contacto con la pared.
+El cambio de masa $\Gamma_{w}$ en la pared $w$ y la fase $j$ tiene asociado una entalpía de fase ${h}'_j$.
+Finalmente, los últimos términos $DISS_i$ representan disipación viscosa en la fase $i$ por fricción en la pared.
+
+En las ecuaciones \ref{relap-momento} y \ref{relap-energia} quedan sin definir una serie de coeficientes.
+Todos estos coeficientes se modelan a partir de ecuaciones de cierre extras \cite{manual-relap-modelos}.
+Estas ecuaciones dependen fuertemente de los regímenes de flujo, y básicamente modelan
+el cálculo de transferencia de masa en la interfaz de fases,
+de transferencia de calor en la interfaz y con estructuras,
+de fricción en la interfaz y con estructuras, y
+de disipación viscosa.
+
+\subsection*{Acoplamiento neutrónico-termohidráulico utilizando \textbf{RELAP5} y \textbf{Fermi}}
 \label{3:relap-fermi}
 
+En el primer ejemplo analizado,
+la ecuación que modela el flujo neutrónico es resuelta con \textbf{Fermi} \cite{fermi}.
+%\textbf{Fermi} es un código de núcleo desarrollado por Guido Giuntoli que calcula el flujo neutrónico a un grupo de energía a partir de un esquema de elementos finitos de la ecuación \ref{eq-nucleo}.
+\textbf{Fermi} es un código de núcleo que calcula el flujo neutrónico a un grupo de energía a partir de un esquema de elementos finitos de la ecuación \ref{eq-nucleo}.
+Las ecuaciones modelos presentadas en \ref{relap-calor}, \ref{relap-masa}, \ref{relap-momento} y \ref{relap-energia}
+los modelos de cierre necesarios para formular problemas bien definidos que ajusten a los distintos regímenes de flujo,
+y las ecuaciones modelos para las condiciones de borde de cada una de estas ecuaciones,
+son resueltas con \textbf{RELAP5}.
+\textbf{RELAP5} es un código de análisis de seguridad de reactores nucleares desarrollado por el Laboratorio Nacional de Idaho (INL por sus siglas en inglés, \textit{Idaho National Laboratory}.
+\textbf{RELAP5} ha sido validado en cálculos termohidráulicos de reactores nucleares y debido al amplio uso que tiene este código a nivel internacional
+se decidió utilizar en la resolución del problema modelado en la presente sección,
+para demostrar la posibilidad de uso en acoplamientos mediante la estrategia descripta en el \hyperlink{chapter.2}{Capítulo 2}.
+\textbf{RELAP5} resuelve las ecuaciones \ref{relap-calor}, \ref{relap-masa}, \ref{relap-momento} y \ref{relap-energia} a partir de esquemas semi-implícitos de diferencias finitas.
 
+El dominio de cálculo neutrónico consiste en un modelo de núcleo sencillo propuesto para evaluar la estrategia de acoplamiento,
+con dimensiones y parámetros arbitrarios.
+Nueve elementos combustibles son dispuestos en un arreglo de 3x3 dentro de un núcleo cúbico de un metro de lado con generación de 100MW térmicos.
+El dominio de cálculo termohidráulico consiste en una simplificación de la geometría del núcleo,
+considerando un único canal de refrigeración con longitud que recibe una potencia igual a la potencia total generada por el reactor.
+Este tipo de modelos es comúnmente utilizado en análsis de acoplamiento neutrónico-termohidráulico \cite{pumita-relap}.
+En la Figura \ref{fuel_z5} puede observarse la geometría utilizada.
+
+\begin{figure}
+
+\caption[Esquema de núcleo simple en análisis de acoplamiento neutrónico-termohidráulico utilizando \textit{RELAP5} y \textit{Fermi}]
+{Esquema de núcleo simple en análisis de acoplamiento neutrónico-termohidráulico utilizando \textit{RELAP5} y \textit{Fermi}.}
+\label{fuel_z5}
+\end{figure}
+Si bien la geometría de análisis es artificial, 
+es importante contar con modelos de secciones eficaces que representen fielmente la dependencia con las variables de estado termohidráulicas.
+Por este motivo se construyeron funciones de $\Sigma$ dependientes en $T_{comb}$, $T_{ref}$ y $N_{ref}$
+a partir de tablas de secciones eficaces proporcionadas por DIFRA (departamento de DIvisión de Física de Reactores Avanzados de CNEA).
+
+Se definen cinco zonas axiales para el cálculo termohidráulico.
+Las temperaturas y densidades medias obtenidas en cada una de ellas definen las secciones eficaces para el cálculo neutrónico en la zona correspondiente.
+Con este modelo, quedan definidas cuatro variables de acoplamiento en cada posición axial $i$: $T_{comb,i}$, $T_{ref,i}$ y $N_{ref,i}$ y $P_i$,
+es decir, en total, veinte incógnitas de acoplamiento.
+
+ASD
 
 
 \subsection*{Acoplamiento neutrónico-termohidráulico utilizando RELAP y PUMA}
 \label{3:relap-puma}
+En el segundo ejemplo analizado, la ecuación que modela el flujo neutrónico es resuelta con \textbf{PUMA} \cite{puma} a cinco grupos de energía.
+\textbf{PUMA} es un código de núcleo desarrollado por CNEA que calcula el flujo neutrónico a partir de un esquema de diferencias finitas de la ecuación \ref{eq-nucleo}.
+Las ecuaciones hidrodinámicas se resuelven con \textbf{RELAP5}.
 
+El dominio de cálculo nautrónico consiste en un modelo del núcleo del reactor CAREM-25 proporcionado por DIFRA.
+CAREM-25 es un reactor integrado de convección natural con generación 100 MW térmicos.
+Utiliza agua liviana como refrigerante y uranio enriquecido como combustible, y
+cuenta con diseños innovativos en sistemas de seguridad \cite{carem}.
+En la Figura \ref{carem} puede observarse un esquema del corte axial del núcleo del reactor.
 
+\begin{figure}
+
+\caption[Esquema del núcleo del reactor CAREM en corte axial]
+{Esquema del núcleo del reactor CAREM en corte axial.}
+\label{carem}
+\end{figure}
+El dominio de cálculo termohidráulico consiste en una simplificación de la geometría del núcleo, similar a la realizada en el ejemplo de análisis previo.
+Se modela un único canal de refrigeración con longitud extendida que recibe toda la potencia generada por el núcleo del reactor.
+Este modelo proviene de una monografía \cite{relap-carem} realizada durante el cursado de \textit{Modelado de sistemas termohidráulicos en reactores mediante códigos de planta}.
+
+ASD

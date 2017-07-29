@@ -215,6 +215,41 @@ Lamarsh, J.
 \newblock Introduction to NUCLEAR REACTOR THEORY.
 \newblock Addison Wesley publishing company, 1996.
 
+\bibitem{manual-relap-modelos}
+ RELAP5/MOD3.3 CODE MANUAL VOLUME I: CODE STRUCTURE, SYSTEM MODELS, AND
+  SOLUTION METHODS.
+\newblock Idaho National Laboratory, 2001.
+
+\bibitem{fermi}
+Fermi: a core nuclear code.
+\newblock \emph{Repositorio GitHub: \url{https://github.com/gg1991/fermi}},
+  2017.
+
+\bibitem{pumita-relap}
+Breitembücher, A., Etchepareborda, A., Hosid, A., Lema, F.
+\newblock Acople neutrónico-termohidráulico entre pumita y relap5 para la
+  simulación de transitorios del reactor carem-25.
+
+\bibitem{puma}
+Grant, C.
+\newblock Manual del sistema "puma" versión 6.
+\newblock \emph{Comisión Nacional de Energía Atómica}, 2010.
+
+\bibitem{carem}
+Delmastro, D., Gómez, S., Mazzi, R., de~Soler, S.~G., Santecchia, A., Ishida,
+  V.
+\newblock Características generales del reactor carem-25.
+\newblock \emph{XXVII Reunión Anual de la Asociación Argentina de Tecnología
+  Nuclear (AATN), Buenos Aires}, 2010.
+
+\bibitem{relap-carem}
+Caccia, F.~A.
+\newblock Tema: Análisis de evento de pérdida de sumidero de energía (lohs)
+  en un reactor autopresurizado integrado mediante un modelo detallado con
+  código relap5.
+\newblock \emph{Monografía de modelado de sistemas termohidráulicos en
+  reactores mediante códigos de planta}, 2016.
+
 \bibitem{github}
 GitHub, Inc.
 \newblock Plataforma de desarrollo colaborativo.

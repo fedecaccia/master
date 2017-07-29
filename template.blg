@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2015/dev/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: template.aux
 The style file: ibtesis.bst
@@ -22,46 +22,50 @@ Warning--empty journal in salome
 Warning--missing publisher in durbin
 Warning--missing publisher in k-e
 Warning--missing publisher in level-set
+Warning--empty author and editor in manual-relap-modelos
+Warning--empty author in fermi
+Warning--empty journal in pumita-relap
+Warning--empty year in pumita-relap
 Warning--empty author in newton-user-manual
-You've used 42 entries,
+You've used 48 entries,
             2634 wiz_defined-function locations,
-            1245 strings with 15181 characters,
-and the built_in function-call counts, 12411 in all, are:
-= -- 801
-> -- 378
+            1266 strings with 16189 characters,
+and the built_in function-call counts, 13870 in all, are:
+= -- 880
+> -- 428
 < -- 4
-+ -- 190
-- -- 94
-* -- 523
-:= -- 1414
-add.period$ -- 121
-call.type$ -- 42
-change.case$ -- 30
++ -- 216
+- -- 106
+* -- 580
+:= -- 1576
+add.period$ -- 136
+call.type$ -- 48
+change.case$ -- 35
 chr.to.int$ -- 0
-cite$ -- 54
-duplicate$ -- 1253
-empty$ -- 1305
-format.name$ -- 121
-if$ -- 2779
+cite$ -- 64
+duplicate$ -- 1423
+empty$ -- 1462
+format.name$ -- 135
+if$ -- 3096
 int.to.chr$ -- 0
-int.to.str$ -- 42
-missing$ -- 368
-newline$ -- 210
-num.names$ -- 40
-pop$ -- 671
+int.to.str$ -- 48
+missing$ -- 415
+newline$ -- 237
+num.names$ -- 44
+pop$ -- 770
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 359
+skip$ -- 405
 stack$ -- 0
 substring$ -- 347
-swap$ -- 728
+swap$ -- 812
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 12
-while$ -- 59
-width$ -- 44
-write$ -- 417
-(There were 12 warnings)
+warning$ -- 16
+while$ -- 63
+width$ -- 50
+write$ -- 469
+(There were 16 warnings)
