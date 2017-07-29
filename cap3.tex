@@ -993,27 +993,6 @@ Estas búsquedas son conocidas en la bibliografía como \textit{line searching} 
 \section{Extensión a problemas acoplados en modelos de núcleo}
 \label{3:extension-nucleo}
 
-\subsection*{Presentación del problema}
-\label{3:neut-th}
-
-La distribución espacial de la potencia generada en el núcleo de un reactor nuclear
-depende de diversos factores, como la posición de barras de control, combustibles y demás materiales,
-y de parámetros físicos como la temperatura del combustible, la temperatura del refrigerante o la fracción de vacío.
-Los modelos neutrónicos que se utilizan para capturar esta dependencia, modelan todos estos factores simplemente a través de una disposición espacial de secciones eficaces.
-La distribución espacial de potencia, a su vez, realimenta las secciones eficaces,
-ya sea a que está actuando como una fuente de energía, modificando temperaturas y densidades de combustibles, refrigerantes y demás materiales,
-o debido al movimiento futuro requerido de materiales,
-como por ejemplo, movimiento de barras de control necesarios para buscar perfiles de potencia planos, o recambio de combustibles por pérdida de criticidad.
-Además, en la evolución temporal el quemado de combustible genera alteraciones en la concentración de elementos existentes y aparición de nuevos elementos,
-que también modifican las secciones eficaces.
-
-La dinámica del núcleo de un reactor nuclear acopla fuertemente múltiples fenómenos, y cualquier modelo que se utilice para estudiarla debe abordar el acoplamiento mediante alguna estrategia.
-En general, los códigos de cálculo utilizados en el área nuclear están validados para resolver solo alguno de estos fenómenos,
-por lo que suele requerirse un acoplamiento entre ellos para resolver la dinámica completa.
-Comúnmente este acoplamiento se resuelve mediante iteraciones explícitas de tipo \textit{Picard} dentro de cada paso de tiempo.
-En la sección \ref{3:strategy-extended} se genera una estrategia de acoplamiento que permite utilizar técnicas explícitas e implícitas.
-En las secciones \ref{3:relap-fermi} y \ref{3:relap-puma} se presentan dos ejemplos de acoplamiento neutrónico-termohidráulico utilizando esta estrategia.
-
 \subsection*{Estrategia de acoplamiento extendida}
 \label{3:strategy-extended}
 
@@ -1024,12 +1003,34 @@ y también ser abordados mediante la misma estrategia.
 Es decir, la herramienta de acoplamiento puede ser utilizada para resolver cualquier tipo de sistemas de ecuaciones acopladas,
 siempre que existan diferentes códigos que se encarguen de resolver parcialmente algunas de ellas.
 
-A continuación se propone un modelo simplificado para el análisis de la dinámica de núcleo de un reactor nuclear
+A continuación se propone un modelo simplificado para el análisis de la dinámica de núcleo de un reactor nuclear.
+En los dos últimos apartados se presentan dos ejemplos de acoplamiento neutrónico-termohidráulico utilizando este modelo.
+
+\subsection*{Presentación del problema}
+\label{3:neut-th}
+
+La distribución espacial de la potencia generada en el núcleo de un reactor nuclear
+depende de diversos factores, como la posición de barras de control, combustibles y demás materiales,
+y de parámetros físicos como la temperatura del combustible, la temperatura del refrigerante o la fracción de vacío.
+Los modelos neutrónicos que se utilizan para capturar esta dependencia modelan todos estos factores simplemente a través de una disposición espacial de secciones eficaces.
+La distribución espacial de potencia, a su vez, genera modificaciones sobre las secciones eficaces,
+ya sea debido a que está actuando como una fuente de energía, modificando temperaturas y densidades de combustibles, refrigerantes y demás materiales,
+o debido al movimiento futuro requerido de materiales,
+como por ejemplo, movimiento de barras de control necesarios para buscar perfiles de potencia planos, o recambio de combustibles por pérdida de criticidad.
+Además, en la evolución temporal, el quemado de combustible genera alteraciones en la concentración de elementos existentes y aparición de nuevos elementos,
+que también modifican las secciones eficaces.
+
+La dinámica del núcleo de un reactor nuclear acopla fuertemente múltiples fenómenos, y cualquier modelo que se utilice para estudiarla debe abordar el acoplamiento mediante alguna estrategia.
+En general, los códigos de cálculo utilizados en el área nuclear están validados para resolver solo alguno de estos fenómenos,
+por lo que suele requerirse un acoplamiento entre ellos para resolver la dinámica completa.
+Comúnmente este acoplamiento se resuelve mediante iteraciones explícitas de tipo \textit{Picard} dentro de cada paso de tiempo.
+
+En esta sección se propone un modelo simplificado para el análisis de la dinámica de núcleo de un reactor nuclear
 considerando solo los fenómenos neutrónicos y termohidráulicos.
 El cálculo de núcleo puede efecutarse mediante un modelo de difusión estacionario
-\footnote{Al modelar un flujo estacionario en realidad se está calculando el flujo en un reactor crítico asociado,
-por lo que la distribución de potencia hallada solo será válida si el $k_{eff}$ calculado es 1.
-En caso contrario, debería repetirse el cálculo considerando otra distribución de secciones eficaces
+\footnote{Al modelar un flujo neutrónico estacionario en realidad se está calculando el flujo en un reactor crítico asociado,
+por lo que la distribución de potencia hallada solo es válida si el $k_{eff}$ calculado es igual a 1.
+En caso contrario, debe repetirse el cálculo considerando otra distribución de secciones eficaces
 (por ejemplo, moviendo barras de control).
 } \cite{henry}:
 
@@ -1037,8 +1038,8 @@ En caso contrario, debería repetirse el cálculo considerando otra distribució
 \Delta \bar{\phi} = \frac{1}{k_{eff}}\Sigma \bar{\phi}
 \label{eq-nt}
 \end{equation}
-donde $\bar{\phi}$ es un vector con el valor del flujo neutrónico a diferentes grupos de energía integrado en diferentes celdas de cálculo del reactor,
-$\Sigma$ es la matriz de secciones eficaces que contiene valores asociados a diferentes reacciones para diferentes grupos de energía y en las diferentes celdas de cálculo,
+donde $\bar{\phi}$ es un vector con el valor del flujo neutrónico a diferentes grupos de energía integrado en las celdas de cálculo del reactor,
+$\Sigma$ es la matriz de secciones eficaces que contiene valores asociados a diferentes reacciones para diferentes grupos de energía en cada celda de cálculo,
 y $k_{eff}$ es el factor de criticidad del reactor.
 Si bien las secciones eficaces tienen diversas dependencias,
 en el modelo propuesto solo dependen de la densidad del refrigerante $N_{ref}$, de la temperatura del refrigerante $T_{ref}$ y de la temperatura del combustible $T_{comb}$ , de modo que:
@@ -1047,7 +1048,7 @@ en el modelo propuesto solo dependen de la densidad del refrigerante $N_{ref}$, 
 \Sigma = \Sigma \left ( N_{ref}, T_{ref}, T_{comb} \right )
 \label{eq-sigma}
 \end{equation}
-El valor de la potencia $P_i$ en cada celda de cálculo $i$ puede modelarse en función del flujo neutrónico obtenido en esa celda \cite{lamarsh} de la siguiente manera:
+El valor de la potencia $P_i$ en cada celda de cálculo $i$ puede obtenerse a partir del flujo neutrónico \cite{lamarsh} obtenido en esa celda de la siguiente manera:
 
 \begin{equation}
 P_i = \sum_j E_{fis,j} \Sigma_{fis,j} \phi_{i,j}
@@ -1055,7 +1056,7 @@ P_i = \sum_j E_{fis,j} \Sigma_{fis,j} \phi_{i,j}
 \end{equation}
 donde $E_{fis,j}$ es la energía liberada por fisión en el grupo de energía $j$,
 $\Sigma_{fis,j}$ es la sección eficaz de fisión condensada en el grupo de energía $j$ y
-$\phi_{i,j}$ es la componente del flujo neutrónico en el grupo de energía $j$.
+$\phi_{i,j}$ es la componente del flujo neutrónico en la celda $i$ y el grupo de energía $j$.
 La distribución de potencia $\bar{P}$ hallada es utilizada como fuente de energía en el balance termohidráulico.
 
 
