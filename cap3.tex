@@ -1058,10 +1058,12 @@ para cada punto espacial y cada grupo de energía, de modo que:
 \end{equation}
 
 La ecuación \ref{eq-nucleo} requiere condiciones de borde en el contorno del dominio de cálculo.
-Por simplicidad, en este trabajo se utilizan condiciones de borde homogéneas\footnote{
+En el primer ejemplo analizado se utilizan condiciones de borde homogéneas\footnote{
 Imponer un flujo nulo en el contorno del dominio implica utilizar la hipótesis de que el flujo se hace nulo a alguna distancia del borde (en la \textit{distancia extrapolada} \ref{lamarsh}),
 y asumir al mismo tiempo que esta distancia es despreciable, para de esta forma no extender el dominio de cálculo.
 } sobre $\phi$.
+En el segundo ejemplo analizado se imponen condiciones de flujo entrante nulo.
+Éstas se modelan mediante un artificio de absorción total de los neutrones salientes, extendiendo la malla del cálculo.
 
 Una vez obtenido el flujo neutrónico $\phi$,
 la distribución de potencia $P$ puede calcularse a partir del ritmo de reacciones de fisión \cite{lamarsh}:
