@@ -1360,59 +1360,60 @@ para demostrar la posibilidad de uso en acoplamientos mediante la estrategia des
 La comunicación entre códigos se implementó mediante manejo de archivos,
 y con este fin se desarrollaron funciones de lectura y escritura específicas para los códigos de cálculo utilizados.
 
-Se utilizaron diferentes métodos de resolución del sistema acoplado.
+La resolución del sistema acoplado se llevó a cabo utilizando tres métodos diferentes.
+En la Figura \ref{fig-relap-fermi} se muestra la cantidad de evaluaciones de funciones en cada paso de quemado requerida por cada método,
+y la Tabla \ref{tab-relap-fermi} integra la cantidad total de evaluaciones y el tiempo consumido por cada uno.
+El primer método utilizado fue el método explícito \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}).
+Este método es el que converge en la menor cantidad de tiempo.
+El segundo método utilizado es otro método explícito, el método del punto fijo.
+Si bien este método tiene la ventaja de mantener a los diferentes programas \textit{exclavos} corriendo en paralelo,
+aquí no demuestra su utilidad porque solo uno de los dos modelos consume recursos temporales apreciables en cada iteración (el modelo neutrónico, que es el que resuelve con mayor detalle).
+Por último, se utilizó el método de \textit{Broyden} que en previas aplicaciones había demostrado muy buenos resultados.
+Si bien este método requiere excesivas evaluaciones en la primera iteración del primer paso de cálculo para la construcción de la matriz jacobiana,
+en los siguientes pasos de quemado converge con similares iteraciones a las de los métodos explícitos.
+Al igual que el método del punto fijo, el método de \textit{Broyden} no llega a demostrar su utilidad aquí
+puesto que el cálculo en paralelo de los modelos neutrónico y termohidráulico no presenta ventaja.
+El método de \textit{Newton-Raphson}, otros métodos \textit{quasi-Newton} como el método de la \textit{secante} o \textit{Shamanskii} y los métodos \textit{Newton-Krylov}
+no fueron tenidos en cuenta puesto que hubieran requerido numerosas evaluaciones de funciones debido a la gran cantidad de incógnitas del sistema.
 
-\begin{figure}[ht]
-	\begin{minipage}{0.5\linewidth}
-		\centering
-		\includegraphics[scale=0.6]{fermi-relap-feval.pdf}
-	\end{minipage}
-	\begin{minipage}{0.5\linewidth}
-		\centering
-		%\includegraphics[scale=0.22]{flux_z5.png}
-\begin{table}[]
-\centering
-\caption{My caption}
-\label{my-label}
-\begin{tabular}{lllll}
- & s &  &  &  \\
- &  d&  &  &  \\
- &  &  &  &  \\
- &  &  &  & 
-\end{tabular}
-\end{table}
-	\end{minipage}
-\caption[Núcleo simple en análisis de acoplamiento neutrónico-termohidráulico utilizando \textit{RELAP5} y \textit{Fermi}]
-{\textbf{(a)} Esquema de núcleo simple en análisis de acoplamiento neutrónico-termohidráulico utilizando \textbf{RELAP5} y \textbf{Fermi}.
-\textbf{(b)} Distribución del flujo neutrónico obtenido en un corte axial a 0.25 $cm$ desde la base del núcleo.
-}
-\label{fuel_z5}
-\end{figure}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\begin{minipage}{\textwidth}
+\begin{minipage}[b]{0.49\textwidth}
+  \centering
+  \includegraphics[scale=0.6]{fermi-relap-feval.pdf}
+  \label{fig-relap-fermi}
+  \captionsetup{width=0.8\textwidth}
+  \captionof{figure}[Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
+  {Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}.}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.49\textwidth}
+  \centering
+  \begin{tabular}{ l r r } \hline
+      Método & Evaluaciones & Tiempo \\
+      no lineal & totales & total [s] \\ \hline %\hline
+      Picard & 68 & 689 \\ %\hline            
+      Punto fijo & 87 & 855  \\ %\hline
+      Broyden & 85 & 836 \\ \hline
+   \end{tabular}
+   \label{tab-relap-fermi}
+   \captionsetup{width=0.8\textwidth}
+   \captionof{table}[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
+   {Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}.}
+  \end{minipage}
+\end{minipage}
 
 \subsection*{Acoplamiento neutrónico-termohidráulico utilizando RELAP y PUMA}
 \label{3:relap-puma}
-En el segundo ejemplo analizado, la ecuación que modela el flujo neutrónico es resuelta con \textbf{PUMA} \cite{puma} a cinco grupos de energía.
-\textbf{PUMA} es un código de núcleo desarrollado por CNEA que calcula el flujo neutrónico a partir de un esquema de diferencias finitas de la ecuación \ref{eq-nucleo}.
-Las ecuaciones hidrodinámicas se resuelven con \textbf{RELAP5}.
 
-El dominio de cálculo nautrónico consiste en un modelo del núcleo del reactor CAREM-25 proporcionado por DIFRA.
+La segunda aplicación analizada consiste en el análisis del núcleo del reactor CAREM-25 \cite{carem} durante un ciclo de quemado de 400 días.
 CAREM-25 es un reactor integrado de convección natural con generación 100 MW térmicos.
 Utiliza agua liviana como refrigerante y uranio enriquecido como combustible, y
 cuenta con diseños innovativos en sistemas de seguridad \cite{carem}.
+El análisis de este reactor es un problema complejo, con gran cantidad de incógnitas de acoplamiento.
+
+El dominio de cálculo neutrónico consiste en un núcleo de 1.4 metros de altura y 1.312 metros de diámetro equivalente.
+Este núcleo está compuesto por 61 elementos combustibles.
+Cada elemento combustible posee una sección transversal de forma hexagonal con 127 posiciones, entre las que se disponen barras con material combustible y absorbente.
 En la Figura \ref{carem} puede observarse un esquema del corte axial del núcleo del reactor.
 
 \begin{figure}
@@ -1421,8 +1422,55 @@ En la Figura \ref{carem} puede observarse un esquema del corte axial del núcleo
 {Esquema del núcleo del reactor CAREM en corte axial.}
 \label{carem}
 \end{figure}
+La ecuación \ref{eq-nucleo} que modela el flujo neutrónico es resuelta con \textbf{PUMA} \cite{puma} a cinco grupos de energía.
+\textbf{PUMA} es un código de núcleo desarrollado por CNEA que calcula el flujo neutrónico a partir de un esquema de diferencias finitas de la ecuación \ref{eq-nucleo}.
+El modelo de núcleo desarrollado para su cálculo con \textbf{PUMA} fue proporcionado por DIFRA.
+
 El dominio de cálculo termohidráulico consiste en una simplificación de la geometría del núcleo, similar a la realizada en el ejemplo de análisis previo.
 Se modela un único canal de refrigeración con longitud extendida que recibe toda la potencia generada por el núcleo del reactor.
 Este modelo proviene de una monografía \cite{relap-carem} realizada durante el cursado de \textit{Modelado de sistemas termohidráulicos en reactores mediante códigos de planta}.
+Las ecuaciones hidrodinámicas son resueltas con \textbf{RELAP5}.
 
-ASD
+La altura del núcleo se discretiza en tramos de 5 cm, con lo que quedan definidas 28 zonas axiales diferentes que se mantienen acopladas entre ambos modelos.
+Cada zona axial $i$ cuenta con cuatro incógnitas: $N_{ref,i}$, $T_{ref,i}$, $T_{comb,i}$ y $P_i$, por lo que en total existen 112 incógnitas.
+La estrategia de acoplamiento utilizada es similar a la implementada en el ejemplo anterior:
+las variables termohidráulicas se utilizan como datos de cálculo en el programa neutrónico, y la distribuición de potencias en el programa temrohidráulico.
+El esquema de avance temporal también es similar al comentado en el ejemplo previo.
+
+La comunicación entre códigos se implementó mediante manejo de archivos,
+por lo que en este caso se desarrollaron funciones específicas para la escritura y lectura de datos que a su vez son manipulados por \textit{scripts} de \textbf{PUMA}.
+
+\begin{minipage}{\textwidth}
+\begin{minipage}[b]{0.49\textwidth}
+  \centering
+  \includegraphics[scale=0.6]{puma-relap-feval.pdf}
+  \label{fig-relap-puma}
+  \captionsetup{width=0.8\textwidth}
+  \captionof{figure}[Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
+  {Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}.}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.49\textwidth}
+  \centering
+  \begin{tabular}{ l r r } \hline
+      Método & Evaluaciones & Tiempo \\
+      no lineal & totales & total [s] \\ \hline %\hline
+      Picard & 100 & 2017 \\ %\hline            
+      Punto fijo & 111 & 1619  \\ %\hline
+      Broyden &  &  \\ \hline
+   \end{tabular}
+   \label{tab-relap-puma}
+   \captionsetup{width=0.8\textwidth}
+   \captionof{table}[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
+   {Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}.}
+  \end{minipage}
+\end{minipage}
+
+En la resolución del sistema acoplado se consideraron solo tres métodos no lineales debido a las consideraciones comentadas en el ejemplo previo.
+En la Figura \ref{fig-relap-puma} se muestra la cantidad de evaluaciones de funciones en cada paso de quemado requerida por cada método,
+y la Tabla \ref{tab-relap-puma} integra la cantidad total de evaluaciones y el tiempo consumido por cada uno.
+
+El método de \textit{Broyden} requiere numerosas iteraciones para converger en cada paso de quemado, lo que consume una excesiva cantidad de tiempo.
+Sin embargo, en este caso, el método del punto fijo presenta una ventaja frente al método de \textit{Picard}.
+Debido a que el método del punto fijo posibilita el cálculo paralelo en ambos subdominios, y dado que el tiempo de cálculo consumido por cada uno de ellos es similar,
+consume un tiempo de cálculo inferior para el ciclo de quemado, aún cuando la cantidad total de evaluaciones de funciones que requiere es mayor.
