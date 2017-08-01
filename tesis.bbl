@@ -1,0 +1,270 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+
+\bibitem{coup-0d3d}
+Leiva, J., Buscaglia, G.
+\newblock Estretegias de acoplamiento entre c\'odigos 0d/1d and c\'odigos cfd
+  3d.
+\newblock \emph{Mec\'anica Computacional}, \textbf{XXV}, 53--82, 2006.
+
+\bibitem{coup-black}
+P.J.~Blanco, J.~L., Feij\'oo, R., Buscaglia, G.
+\newblock Black-box decomposition approach for computational hemodynamics:
+  One-dimensional models.
+\newblock \emph{Computer Methods in Applied Mechanics and Engineering},
+  \textbf{200}, 1389--1405, 2010.
+
+\bibitem{coup-hyd}
+Leiva, J., Blanco, P., Buscaglia, G.~C.
+\newblock Partitioned analysis for dimensionally-heterogeneous hydraulic
+  networks.
+\newblock \emph{Multiscale Model. Simul.}, \textbf{9}, 872--903, 2011.
+
+\bibitem{ddmethod}
+Quarteroni, A.
+\newblock Introduction to domain decomposition methods.
+\newblock \emph{6th Summer School in Analysis and Applied Mathematics}, 2011.
+
+\bibitem{fede-enief2016}
+Caccia, F., Dari, E.~A.
+\newblock Acoplamiento multiescala en cálculos fluidodinámicos.
+\newblock \emph{Mecánica Computacional}, \textbf{XXXIV}, 1955--1972, 2016.
+
+\bibitem{coup-strong}
+Leiva, J., Blanco, P.~J., Buscaglia, G.
+\newblock Iterative strong coupling of dimensionally heterogeneous models.
+\newblock \emph{International Journal for Numerical Methods in Engineering},
+  \textbf{81}, 1558--1580, 2009.
+
+\bibitem{broyden}
+Broyden, C.
+\newblock A class of methods for solving nonlinear simultaneous equations.
+\newblock \emph{American Mathematical Society}, \textbf{19}, 577--593, 1965.
+
+\bibitem{broyden-on}
+Dennis, J., Shnabel, R.
+\newblock Numerical Methods for Unconstrained Optimization and Nonlinear
+  Equations.
+\newblock Society for industrial and applied mathematics, 1996.
+
+\bibitem{kelley}
+Kelley, C.
+\newblock Iterative Methods for Linear and Nonlinear Equations.
+\newblock siam, 1995.
+
+\bibitem{maestro-esclavo}
+Hendrickson, B., Devine, K.
+\newblock Dynamic load balancing in computational mechanics.
+\newblock \emph{Computer Methods in Applied Mechanics and Engineering}, p\'ags.
+  485--500, 2000.
+
+\bibitem{comunicacion}
+Calviño, B.
+\newblock Estrategias de descomposición en dominios para entornos grid.
+\newblock \emph{Tesis Doctoral, Universidad Politécnica de Cataluña}, 2007.
+
+\bibitem{newton}
+Newton: a multiphysics coupling master code.
+\newblock \emph{Repositorio GitHub:
+  \url{https://github.com/fedecaccia/newton}}, 2017.
+
+\bibitem{fuente-fria}
+Buscaglia, G., Dari, E., Martín, E., Arnica, D., Bonetto, F.
+\newblock Finite element modeling of liquid deuterium flow and heat transfer in
+  a cold-neutron source.
+\newblock \emph{International Journal of Computational Fluid Dynamics},
+  \textbf{18}, 355--365, 2004.
+
+\bibitem{iedelchik}
+Iedelchik, I.
+\newblock Handbook of Local Resistance and Friction.
+\newblock 1960.
+
+\bibitem{kays}
+Kays, W., Crawford, M.
+\newblock Convective Heat and Mass Transfer, 3rd Edition.
+\newblock 1993.
+
+\bibitem{gunzburger}
+Gunzburger, M.
+\newblock Finite Element Methods for Viscous Incompressible FLows.
+\newblock 1989.
+
+\bibitem{supg}
+Codina, R.
+\newblock Comparison of some finite element methods for solving the
+  diffusion-convection-reaction equation.
+\newblock \emph{Computer Methods in Applied Mechanics and Engineering},
+  \textbf{156}, 185--210, 1998.
+
+\bibitem{pspg}
+Hughes, T., Franca, L., Balestra, M.
+\newblock A new finite element formulation for computational fluid dynamics: V.
+  circumventing the babu\v{s}ka-brezzi condition: a stable petrov-galerkin
+  formulation of the stokes problem accomodating equal-order interpolations.
+\newblock \emph{Computer Methods in Applied Mechanics and Engineering},
+  \textbf{59}, 85--99, 1986.
+
+\bibitem{gmsh}
+Geuzaine, C., Remacle, J.
+\newblock Gmsh reference manual, 2016.
+
+\bibitem{gpfep}
+Buscaglia, G., Felicelli, S.
+\newblock Un sistema de generación de programas de elementos finitos.
+\newblock \emph{Documentación: Versión 1.1}, 1995.
+
+\bibitem{pargpfep}
+Buscaglia, G., Dari, E., Lew, A., Raschi, M.
+\newblock Un programa general de elementos finitos en paralelo.
+\newblock \emph{Mecánica Computacional}, p\'ags. 845--854, 1999.
+
+\bibitem{richardson}
+Buscaglia, G., Dari, E.
+\newblock Numerical investigation of flow through a cavity with internal heat
+  generation.
+\newblock \emph{Numerical Heat Transfer}, p\'ags. 525--541, 2003.
+
+\bibitem{cnea-informe-ra10}
+Rechiman, L., Cantero, M., Dari, E., Caccia, F., Chacoma, A.
+\newblock Análisis hidrodinámico del segundo sistema de parada del ra-10.
+\newblock \emph{Informe técnico CNEA IN-ATN40MC-03/2015}, 2015.
+
+\bibitem{ra10-paper}
+Rechiman, L., Cantero, M., Caccia, F., Dari, E., Chacoma, A.
+\newblock Three-dimensional hydrodynamic modeling of the second shutdown system
+  of an experimental nuclear reactor.
+\newblock \emph{Nuclear Engineering and Design}, \textbf{319}, 163--175, 2017.
+
+\bibitem{ra10-enief}
+Rechiman, L., Cantero, M., Caccia, F., Dari, E.
+\newblock Validation of a multiscale model of the sencond shutdown system of an
+  experimental nuclear reactor.
+\newblock \emph{Mecánica Computacional}, \textbf{XXXIV}, 2199--2215, 2016.
+
+\bibitem{invap-mockup}
+Invap.
+\newblock Segundo sistema de parada - validaci\'on del cfd para drenaje del
+  tanque reflector, 2013.
+
+\bibitem{cnea-informe-mockup}
+Rechiman, L., Cantero, M., Dari, E., Chacoma, A.
+\newblock Modelo multiescala del mockup del segundo sistema de parada del
+  reactor ra-10.
+\newblock \emph{Informe técnico CNEA IN-ATN40MC-02/2015}, 2015.
+
+\bibitem{bird}
+Bird, R., Stewart, W., Lightfoot, E.
+\newblock Transport Phenomena, 2nd Edition.
+\newblock 2002.
+
+\bibitem{salome}
+CEA/DEN, E.~R., CASCADE, O.
+\newblock Salome version 7.8.0: Public release announcement, 2016.
+
+\bibitem{k-e-realizable}
+Lew, A., Buscaglia, G., Carrica, P.
+\newblock A note on the numerical treatment of the k-epsilon turbulence model.
+\newblock \emph{International Journal of Computational Fluid Dynamics}, 2001.
+
+\bibitem{durbin}
+Durbin, P., Reif, B.~P.
+\newblock Statistic Theory and Modeling for Turbulent Flows.
+\newblock 2011.
+
+\bibitem{k-e}
+Mohammadi, B., Pironneau, O.
+\newblock Analysis of the k-epsilon turbulence model.
+\newblock 1994.
+
+\bibitem{lew}
+Lew, A.
+\newblock El m\'etodo de elementos finitos en entornos computacionales de alta
+  performance.
+\newblock \emph{Trabajo Especial Carrera de Ingenier\'ia Nuclear, Instituto
+  Balseiro}, p\'ags. 57--64, 1998.
+
+\bibitem{level-set}
+Osher, S., Fedkiw, R.
+\newblock Level Set Methods and Dynamic Implicit Surfaces.
+\newblock 2003.
+
+\bibitem{enriq}
+Ausas, R., Buscaglia, G., Idelsohn, S.
+\newblock A new enrichment space for the treatment of discontinuous pressures
+  in multi-fluid flows.
+\newblock \emph{International Journal for Numerical Methods in Fluids}, 2011.
+
+\bibitem{white}
+White, F.
+\newblock Fluid Mechanics, 4th edition.
+\newblock Mc Graw Hill Education, 1998.
+
+\bibitem{griewank}
+Griewank, A.
+\newblock Broyden updating, the good and the bad!, 2000.
+
+\bibitem{henry}
+Henry, A.
+\newblock Nuclear-reactor analysis.
+\newblock MIT press Cambridge, 1975.
+
+\bibitem{lamarsh}
+Lamarsh, J.
+\newblock Introduction to NUCLEAR REACTOR THEORY.
+\newblock Addison Wesley publishing company, 1996.
+
+\bibitem{manual-relap-modelos}
+ RELAP5/MOD3.3 CODE MANUAL VOLUME I: CODE STRUCTURE, SYSTEM MODELS, AND
+  SOLUTION METHODS.
+\newblock Idaho National Laboratory, 2001.
+
+\bibitem{pumita-relap}
+Breitembücher, A., Etchepareborda, A., Hosid, A., Lema, F.
+\newblock Acople neutrónico-termohidráulico entre pumita y relap5 para la
+  simulación de transitorios del reactor carem-25.
+
+\bibitem{fermi}
+Fermi: a core nuclear code.
+\newblock \emph{Repositorio GitHub: \url{https://github.com/gg1991/fermi}},
+  2017.
+
+\bibitem{carem}
+Delmastro, D., Gómez, S., Mazzi, R., de~Soler, S.~G., Santecchia, A., Ishida,
+  V.
+\newblock Características generales del reactor carem-25.
+\newblock \emph{XXVII Reunión Anual de la Asociación Argentina de Tecnología
+  Nuclear (AATN), Buenos Aires}, 2010.
+
+\bibitem{puma}
+Grant, C.
+\newblock Manual del sistema "puma" versión 6.
+\newblock \emph{Comisión Nacional de Energía Atómica}, 2010.
+
+\bibitem{relap-carem}
+Caccia, F.~A.
+\newblock Tema: Análisis de evento de pérdida de sumidero de energía (lohs)
+  en un reactor autopresurizado integrado mediante un modelo detallado con
+  código relap5.
+\newblock \emph{Monografía de modelado de sistemas termohidráulicos en
+  reactores mediante códigos de planta}, 2016.
+
+\bibitem{github}
+GitHub, Inc.
+\newblock Plataforma de desarrollo colaborativo.
+\newblock \emph{\url{https://github.com}}, 2008.
+
+\bibitem{newton-user-manual}
+Newton: a multiphysics coupling master code user's manual.
+\newblock \emph{Repositorio GitHub:
+  \url{https://github.com/fedecaccia/newton/doc/newton-u-m.pdf}}, 2017.
+
+\bibitem{petsc-web-page}
+Balay, S., Abhyankar, S., Adams, M.~F., Brown, J., Brune, P., Buschelman, K.,
+  \emph{et~al.}
+\newblock {PETS}c {W}eb page.
+\newblock \url{http://www.mcs.anl.gov/petsc}, 2016.
+\newblock \urlprefix\url{http://www.mcs.anl.gov/petsc}.
+
+\end{thebibliography}

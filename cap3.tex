@@ -1025,8 +1025,8 @@ En general, los códigos de cálculo utilizados en el área nuclear están valid
 por lo que suele requerirse un acoplamiento entre ellos para resolver la dinámica completa.
 Comúnmente este acoplamiento se resuelve mediante iteraciones explícitas de tipo \textit{Picard} dentro de cada paso de tiempo.
 
-En esta sección se propone un modelo simplificado para el análisis de la dinámica de núcleo de un reactor nuclear
-considerando solo los fenómenos neutrónicos y termohidráulicos.
+En esta sección se propone un modelo simplificado para el análisis de la dinámica de núcleo de un reactor nuclear durante un ciclo de quemado de elementos combustibles,
+considerando solo los fenómenos neutrónico y termohidráulico.
 
 \subsection*{Subsistemas de estudio}
 \label{3:subsistemas-nt}
@@ -1049,7 +1049,8 @@ Los puntos de cálculo pueden corresponder a nodos en formulaciones de diferenci
 } de cálculo del reactor,
 $\Sigma$ es la matriz de secciones eficaces asociada a diferentes reacciones para diferentes grupos de energía,
 y $k_{eff}$ es el factor de criticidad del reactor.
-En el modelo propuesto las secciones eficaces dependen de la densidad del refrigerante $N_{ref}$, de la temperatura del refrigerante $T_{ref}$ y de la temperatura del combustible $T_{comb}$, 
+En el modelo propuesto las secciones eficaces dependen de la densidad del refrigerante $N_{ref}$, de la temperatura del refrigerante $T_{ref}$, de la temperatura del combustible $T_{comb}$, 
+y del valor histórico de quemado $B$ el material\cite{lamarsh},
 para cada punto espacial y cada grupo de energía, de modo que:
 
 \begin{equation}
@@ -1057,11 +1058,9 @@ para cada punto espacial y cada grupo de energía, de modo que:
 \label{eq-sigma}
 \end{equation}
 
-y esto de donde sale?
-
 La ecuación \ref{eq-nucleo} requiere condiciones de borde en el contorno del dominio de cálculo.
 En el primer ejemplo analizado se utilizan condiciones de borde homogéneas\footnote{
-Imponer un flujo nulo en el contorno del dominio implica utilizar la hipótesis de que el flujo se hace nulo a alguna distancia del borde (en la \textit{distancia extrapolada} \ref{lamarsh}),
+Imponer un flujo nulo en el contorno del dominio implica utilizar la hipótesis de que el flujo se hace nulo a alguna distancia del borde (en la \textit{distancia extrapolada} \cite{lamarsh}),
 y asumir al mismo tiempo que esta distancia es despreciable, para de esta forma no extender el dominio de cálculo.
 } sobre $\phi$.
 En el segundo ejemplo analizado se imponen condiciones de flujo entrante nulo.
@@ -1191,6 +1190,29 @@ de transferencia de calor en la interfaz y con estructuras,
 de fricción en la interfaz y con estructuras, y
 de disipación viscosa.
 
+\subsection*{Modelo de resolución}
+\label{3:modelo-nt}
+
+La evolución temporal se discretiza en intervalos grupos de días.
+En el primer paso de cálculo se supone que el valor $B$ del quemado es nulo para todas las zonas físicas definidias,
+y a partir del segundo paso el valor del quemado se actualiza localmente suponiendo que el último ritmo de fisiones calculado en esa zona se mantiene constante.
+En cada paso de quemado,
+la estrategia de acoplamiento implementada es considerar a las variables termohidráulicas como dato en el cálculo neutrónico,
+y la distribución de potencia como dato en el cálculo termohidráulico\footnote{
+Notar que otra formulación del problema no hubiera sido posible,
+porque el programa de cálculo neutrónico no está capacitado para calcular las variables termohidráulicas en función de una distribución de potencias,
+ni el programa de cálculo termohidráulico está capacitado para calcular la distribución de potencias en función de las temperaturas y densidades de los materiales.
+A veces, la estrategia de formulación del problema acoplado queda definida por las capacidades de los programas \textit{esclavos}.
+En este caso, además, una formulación diferente hubiera resultado en un problema mal planteado.
+}.
+El núcleo se discretiza axialmente en una serie de zonas en las cuales se trabaja con valores medios de las variables de acoplamiento.
+El cálculo termohidráulico arroja variables promediadas en diferentes zonas axiales del canal.
+En el cálculo neutrónico, se definen zonas axiales en base a la misma discretización,
+en cada una de las cuales las secciones eficaces son calculadas a partir de las variables termohidráulicas de la zona correspondiente.
+y del valor histórico del quemado que se va almacenando en diferentes regiones físicas predefinidas.
+La potencia calculada se integra en cada una de ellas.
+Con este modelo, quedan definidas cuatro variables de acoplamiento en cada posición axial $i$: $T_{comb,i}$, $T_{ref,i}$ y $N_{ref,i}$ y $P_i$.
+
 \subsection*{Acoplamiento neutrónico-termohidráulico utilizando \textbf{RELAP5} y \textbf{Fermi}}
 \label{3:relap-fermi}
 
@@ -1224,25 +1246,9 @@ Por este motivo se construyeron funciones de $\Sigma$ dependientes en $T_{comb}$
 a partir de tablas de secciones eficaces proporcionadas por DIFRA (departamento de DIvisión de Física de Reactores Avanzados de CNEA).
 
 La evolución temporal se discretiza en intervalos de 10 días.
-En el primer paso de cálculo se supone que el valor $B$ del quemado es nulo para todas las zonas físicas definidias,
-y a partir del segundo paso el valor del quemado se actualiza localmente suponiendo que el último ritmo de fisiones calculado en esa zona se mantiene constante.
-En cada paso de quemado,
-la estrategia de acoplamiento implementada es considerar a las variables termohidráulicas como dato en el cálculo neutrónico,
-y la distribución de potencia como dato en el cálculo termohidráulico\footnote{
-Notar que otra formulación del problema no hubiera sido posible,
-porque el programa de cálculo neutrónico no está capacitado para calcular las variables termohidráulicas en función de una distribución de potencias,
-ni el programa de cálculo termohidráulico está capacitado para calcular la distribución de potencias en función de las temperaturas y densidades de los materiales.
-A veces, la estrategia de formulación del problema acoplado queda definida por las capacidades de los programas \textit{esclavos}.
-En este caso, además, una formulación diferente hubiera resultado en un problema mal planteado.
-}.
-El cálculo termohidráulico arroja variables promediadas en cinco zonas axiales diferentes del canal.
-En el cálculo neutrónico, también se definen cinco zonas axiales,
-en cada una de las cuales las secciones eficaces son calculadas a partir de las variables termohidráulicas de la zona correspondiente,
-y del valor histórico del quemado que se va almacenando en diferentes regiones físicas predefinidas.
-La potencia calculada se integra en cada una de las cinco zonas axiales.
-Con este modelo, quedan definidas cuatro variables de acoplamiento en cada posición axial $i$: $T_{comb,i}$, $T_{ref,i}$ y $N_{ref,i}$ y $P_i$,
-es decir, en total, veinte incógnitas de acoplamiento.
-En la Figura \ref{esquema-fermi-relap} se esquematiza esta estrategia para un paso de quemado genérico.
+Se definen cinco zonas axiales de acoplamiento.
+Con el modelode resolución previamente comentado, quedan definidas en total veinte incógnitas de acoplamiento.
+En la Figura \ref{esquema-fermi-relap} se esquematiza la estrategia para un paso de quemado genérico.
 Los mapeos entre las variables termohidráulicas y las secciones eficaces fueron implementados en la función \textit{th2xs} en el código \textit{maestro} \textbf{Newton}.
 Las potencias $P_i$ calculadas por el código neutrónico son escaleadas mediante la función $P2p$ a valores $p_i$ en el cálculo de residuos.
 Estos valores escaleados se definieron de tal forma que todas las variables de acoplamiento tuvieran magnitudes similares,
@@ -1431,11 +1437,9 @@ Se modela un único canal de refrigeración con longitud extendida que recibe to
 Este modelo proviene de una monografía \cite{relap-carem} realizada durante el cursado de \textit{Modelado de sistemas termohidráulicos en reactores mediante códigos de planta}.
 Las ecuaciones hidrodinámicas son resueltas con \textbf{RELAP5}.
 
+La evolución temporal se discretiza en intervalos de 10 días.
 La altura del núcleo se discretiza en tramos de 5 cm, con lo que quedan definidas 28 zonas axiales diferentes que se mantienen acopladas entre ambos modelos.
-Cada zona axial $i$ cuenta con cuatro incógnitas: $N_{ref,i}$, $T_{ref,i}$, $T_{comb,i}$ y $P_i$, por lo que en total existen 112 incógnitas.
-La estrategia de acoplamiento utilizada es similar a la implementada en el ejemplo anterior:
-las variables termohidráulicas se utilizan como datos de cálculo en el programa neutrónico, y la distribuición de potencias en el programa temrohidráulico.
-El esquema de avance temporal también es similar al comentado en el ejemplo previo.
+Como en cada zona axial quedan definidas cuatro incógnitas de acoplamiento, en total existen 112 incógnitas.
 
 La comunicación entre códigos se implementó mediante manejo de archivos,
 por lo que en este caso se desarrollaron funciones específicas para la escritura y lectura de datos que a su vez son manipulados por \textit{scripts} de \textbf{PUMA}.
