@@ -11,6 +11,10 @@ A level-1 auxiliary file: apend1.aux
 A level-1 auxiliary file: apend2.aux
 A level-1 auxiliary file: apend3.aux
 Database file #1: mibib.bib
+Repeated entry---line 408 of file mibib.bib
+ : @book{griewank
+ :               ,
+I'm skipping whatever remains of this entry
 Warning--empty author in newton
 Warning--missing publisher in iedelchik
 Warning--missing publisher in kays
@@ -27,45 +31,45 @@ Warning--empty journal in pumita-relap
 Warning--empty year in pumita-relap
 Warning--empty author in fermi
 Warning--empty author in newton-user-manual
-You've used 48 entries,
+You've used 49 entries,
             2634 wiz_defined-function locations,
-            1266 strings with 16183 characters,
-and the built_in function-call counts, 13870 in all, are:
-= -- 880
-> -- 428
+            1270 strings with 16421 characters,
+and the built_in function-call counts, 14273 in all, are:
+= -- 901
+> -- 456
 < -- 4
-+ -- 216
-- -- 106
-* -- 580
-:= -- 1576
-add.period$ -- 136
-call.type$ -- 48
-change.case$ -- 35
++ -- 230
+- -- 113
+* -- 600
+:= -- 1624
+add.period$ -- 139
+call.type$ -- 49
+change.case$ -- 36
 chr.to.int$ -- 0
-cite$ -- 64
-duplicate$ -- 1423
-empty$ -- 1462
-format.name$ -- 135
-if$ -- 3096
+cite$ -- 65
+duplicate$ -- 1464
+empty$ -- 1493
+format.name$ -- 143
+if$ -- 3181
 int.to.chr$ -- 0
-int.to.str$ -- 48
-missing$ -- 415
-newline$ -- 237
-num.names$ -- 44
-pop$ -- 770
+int.to.str$ -- 49
+missing$ -- 428
+newline$ -- 242
+num.names$ -- 45
+pop$ -- 790
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 405
+skip$ -- 421
 stack$ -- 0
 substring$ -- 347
-swap$ -- 812
+swap$ -- 838
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 16
-while$ -- 63
-width$ -- 50
-write$ -- 469
-(There were 16 warnings)
+while$ -- 64
+width$ -- 51
+write$ -- 479
+(There was 1 error message)

@@ -246,6 +246,13 @@ En general los sistemas acoplados se modelan con sistemas de ecuaciones no linea
 \label{1:metodos}
 
 Existen diferentes métodos numéricos para hallar las raíces del sistema de ecuaciones \ref{sistema-simple}.
+El método más básico es el método del punto fijo, que es un método explícito,
+y consiste en tomar como semilla $\bar{x}_n$ para cada iteración $n$ a la solución del paso previo $\bar{F} \left( \bar{x}_{n-1} \right)$.
+Puede pensarse a este método como una combinación de múltiples métodos \textit{Dirichlet-to-Neumann} efectuados al mismo tiempo,
+en el que en cada iteración se realiza el cálculo en cada subdominio a partir de los resultados obtenidos en otros subdominios en la iteración previa.
+
+Los métodos más eficientes para la resolución de sistemas de ecuaciones de residuos son métodos implícitos,
+en los que la semilla para cada iteración no es directamente el resultado obtenido en la iteración previa.
 Haciendo un desarrollo de Taylor de las ecuaciones de residuos alrededor del punto $\bar{x}_n$, 
 truncando los términos superiores al primer orden, y evaluando en $\bar{x}=\bar{x}_{n+1}$ se tiene:
 
@@ -308,10 +315,14 @@ Este método también tiene convergencia superlineal \cite{kelley}.
 
 Existe también un conjunto de métodos conocidos como métodos \textit{Newton-Krylov} \cite{kelley} para la resolución del sistema \ref{sistema-simple}.
 Estos métodos no requieren el cálculo de matriz jacobiana (\textit{matrix-free methods}).
-Sin embargo, en cada paso de iteración de resolución del sistema no lineal ({outer iteration}) requieren múltiples iteraciones del método de \textit{Krylov} (\textit{inner iterations},
+Sin embargo, en cada paso de iteración de resolución del sistema no lineal ({outer iteration}) requieren múltiples iteraciones del método de \textit{Krylov} (\textit{inner iterations}),
 y en cada una de ellas calculan variaciones en las direcciones de descenso seleccionadas,
 lo cual implica múltiples evaluaciones de funciones.
 Por este motivo estos métodos resultan altamente costosos.
+
+En la resolución de sistemas de ecuaciones no lineales mediante cualquiera de los métodos imlpícitos
+puede utilizarse una técnica de aceleración conocida en la bibliografía como \textit{line searching} \cite{kelley}. 
+Esta técnica consiste en búsquedas del mínimo a lo largo de la última dirección de cambio en cada iteración, empleando evaluaciones de funciones extras.
 
 Notar que los métodos presentados en el presente apartado resuelven el sistema de ecuaciones \ref{sistema-simple} de forma monolítica,
 y es por este motivo que permiten incluir estrategias para la selección de condiciones de borde prohibidas al método \textit{Dirichlet-to-Neumann}.

@@ -298,10 +298,15 @@ excediendo el doble de los pasos requeridos por los métodos \textit{quasi-Newto
 \label{3:mockup}
 
 \subsection*{Presentación del problema}
-El Departamento de Mecánica Computacional de CNEA tuvo a cargo el análisis del segundo sistema de parada (SSP) del reactor RA-10.
-El SSP consiste en el accionamiento del vaciado del tanque reflector.
-El drenado del material reflector (agua pesada) disminuye drásticamente la reactividad, apagando el reactor.
-La tarea consistió en verificar si el diseño cumple con el criterio de éxito,
+El Departamento de Mecánica Computacional de CNEA tuvo a cargo el análisis del segundo sistema de parada (SSP) del reactor RA-10 \cite{ra10}.
+El RA-10 es un reactor de investigación multipropósito, destinado principalmente a aumentar la producción de radioisótopos para uso de diagnóstico de enfermedades,
+a la investigación científica de haces de neutrones en diferentes rangos de energía,
+y al ensayo de materiales.
+El RA-10 es un reactor de pileta abierta de flujo ascendente, con combustibles de bajo enriquecimiento tipo placa y agua liviana como refrigerante.
+El núcleo del reactor está inmerso en un tanque que contiene agua pesada como material reflector.
+El SSP consiste en el accionamiento del vaciado este tanque.
+El drenado del agua pesada disminuye drásticamente la reactividad, apagando el reactor.
+La tarea de estudio consistió en verificar si el diseño cumple con el criterio de éxito,
 a saber, completar el 55\% del vaciado en un tiempo inferior a los 15 segundos,
 ante una falla simple del sistema (falla de apertura de cualquiera de las válvulas).
 Este requerimiento pudo verificarse tras el análisis \cite{cnea-informe-ra10}.
@@ -676,7 +681,7 @@ En la Figura \ref{evol-ls} se observa la evolución de la superficie libre duran
 
 \subsection*{Conclusiones del análisis}
 La herramienta de análisis de acoplamiento fuerte de subsistemas permite incorporar el estudio de la inercia fluídica en la red hidráulica de descarga.
-Este estudio concluye que los modelos que incluyen el fenómeno inercial del fluido en la red hidráulica predicen un retraso de la descarga en un máximo de un segundo 
+Este estudio concluye que los modelos que incluyen el fenómeno inercial del fluido en la red hidráulica del \textit{mockup} del OPAL predicen un retraso de la descarga en un máximo de un segundo 
 respecto a los modelos que no lo incluyen.
 Como la inclusión del efecto inercial modela una dinámica similar a la reportada experimentalmente durante el transitorio inicial y,
 además, es conservativa en función del objetivo de estudio establecido, debería ser considerada en futuros análisis de seguridad.
@@ -701,7 +706,8 @@ mientras que los métodos implícitos \textit{quasi-Newton} son los más eficien
 El método explícito \textit{Dirichlet-to-Neumann} es el que mayor cantidad de evaluaciones consume, debido a que requiere una excesiva cantidad de iteraciones para converger.
 Los métodos de tipo \textit{Newton-Krylov}: \textit{Newton-GMRES} y \textit{Newton-CG} (\textit{Newton-Gradientes Conjugados}) requieren baja cantidad de iteraciones, 
 pero debido a la forma de resolución toman más evaluaciones que los métodos \textit{quasi-Newton}: \textit{Broyden} y \textit{Broyden ortonormal},
-los cuales convergen con baja cantidad de iteraciones y de evaluaciones asociadas.
+los cuales convergen con baja cantidad de iteraciones y de evaluaciones asociadas
+(solo en el primer paso de cálculo involucran mayor cantidad de evaluaciones debido a que inicializan la matriz jacobiana por diferencias finitas).
 El método de \textit{Newton-Raphson} toma tantas evaluaciones como los métodos \textit{Newton-Krylov},
 sin embargo, estas evaluaciones están asociadas a muy baja cantidad de iteraciones,
 ya que consume evaluaciones en la construcción de la matriz jacobiana.
@@ -762,7 +768,8 @@ comenzando con alto $k_{\mathbb{B}}$ y bajo $k_{\bar{x}}$, y tendiendo a $k_{\ma
 Con el interés de conocer el comportamiento de la metodología de resolución
 para problemas abordados mediante el Método de Descomposición Dijsunta de Dominios en sistemas con grandes cantidades de incógnitas,
 se propuso analizar redes hidráulicas de múltiples componentes interconectados.
-La idea es utilizar modelos sencillos para describir el comportamiento de cada componente particular para poder centrar el análisis solo en el estudio de convergencia.
+La idea es utilizar modelos sencillos que describan el comportamiento de cada componente particular para poder centrar el análisis solo en el estudio de convergencia
+de resultados, analizando estados estacionarios.
 
 \subsection*{Subsistemas de estudio}
 \label{3:redes-subsistemas}
@@ -914,12 +921,7 @@ La cantidad de incógnitas en el eje $x$ corresponde a una simplificación obten
   \label{net_linear}
 \end{figure}
 
-El método del punto fijo reportado es un método explícito.
-En este método se genera una semilla inicial $\bar{x}_0$ para las incógnitas y se las envía a los códigos \textit{esclavos}.
-Los resultados que ellos devuelven conforman directamente el vector de iteración $\bar{x}_1$.
-El método del punto fijo podría pensarse como una combinación múltiple de métodos \textit{Dirichlet-to-Neumann},
-en el que los residuos se computan directamente entre vectores de iteración contiguos.
-En la figura se observa que este método requiere excesiva cantidad de iteraciones.
+En la figura se observa que el método del punto fijo requiere excesiva cantidad de iteraciones.
 Las mismas ascienden hasta 1000 para sistemas con 16 incógnitas reducidas,
 pero este valor puede variar dependiendo de las semillas iniciales y de los parámetros del sistema.
 El método de \textit{Broyden} requiere decenas de iteraciones para cada sistema.
@@ -947,11 +949,14 @@ existen formulaciones que aproximan directamente la inversa de la matriz jacobia
 Estos métodos se conocen en la bibliografía como \textit{bad Broyden update} (\textit{mala actualización de Broyden}) \cite{griewank} y en la figura puede verse que tienen eficiencia inferior.
 
 El método de \textit{Broyden} se utilizó también mejorando la semilla inicial para la matriz $\mathbb{B}_n$.
-En todos los estudios reportados se venía utilizando la matriz identidad,
+En los otros estudios reportados se utiliza la matriz identidad,
 pero aquí se reemplazó por una matriz con \textit{unos} en los elementos que corresponden a posiciones llenas de la matriz jacobiana original,
 y \textit{ceros} en el resto de los elementos.
 Este llenado es sencillo de implementar ya que simplemente depende de las relaciones de dependecia de las residuos y las incógnitas, que \textit{a priori} son conocidas.
-Con esta implementación puede observarse en la curva de \textit{Broyden con} $B_{0,aprox}$ que la convergencia mejora a medida que la cantidad de incógnitas aumenta.
+Con esta implementación puede observarse en la curva de \textit{Broyden con} $\mathbb{B}_{0,aprox}$ que la convergencia mejora a medida que la cantidad de incógnitas aumenta.
+Una mejor semilla para la matriz $\mathbb{B}_{0}$ hubiera podido generarse con un cálculo de diferencias finitas,
+similar al que se venía utilizando para inicializar las matrices en las aplicaciones analizadas en \ref{3:ff} y \ref{3:mockup}.
+En este caso los resultados hubieran coincidido con los resultados del método de la secante, que efectúa el cálculo aproximado de $\mathbb{J}$ y luego converge en una sola iteración.
 
 La curva \textit{Broyden / residuos desordenados} corresponde a un esquema en el que el residuo $i$ se corresponde con alguna incógnita $j$ distinta de $i$.
 Utilizar la matriz identidad como semilla para $\mathbb{B}_n$ es una mala propuesta en este caso,
@@ -981,14 +986,14 @@ para la convergencia de los resultados en sistemas con diferente cantidad de inc
 \label{net_nonLinear_fevals}
 \end{figure}
 
+El método explícito del punto fijo diverge en todos los sitemas analizados y por lo tanto no aparece en la gráfica.
+Los métodos implícitos estudiados incluyen \textit{line searching}.
 Los métodos \textit{Newton-Krylov} toman demasiadas evaluaciones para converger.
-El método de \textit{Broyden localemente convergente}, que no es otro sino el método de \textit{Broyden} que hasta ahora se venía utilizando,
-solo se comporta bien a baja cantidad de incógnitas, y cuando la cantidad de incógnitas es elevada diverge.
 Los métodos de \textit{Newton-Raphson} y \textit{Shamanskii} tienen buena convergencia.
 De estos dos el último presenta mayor ventaja ya que elude el cálculo de la matriz jacobiana en iteraciones contiguas.
-El método que mejor se comporta es el método de \textit{Broyden globalmente convergente},
-que realiza búsquedas del mínimo a lo largo de la dirección de cambio en cada iteración (empleando evaluaciones de funciones extras).
-Estas búsquedas son conocidas en la bibliografía como \textit{line searching} \cite{kelley}.
+El método que mejor se comporta es el método de \textit{Broyden} (globalmente convergente).
+El método de \textit{Broyden local}, el único que no incluye \textit{line searching},
+solo se comporta bien a baja cantidad de incógnitas, y cuando la cantidad de incógnitas es elevada diverge.
 
 \section{Extensión a problemas acoplados en modelos de núcleo}
 \label{3:extension-nucleo}
@@ -1370,17 +1375,19 @@ La resolución del sistema acoplado se llevó a cabo utilizando tres métodos di
 En la Figura \ref{fig-relap-fermi} se muestra la cantidad de evaluaciones de funciones en cada paso de quemado requerida por cada método,
 y la Tabla \ref{tab-relap-fermi} integra la cantidad total de evaluaciones y el tiempo consumido por cada uno.
 El primer método utilizado fue el método explícito \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}).
-Este método es el que converge en la menor cantidad de tiempo.
+
 El segundo método utilizado es otro método explícito, el método del punto fijo.
-Si bien este método tiene la ventaja de mantener a los diferentes programas \textit{exclavos} corriendo en paralelo,
-aquí no demuestra su utilidad porque solo uno de los dos modelos consume recursos temporales apreciables en cada iteración (el modelo neutrónico, que es el que resuelve con mayor detalle).
+Este método demuestra la ventaja de mantener a los diferentes programas \textit{exclavos} corriendo en paralelo.
 Por último, se utilizó el método de \textit{Broyden} que en previas aplicaciones había demostrado muy buenos resultados.
 Si bien este método requiere excesivas evaluaciones en la primera iteración del primer paso de cálculo para la construcción de la matriz jacobiana,
-en los siguientes pasos de quemado converge con similares iteraciones a las de los métodos explícitos.
-Al igual que el método del punto fijo, el método de \textit{Broyden} no llega a demostrar su utilidad aquí
-puesto que el cálculo en paralelo de los modelos neutrónico y termohidráulico no presenta ventaja.
+en los siguientes pasos de quemado converge con pocas iteraciones, y finalmente
+este método es el que converge en la menor cantidad de tiempo.
 El método de \textit{Newton-Raphson}, otros métodos \textit{quasi-Newton} como el método de la \textit{secante} o \textit{Shamanskii} y los métodos \textit{Newton-Krylov}
-no fueron tenidos en cuenta puesto que hubieran requerido numerosas evaluaciones de funciones debido a la gran cantidad de incógnitas del sistema.
+no fueron tenidos en cuenta puesto que hubieran requerido numerosas evaluaciones\footnote{
+Si bien los recursos utilizados serían elevados,
+no debería influir en el tiempo de cálculo cuando las evaluaciones solo son necesarias para la construcción de la matriz jacobiana,
+puesto que este tipo de cálculo es paralelizable.
+} de funciones debido a la gran cantidad de incógnitas del sistema.
 
 \begin{minipage}{\textwidth}
 \begin{minipage}[b]{0.49\textwidth}
@@ -1397,9 +1404,9 @@ no fueron tenidos en cuenta puesto que hubieran requerido numerosas evaluaciones
   \begin{tabular}{ l r r } \hline
       Método & Evaluaciones & Tiempo \\
       no lineal & totales & total [s] \\ \hline %\hline
-      Picard & 68 & 689 \\ %\hline            
-      Punto fijo & 87 & 855  \\ %\hline
-      Broyden & 85 & 836 \\ \hline
+      Picard & 68 & 684 \\ %\hline            
+      Punto fijo & 87 & 628  \\ %\hline
+      Broyden & 85 & 610 \\ \hline
    \end{tabular}
    \label{tab-relap-fermi}
    \captionsetup{width=0.8\textwidth}
@@ -1459,8 +1466,8 @@ por lo que en este caso se desarrollaron funciones específicas para la escritur
   \begin{tabular}{ l r r } \hline
       Método & Evaluaciones & Tiempo \\
       no lineal & totales & total [s] \\ \hline %\hline
-      Picard & 100 & 2017 \\ %\hline            
-      Punto fijo & 111 & 1619  \\ %\hline
+      Picard & 100 & 1962 \\ %\hline            
+      Punto fijo & 113 & 1614  \\ %\hline
       Broyden &  &  \\ \hline
    \end{tabular}
    \label{tab-relap-puma}
@@ -1475,6 +1482,8 @@ En la Figura \ref{fig-relap-puma} se muestra la cantidad de evaluaciones de func
 y la Tabla \ref{tab-relap-puma} integra la cantidad total de evaluaciones y el tiempo consumido por cada uno.
 
 El método de \textit{Broyden} requiere numerosas iteraciones para converger en cada paso de quemado, lo que consume una excesiva cantidad de tiempo.
-Sin embargo, en este caso, el método del punto fijo presenta una ventaja frente al método de \textit{Picard}.
+El método del punto fijo, presenta una ventaja frente al método de \textit{Picard}.
 Debido a que el método del punto fijo posibilita el cálculo paralelo en ambos subdominios, y dado que el tiempo de cálculo consumido por cada uno de ellos es similar,
 consume un tiempo de cálculo inferior para el ciclo de quemado, aún cuando la cantidad total de evaluaciones de funciones que requiere es mayor.
+
+A pesar de que solo se estudiaron tres métodos no lineales, la estrategia de acoplamiento desarrollada provee toda la estructura necesaria para investigar nuevas propuestas.
