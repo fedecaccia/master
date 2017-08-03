@@ -1243,7 +1243,11 @@ En la Figura \ref{fuel_z5} puede observarse la geometría utilizada.
 \label{fuel_z5}
 \end{figure}
 El dominio de cálculo termohidráulico consiste en una simplificación de la geometría del núcleo,
-considerando un único canal de refrigeración con longitud extendida que recibe una potencia igual a la potencia total generada por el reactor.
+considerando un único canal de refrigeración cilíndrico de sección similar a aquella por la que fluye todo el caudal del refrigerante.
+Este canal está en contacto con una única estructura que genera energía, 
+del mismo diámetro que el que tendrían los pines de los elementos combustibles y altura equivalente a la suma de todos ellos.
+Como el modelo es ficticio, el diámetro y la cantidada de pines asumen valores arbitrarios.
+La energía total generada en esta estructura es igual a la potencia total generada por el reactor. 
 Este tipo de modelos es comúnmente utilizado en análsis de acoplamiento neutrónico-termohidráulico \cite{pumita-relap}.
 Si bien la geometría de análisis es artificial, 
 es importante contar con modelos de secciones eficaces que representen fielmente la dependencia con las variables de estado termohidráulicas.
@@ -1440,7 +1444,9 @@ La ecuación \ref{eq-nucleo} que modela el flujo neutrónico es resuelta con \te
 El modelo de núcleo desarrollado para su cálculo con \textbf{PUMA} fue proporcionado por DIFRA.
 
 El dominio de cálculo termohidráulico consiste en una simplificación de la geometría del núcleo, similar a la realizada en el ejemplo de análisis previo.
-Se modela un único canal de refrigeración con longitud extendida que recibe toda la potencia generada por el núcleo del reactor.
+Se modela un único canal de refrigeración en contacto con una estructura de calor que contiene toda la masa de los elementos combustibles.
+La longitud de esta estructura es equivalente a la longitud de la suma de todos los pines presentes en los elementos combustibles.
+Radialmente, respeta la distribución de material de combustible, \textit{gap} y material de vaina.
 Este modelo proviene de una monografía \cite{relap-carem} realizada durante el cursado de \textit{Modelado de sistemas termohidráulicos en reactores mediante códigos de planta}.
 Las ecuaciones hidrodinámicas son resueltas con \textbf{RELAP5}.
 

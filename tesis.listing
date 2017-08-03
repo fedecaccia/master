@@ -1,0 +1,53 @@
+
+Se desea resolver un problema de cálculo de campo de temperatura mediante el Método de Descomposición Disjunta de Dominios.
+El sistema global de análisis es una barra unidimensional de longitud $L$ con condiciones de borde homogéneas, fuente interna de energía $f$ y conductividad térmica $k$.
+El modelo matemático utilizado es el siguiente:
+\begin{equation}
+\left\{\begin{matrix}
+-k \Delta u=f \\
+\left.u\right|_{\partial\Omega}=0
+\end{matrix}\right.
+\label{ecuacion-calor}
+\end{equation}
+Resolver el problema particionando el dominio original $[0,L]$ en los subdominios $[0,c]$ y $[c,L]$ como se muestra en la Figura \ref{temp-ej}:
+
+  \centering
+  \begin{tikzpicture}
+	\node at (12.5,4em) (om) {$\Omega$};
+
+	\node at (7.5,5.9em) (Olabel) {0}; % 0
+	\node at (7.5,5em) (O) {}; % point 0
+
+	\node at (14.5,6.9em) (clabel) {c}; % c
+	\node at (14.5,5em) (c) {}; % point c
+
+	\node at (17.5,5.9em) (llabel) {L}; % L
+	\node at (17.5,5em) (l) {}; % point L
+
+	\draw[line width=1pt, o-|] (O) -- (c.center); % primer extremo de barra completa
+	\draw[line width=1pt, |-o] (c.center) -- (l); % segundo extremo de barra completa
+
+	\draw[line width=0.8pt,->] (11,3.5em) -- (10,1.5em); % primer flecha
+	\draw[line width=0.8pt,->] (16,3.5em) -- (17,1.5em); % segunda flecha
+
+	\node at (10,-1em) (om1) {$\Omega_1$};
+	\node at (6.5,0.9em) (O1label) {0};
+	\node at (6.5,0em) (O1) {};
+	\node at (13.5,0.9em) (c1label) {c};
+	\node at (13.5,0em) (c1) {};
+
+	\draw[line width=1pt, o-o] (O1) -- (c1); % primer barra
+
+	\node at (17,-1em) (om2) {$\Omega_2$};
+	\node at (15.5,0.9em) (c2label) {c};
+	\node at (15.5,0em) (c2) {};
+	\node at (18.5,0.9em) (l2label) {L};
+	\node at (18.5,0em) (l2) {};
+
+	\draw[line width=1pt, o-o] (c2) -- (l2); % segunda barra
+  \end{tikzpicture}
+  \captionof{figure}
+  [Descomposición disjunta de dominios en el cálculo del campo de temperatura a lo largo de una barra unidimensional]
+  {Descomposición disjunta de dominios en el cálculo del campo de temperatura a lo largo de una barra unidimensional.}
+  \label{temp-ej}
+

@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \documentclass[12pt,papel,twoside]{ibtesis}
-\documentclass[12pt,screen,twoside,pagebackref]{ibtesis}
-% \documentclass[12pt,papel,singlespace,oneside]{ibtesis}
-%\documentclass[12pt,papel,preprint,singlespace,oneside]{ibtesis}
+%\documentclass[12pt,screen,twoside,pagebackref]{ibtesis}
+%\documentclass[12pt,papel,singlespace,oneside]{ibtesis}
+\documentclass[12pt,papel,preprint,singlespace,oneside]{ibtesis}
 
 
 %%%%%%%%%%%%%%%%%%%%% Paquetes extra %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,6 +41,15 @@
 \usepackage{float} % [H] option for figures
 \restylefloat{figure}
 
+\usepackage{lipsum}
+\usepackage[listings]{tcolorbox} % examples
+\newtcblisting{EvalBox}[2][]{%
+  colback=blue!05,
+  arc=10pt,
+  boxrule=1.0pt,
+  text only,
+  title=#2,#1}
+  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % New commands
 
@@ -69,6 +78,7 @@ Dr.P. Zanocco (Instituto Balseiro, Universidad Nacional de Cuyo)\\
 
 
 \begin{document}
+\lipsum[1]
 \renewcommand{\tablename}{Tabla} %Reemplaza la palabra 'Cuadro' por 'Tabla' en los ep�grafes de las
 
 % Dentro del environment 'preliminary' va:
@@ -87,7 +97,7 @@ Dr.P. Zanocco (Instituto Balseiro, Universidad Nacional de Cuyo)\\
 
 \textbf{CFD}: Fluidodinámica Computacional (\textit{Computational Fluid Dynamics})
 
-\textbf{DNS}: Simulación numérica directa (\textit{Direct Numerical Simulation})
+\textbf{DNS}: Simulación Numérica Directa (\textit{Direct Numerical Simulation})
 
 \textbf{FEM}: Método de Elementos Finitos (\textit{Finite Element Method})
 

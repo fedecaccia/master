@@ -4,14 +4,14 @@
 {The trouble with the world is that the stupid are cocksure and the intelligent are full of doubt.}
 {Bertrand Russell, 1872-1970}
 
-En este capítulo se resumen las tareas realizadas en el trabajo de maestría y se presentan los resultados obtenidos más destacados.
+En la primera sección se resumen las tareas realizadas en el trabajo de maestría y se presentan los resultados obtenidos más destacados.
+En la siguiente sección se comentan las líneas de investigación propuestas para continuar el trabajo.
 
-En el trabajo se desarrolló una estrategia genérica que permite resolver los siguientes tipos de problemas:
-\begin{itemize}
-\item problemas formulados mediante el Método de Descomposición Disjunta de Dominios;
-\item problemas acoplados en sistemas complejos que requieren análsis multifísicos;
-\item y en general, cualquier problema que requiera la resolución de sistemas de ecuaciones acopladas.
-\end{itemize}
+\section{Logros alcanzados}
+\label{logros}
+
+En el trabajo se desarrolló una estrategia genérica que permite resolver problemas fluidodinámicos formulados mediante el Método de Descomposición Disjunta de Dominios.
+En la última estapa se extendió la estrategia para cubrir la resolución de problemas acoplados en sistemas complejos que requieren análsis multifísicos.
 Esta estrategia de acoplamiento está compuesta por dos etapas:
 \begin{enumerate}
 \item una primera etapa de modelado, que consiste en la formulación de un problema global, compuesto por subproblemas bien planteados, definición de variables incógnitas y de ecuaciones de residuos (ver \hyperlink{chapter.1}{Capítulo 1});
@@ -61,18 +61,28 @@ Se analizaron dos núcleos diferentes, y en ambos se constató que la técnica d
 que bien pueden paralelizarse utilizando el método del punto fijo.
 El método de \textit{Broyden} resultó ser altamente eficiente en el primer modelo de núcleo, que tenía inferior cantidad de incógnitas,
 pero en el segundo núcleo de estudio requirió demasiadas iteraciones para converger en cada paso de cálculo.
-Si bien estos resultados están lejos de ser concluyentes, la herramienta de acoplamiento desarrollada tiene diversas capacidades
-y aquí se abren las puertas a trabajos futuros en los que se investiguen nuevos modelos de núcleo y esquemas numéricos de resolución.
-Sería interesante tambien evaluar el desempeño de las diferentes técnicas de resolución de sistemas de ecuaciones de resiudos
-en el cálculo de la dinámica de núcleos que acoplen mayor cantidad de modelos,
-por ejemplo, considerando el movimiento de las barras de control y el comportamiento de materiales.
 
+
+\section{Trabajos futuros}
+\label{trabajos-futuros}
+
+La estrategia de acoplamiento desarrollada permite resolver cualquier tipo de problemas acoplados.
+Si bien se ha intentado cubrir diversos tipos de problemas en el área de la fluidodinámica,
+incluyendo acoples multi-dimensionales, acoples con baja cantidad de incógnitas y con alta cantidad de incógnitas,
+solo se han realizado algunos ensayos en el área multifísica.
+Los resultados obtenidos en los modelos de núcleo están lejos de ser concluyentes.
+Aquí se abren las puertas a trabajos futuros en los que se investiguen nuevos modelos de núcleo y esquemas numéricos de resolución.
+En primera instancia, sería bueno investigar otros métodos numéricos para la resolución del acoplamiento neutrónico-termohidráulico en los modelos propuestos.
+En segunda instancia, podrían ampliarse estos modelos, acoplando al cálculo mayor cantidad de canales de refrigeración.
+Sería interesante tambien evaluar el desempeño en el cálculo de la dinámica de núcleos que acoplen el movimiento de las barras de control y el comportamiento de materiales.
+
+También existe otra línea de investigación fuertemente relacionada con el acoplamiento de códigos.
 Algunos esquemas de acoplamiento implícito utilizados en el trabajo requirieron la construcción de la matriz jacobiana del sistema de ecuaciones a resolver.
 En este trabajo se abordó una metodología de aproximación de sus elementos por diferencias finitas, requiriendo numerosas ejecuciones de código.
 Una técnica alternativa que no ha sido investigada es la de diferenciación automática \cite{griewank}.
 La diferenciación automática requiere implementaciones en el código fuente del programa de cálculo utilizado,
 el cual en lugar de devolver al código \textit{maestro} que lo está llamando sólo el valor de las variables incógnitas,
-también debe devolver el valor de sus derivadas con respecto a las variables independientes
+también debe devolver el valor de sus derivadas con respecto a las variables independientes requeridas
 (que en este caso, son las variables que el código \textit{maestro} le envía como dato).
-Esta técnica permitiría acelerar la construcción de la matriz jacobiana de manera notable,
+Esta técnica permitiría construir la matriz jacobiana de manera mucho más rápida y precisa,
 con la consecuente aceleración en la convergencia de resultados.
