@@ -30,9 +30,9 @@ Se desarrolló un manual de comandos de entrada \cite{newton-user-manual}.
 \label{ap2:mappers}
 
 En ciertas formulaciones las variables de acoplamiento pueden ser expresadas bajo transformaciones en las diferentes ecuaciones acopladas.
-Por ejemplo, en acoplamientos fluidodinámicos es común que en un subsistema utilice velocidades en la interfaz y que otro utilice un valor de caudal en la interfaz acoplada.
-El caudal se define como la integral del perfil de velocidades normal a la interfaz de acople, sobre toda esta sección.
-Esta integral puede pensarse como un mapeo \textit{velocidad-caudal}.
+Por ejemplo, en acoplamientos fluidodinámicos es común que en algunos modelos se calculen velocidades medias en interfaces de acople
+y que en otros modelos se calculen valores de caudales.
+En estos casos es necesario realizar mapeos \textit{velocidad-caudal}.
 En otros tipos de problemas también es necesario realizar mapeos.
 En acoplamiento neutrónico-termohidráulico, por ejemplo, las variables de cálculo del programa termohidráulico podrían ser densidades y termperaturas,
 pero el programa neutrónico utiliza como variables secciones eficaces, que dependen de ellas.
@@ -57,7 +57,7 @@ se incorporaron diferentes modos de comunicación, conforme a la estrategia desc
 \end{itemize}
 Todas estas funciones fueron implementadas en la clase \texttt{Communicator}.
 \textbf{Newton} puede ser ejecutado en múltiples procesos de modo que la conexión mediante manejo de archivos sea paralelizada.
-Las tareas se distribuyen automáticamente de forma eficiente conforme a la cantidad de procesos lanzdos por el usuario.
+Las tareas se distribuyen automáticamente de forma eficiente conforme a la cantidad de procesos lanzados por el usuario.
 
 \subsection*{Métodos numéricos}
 \label{ap2:num-met}
@@ -86,7 +86,7 @@ El manejo eficiente de errores fue pensado como una de las características prin
 debido a la complejidad de conexiones y consecuente diversidad en origen de fallas.
 Cualquier error generado comienza la siguiente cascada de eventos:
 \begin{enumerate}
-\item Devolución de un mensaje correspondiente en la salida estandard.
+\item Devolución de un mensaje correspondiente en la salida estándard.
 \item Comunicación del error a todos los procesos de \textbf{Newton}.
 \item Envío de órden de aborto a los programas \textit{esclavos} por parte del proceso \textit{raiz}.
 \item Finalización de las tareas.
@@ -102,9 +102,9 @@ El usuario puede requerir su uso en clases específicas mediante palabras claves
 \subsection*{Validación}
 \label{ap2:bench}
 
-Las funciones implementadas y la metodología de cálculo fueron puestas a prueba exitosamente en la resolución de sistemas de ecuaciones lineales y no lineales acoplados.
-Los mismos pueden encontrarse dentro de la carpeta \texttt{examples} en el directorio principal de \textbf{Newton}.
-Se verificó el correcto funcionamiento de los diferentes tipos de comunicación, de las intancias de mapeos y de los distintos métodos numéricos implementados para la resolución del sistema e ecuaciones de residuos.
+Las funciones implementadas y la metodología de cálculo fueron puestas a prueba exitosamente en la resolución de sistemas de ecuaciones lineales y no lineales acopladas.
+Las mismos pueden encontrarse dentro de la carpeta \texttt{examples} en el directorio principal de \textbf{Newton}.
+Se verificó el correcto funcionamiento de los diferentes tipos de comunicación, de las intancias de mapeos y de los distintos métodos numéricos implementados para la resolución del sistema de ecuaciones de residuos.
 
 \section{Modelado de problemas acoplados}
 \label{ap1:definicion}
@@ -290,7 +290,7 @@ La función \texttt{Newton::run} ejecuta todas las tareas necesarias para comple
   \end{itemize}
   \item Envío de orden de avance o de reinicio a cada programa \textit{esclavo} conectado por MPI.
   \end{enumerate}
-\item Finalización delbucle de evolución.
+\item Finalización del bucle de evolución.
 \end{enumerate}
 
 \subsection*{Función de finalización}
@@ -311,24 +311,25 @@ A continuación se comenta la resolución de uno de los problemas utilizados par
 Se quiere resolver el siguiente sistema de ecuaciones:
 
 \begin{equation}
-\left\{\begin{matrix}
-  1w +  2x +  3y +  4z = 17 \\
- 12w + 13x + 14y +  5z = 18 \\
- 11w + 16x + 15y +  6z = 19 \\
- 10w +  9x +  8y +  7z = 20
-\end{matrix}\right.
+\left\{ \begin{array}{rcl}
+  1w +  2x +  3y +  4z &=& 17 \\
+ 12w + 13x + 14y +  5z &=& 18 \\
+ 11w + 16x + 15y +  6z &=& 19 \\
+ 10w +  9x +  8y +  7z &=& 20
+\end{array}
+\right.
 \label{eq:linear2}
 \end{equation}
 Uno de los programas \textit{esclavos} calcula $(w,x,y)$ en función de algún valor $z_{guess}$ poporcionado, y resuelve las primeras tres ecuaciones:
 \begin{equation}
-\left\{\begin{matrix}
- w = (17 -  2x -  3y - 4z_{guess})/ 1 \\
- x = (18 - 12w - 14y - 5z_{guess})/13 \\
- y = (19 - 11w - 16x - 6z_{guess})/15
-\end{matrix}\right.
+\left\{ \begin{array}{rcl}
+ w &=& (17 -  2x -  3y - 4z_{guess})/ 1 \\
+ x &=& (18 - 12w - 14y - 5z_{guess})/13 \\
+ y &=& (19 - 11w - 16x - 6z_{guess})/15
+\end{array}
+\right.
 \label{eq:linear2a}
 \end{equation}
-
 El otro programa \textit{esclavo} calcula $z$ como función de los valores $(w_{guess},x_{guess},y_{guess})$ proporcionados, resolviendo la última ecuación de \ref{eq:linear2}:
 
 \begin{equation}
@@ -337,12 +338,13 @@ El otro programa \textit{esclavo} calcula $z$ como función de los valores $(w_{
 \end{equation}
 La solución analítica para este problema es la siguiente:
 \begin{equation}
-\left\{\begin{matrix}
- w = -0.70909 \\
- x = -1.89091 \\
- y = 2.36364 \\
- z = 3.60000
-\end{matrix}\right.
+\left\{ \begin{array}{rcl}
+ w &=& -0.70909 \\
+ x &=& -1.89091 \\
+ y &=& 2.36364 \\
+ z &=& 3.60000
+\end{array}
+\right.
 \label{eq:linear2-sol}
 \end{equation}
 
@@ -361,12 +363,12 @@ el archivo de configuración \texttt{newton.config} se completa como sigue:
 \textcolor{Gray}{ # Especificaciones para códigos esclavos}
 
 \textcolor{Red}{CLIENT} \textcolor{OliveGreen}{linear1} \textcolor{Gray}{# Apodo del primer programa esclavo}
-\textcolor{Red}{ROOT_GLOBAL_RANK} \textcolor{OliveGreen}{2} \textcolor{Gray}{# Rango global del proceso raíz}
+\textcolor{Red}{ROOT_GLOBAL_RANK} \textcolor{OliveGreen}{1} \textcolor{Gray}{# Rango global del proceso raíz}
 \textcolor{Red}{CALCS} \textcolor{OliveGreen}{w x y} \textcolor{Red}{GUESSES} \textcolor{OliveGreen}{z} \textcolor{Gray}{# Variables de cálculo y variables dato}
 \textcolor{Red}{CONNECTION} \textcolor{OliveGreen}{mpi_comm} \textcolor{Gray}{# Tipo de conexión}
 
 \textcolor{Red}{CLIENT} \textcolor{OliveGreen}{linear2} \textcolor{Gray}{# Apodo del primer programa esclavo}
-\textcolor{Red}{ROOT_GLOBAL_RANK} \textcolor{OliveGreen}{3}  \textcolor{Gray}{# Rango global del proceso raíz}
+\textcolor{Red}{ROOT_GLOBAL_RANK} \textcolor{OliveGreen}{2}  \textcolor{Gray}{# Rango global del proceso raíz}
 \textcolor{Red}{CALCS} \textcolor{OliveGreen}{z} \textcolor{Red}{GUESSES} \textcolor{OliveGreen}{w x y} \textcolor{Gray}{# Variables de cálculo y variables dato}
 \textcolor{Red}{CONNECTION} \textcolor{OliveGreen}{mpi_comm} \textcolor{Gray}{# Tipo de conexión}
 

@@ -1,10 +1,10 @@
 \chapter{Conclusiones}
 \label{conclusiones}
-\chapterquote
-{The trouble with the world is that the stupid are cocksure and the intelligent are full of doubt.}
-{Bertrand Russell, 1872-1970}
+%~ \chapterquote
+%~ {The trouble with the world is that the stupid are cocksure and the intelligent are full of doubt.}
+%~ {Bertrand Russell, 1872-1970}
 
-En la primera sección se resumen las tareas realizadas en el trabajo de maestría y se presentan los resultados obtenidos más destacados.
+En la primera sección de este capítulo se resumen las tareas realizadas en el trabajo de maestría y se presentan los resultados obtenidos más destacados.
 En la siguiente sección se comentan las líneas de investigación propuestas para continuar el trabajo.
 
 \section{Logros alcanzados}
@@ -31,10 +31,11 @@ acoplando un subdominio de cálculo cero-dimensional y otro bi-dimensional.
 El acople permitió analizar el detalle fluídico en el interior de la cavidad conservando la dinámica global de todo el sistema, incluyendo el circuito de enfriamiento.
 Se utilizaron diferentes esquemas numéricos de resolución de sistemas no lineales y el método de \textit{Broyden} resultó ser el más eficiente.
 
-El segundo estudio realizado en la sección \ref{3:mockup} fue el análisis del vaciado del tanque reflector de un reactor de investigación,
+El segundo estudio realizado en la sección \ref{3:mockup} fue el análisis del \textit{mockup} del SSP del OPAL,
 acoplando un modelo tri-dimensional del arreglo de válvulas presente en la red hidráulica a un modelo cero-dimensional del resto del sistema.
-El análisis reveló que la inercia del fluido en la red hidráulica genera un retardo de hasta un segundo en el drenaje del tanque,
-respecto de aquellos modelos que no consideran este efecto, que solo influye en el transitorio inicial.
+El análisis reveló que la inercia del fluido en la red hidráulica solo influye en el transitorio inicial y
+genera un retardo de hasta un segundo en el drenaje del tanque,
+respecto de aquellos modelos que no consideran este efecto.
 Transcurrido este transitorio, el caudal de descarga se mantiene aproximadamente constante y es similar en todos los modelos,
 lo cual verifica el cálculo mediante estudios independientes.
 El acoplamiento permitió también estudiar la dinámica del vaciado considerando diferentes válvulas en falla, y los resultados arrojaron diferencias despreciables.
@@ -52,15 +53,15 @@ En el estudio de sistemas con regímenes de flujo laminar el sistema de ecuacion
 El método de \textit{Newton-Raphson} y otros métodos \textit{quasi-Newton}, entre los que también se encuentra el método de \textit{Broyden} resultaron ser los más eficientes.
 Se propuso la construcción de una semilla para la matriz de cálculo en el método de \textit{Broyden} que acelera la convergencia de los resultados.
 En el estudio de sistemas con regímenes de flujo turbulento el sistema de ecuaciones a resolver es un sistema no lineal.
-Los métodos de resolución más eficientes resultaron ser nuevamente el método de \textit{Newton-Raphson} y otros métodos \textit{quasi-Newton},
-siempre y cuando incorporaran algunas evaluaciones de \textit{line-searching} entre las iteraciones no lineales.
+Los métodos de resolución más eficientes resultaron ser nuevamente el método de \textit{Newton-Raphson} y otros métodos \textit{quasi-Newton}
+combinados con evaluaciones de \textit{line-searching} entre las iteraciones no lineales.
 
 En la sección \ref{3:extension-nucleo} se extendió la metodología de acoplamiento a la resolución de problemas multifísicos provenientes de modelos de análisis del núcleo de reactores nucleares.
 Se desarrolló un modelo de acoplamiento neutrónico-termohidráulico para el estudio de ciclos de quemado de combustibles y se evaluó la eficiencia de resolución de difererentes esquemas numéricos.
 Se analizaron dos núcleos diferentes, y en ambos se constató que la técnica de \textit{Picard} comúnmente utilizada no es la más eficiente ya que requiere evaluaciones serializadas
 que bien pueden paralelizarse utilizando el método del punto fijo.
-El método de \textit{Broyden} resultó ser altamente eficiente en el primer modelo de núcleo, que tenía inferior cantidad de incógnitas,
-pero en el segundo núcleo de estudio requirió demasiadas iteraciones para converger en cada paso de cálculo.
+El método de \textit{Broyden} resultó ser eficiente en el primer modelo de núcleo, que tenía inferior cantidad de incógnitas,
+pero en el segundo núcleo de estudio requirió excesivas iteraciones para converger en cada paso de cálculo.
 
 
 \section{Trabajos futuros}
@@ -68,21 +69,26 @@ pero en el segundo núcleo de estudio requirió demasiadas iteraciones para conv
 
 La estrategia de acoplamiento desarrollada permite resolver cualquier tipo de problemas acoplados.
 Si bien se ha intentado cubrir diversos tipos de problemas en el área de la fluidodinámica,
-incluyendo acoples multi-dimensionales, acoples con baja cantidad de incógnitas y con alta cantidad de incógnitas,
+incluyendo acoples multi-dimensionales y acoples con baja cantidad de incógnitas y con alta cantidad de incógnitas,
 solo se han realizado algunos ensayos en el área multifísica.
 Los resultados obtenidos en los modelos de núcleo están lejos de ser concluyentes.
-Aquí se abren las puertas a trabajos futuros en los que se investiguen nuevos modelos de núcleo y esquemas numéricos de resolución.
+Aquí se abren las puertas a trabajos futuros en los que se investiguen nuevos modelos y esquemas numéricos de resolución.
 En primera instancia, sería bueno investigar otros métodos numéricos para la resolución del acoplamiento neutrónico-termohidráulico en los modelos propuestos.
 En segunda instancia, podrían ampliarse estos modelos, acoplando al cálculo mayor cantidad de canales de refrigeración.
 Sería interesante tambien evaluar el desempeño en el cálculo de la dinámica de núcleos que acoplen el movimiento de las barras de control y el comportamiento de materiales.
 
+Otro trabajo interesante sería evaluar la evolución de la criticidad en el núcleo de reactores que utilizan el vaciado del tanque reflector como SSP.
+Este tipo de cálculos implicaría acoplamientos fuertes entre modelos multiescalas del SSP, como el analizado en la sección \ref{3:mockup},
+y un acoplamiento débil con el modelo neutrónico, ya que si bien el drenaje del material reflector afecta las secciones eficaces,
+la dinámica del núcleo no genera retroalimentación.
+
 También existe otra línea de investigación fuertemente relacionada con el acoplamiento de códigos.
 Algunos esquemas de acoplamiento implícito utilizados en el trabajo requirieron la construcción de la matriz jacobiana del sistema de ecuaciones a resolver.
 En este trabajo se abordó una metodología de aproximación de sus elementos por diferencias finitas, requiriendo numerosas ejecuciones de código.
-Una técnica alternativa que no ha sido investigada es la de diferenciación automática \cite{griewank}.
+Una técnica alternativa que no ha sido investigada es la de diferenciación automática \cite{griewank-ad}.
 La diferenciación automática requiere implementaciones en el código fuente del programa de cálculo utilizado,
 el cual en lugar de devolver al código \textit{maestro} que lo está llamando sólo el valor de las variables incógnitas,
 también debe devolver el valor de sus derivadas con respecto a las variables independientes requeridas
-(que en este caso, son las variables que el código \textit{maestro} le envía como dato).
+(que en este caso, deberían ser las variables que el código \textit{maestro} le envía como dato).
 Esta técnica permitiría construir la matriz jacobiana de manera mucho más rápida y precisa,
-con la consecuente aceleración en la convergencia de resultados.
+con la consecuente aceleración en la convergencia de los resultados.

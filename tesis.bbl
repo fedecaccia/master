@@ -91,6 +91,12 @@ Gunzburger, M.
 \newblock Finite Element Methods for Viscous Incompressible FLows.
 \newblock 1989.
 
+\bibitem{galerkin}
+Fries, T., Matthies, H.-G.
+\newblock A Review of Petrov-Galerkin Stabilization Aproaches and an Extension
+  to MeshFree Methods.
+\newblock 2004.
+
 \bibitem{supg}
 Codina, R.
 \newblock Comparison of some finite element methods for solving the
@@ -209,7 +215,8 @@ White, F.
 
 \bibitem{griewank}
 Griewank, A.
-\newblock Broyden updating, the good and the bad!, 2000.
+\newblock Broyden Updating, the Good and the Bad!
+\newblock 2000.
 
 \bibitem{henry}
 Henry, A.
@@ -255,6 +262,12 @@ Caccia, F.~A.
   código relap5.
 \newblock \emph{Monografía de modelado de sistemas termohidráulicos en
   reactores mediante códigos de planta}, 2016.
+
+\bibitem{griewank-ad}
+Griewank, A.
+\newblock Automatic Differentiation.
+\newblock Princeton Companion to Applied Mathematics, Nicolas Higham Ed.,
+  Princeton University Press, 2014.
 
 \bibitem{github}
 GitHub, Inc.

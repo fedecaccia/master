@@ -10,7 +10,7 @@ Su desempeño fue validado en diversos trabajos de acoplamiento \cite{coup-0d3d}
 \section{Modelado de problemas acoplados}
 \label{ap1:definicion}
 El programa \textbf{Coupling} resuelve problemas que fueron formulados mediante el Método de Descomposición Disjunta de Dominios descripto en el \hyperlink{chapter.1}{Capítulo 1}.
-El esquema de resolución fue diseñado de tal forma que se permite que las interfaces de acoplamiento cuenten con múltiples pares de incógnitas vectoriales en diferentes nodos.
+El esquema de resolución fue diseñado de tal forma que permite que las interfaces de acoplamiento cuenten con múltiples pares de incógnitas vectoriales en diferentes nodos.
 Las principales variables en la definición de un problema son las siguientes:
 \begin{itemize}
 \item Cantidad de subdominios acoplados (variable \textit{Ncomp}).
@@ -39,7 +39,7 @@ En la sección \ref{ap1:ejemplo} se describe como ejemplo la formulación utiliz
 
 El archivo \texttt{src/couple\_ddm.for} contiene la estructura principal del programa.
 El modelo de comunicación entre programas implementado es el de paso de mensajes entre programas ejecutados en modos SISD o SIMD.
-Conforme a la estrategia de acoplamiento descripta en el \hyperlink{chapter.2}{Capítulo 2}, se siguen los siguientes pasos:
+Conforme a la estrategia de resolución descripta en el \hyperlink{chapter.2}{Capítulo 2}, se siguen los siguientes pasos:
 \begin{enumerate}
 \item Lectura de archivos de datos \texttt{mesh.cfg} y \texttt{couple.cfg}.
 \item Inicialización de las funciones de MPI y publicación de puertos de conexión.

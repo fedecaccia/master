@@ -11,14 +11,11 @@ A level-1 auxiliary file: apend1.aux
 A level-1 auxiliary file: apend2.aux
 A level-1 auxiliary file: apend3.aux
 Database file #1: mibib.bib
-Repeated entry---line 408 of file mibib.bib
- : @book{griewank
- :               ,
-I'm skipping whatever remains of this entry
 Warning--empty author in newton
 Warning--missing publisher in iedelchik
 Warning--missing publisher in kays
 Warning--missing publisher in gunzburger
+Warning--missing publisher in galerkin
 Warning--empty journal in gmsh
 Warning--empty journal in invap-mockup
 Warning--missing publisher in bird
@@ -26,50 +23,51 @@ Warning--empty journal in salome
 Warning--missing publisher in durbin
 Warning--missing publisher in k-e
 Warning--missing publisher in level-set
+Warning--missing publisher in griewank
 Warning--empty author and editor in manual-relap-modelos
 Warning--empty journal in pumita-relap
 Warning--empty year in pumita-relap
 Warning--empty author in fermi
 Warning--empty author in newton-user-manual
-You've used 49 entries,
+You've used 51 entries,
             2634 wiz_defined-function locations,
-            1270 strings with 16421 characters,
-and the built_in function-call counts, 14273 in all, are:
-= -- 901
-> -- 456
+            1278 strings with 16750 characters,
+and the built_in function-call counts, 14744 in all, are:
+= -- 927
+> -- 468
 < -- 4
-+ -- 230
-- -- 113
-* -- 600
-:= -- 1624
-add.period$ -- 139
-call.type$ -- 49
-change.case$ -- 36
++ -- 236
+- -- 116
+* -- 615
+:= -- 1675
+add.period$ -- 146
+call.type$ -- 51
+change.case$ -- 35
 chr.to.int$ -- 0
-cite$ -- 65
-duplicate$ -- 1464
-empty$ -- 1493
-format.name$ -- 143
-if$ -- 3181
+cite$ -- 69
+duplicate$ -- 1504
+empty$ -- 1556
+format.name$ -- 147
+if$ -- 3294
 int.to.chr$ -- 0
-int.to.str$ -- 49
-missing$ -- 428
-newline$ -- 242
-num.names$ -- 45
-pop$ -- 790
+int.to.str$ -- 51
+missing$ -- 445
+newline$ -- 253
+num.names$ -- 47
+pop$ -- 819
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 421
+skip$ -- 441
 stack$ -- 0
 substring$ -- 347
-swap$ -- 838
+swap$ -- 858
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 16
-while$ -- 64
-width$ -- 51
-write$ -- 479
-(There was 1 error message)
+warning$ -- 18
+while$ -- 66
+width$ -- 53
+write$ -- 498
+(There were 18 warnings)

@@ -1,23 +1,23 @@
 \chapter{Ejemplos de aplicación}
 \label{chap3}
-\chapterquote
-{The City's central computer told you? R2-D2, you know better than to trust a strange computer. }
-{C-3PO, from Star Wars}
+%~ \chapterquote
+%~ {The City's central computer told you? R2-D2, you know better than to trust a strange computer. }
+%~ {C-3PO, from Star Wars}
 
 \section{Movimiento por fuerza boyante en un circuito cerrado}
 \label{3:ff}
 
 \subsection*{Presentación del problema}
-Como primer ejemplo se presenta un sistema que se estudia analizándolo en dos subsistemas separados,
+Como primer ejemplo se presenta un sistema que modela el movimiento de un fluido en régimen de convección natural a través de
+una fuente fría de neutrones alojada próxima al núcleo de un reactor de investigación \cite{fuente-fria}.
+El sistema se estudia analizándolo en dos subsistemas separados,
 definiendo dos interfaces de acople,
 y en cada una de ellas dos pares de variables dinámicas.
 El primer subsistema modela un fluido en un tanque de paredes adiabáticas y con fuente interna de energía. 
 El segundo subsistema representa un circuito en el que el fluido transfiere energía en un intercambiador de calor para bajar su temperatura.
 Ambos se comunican mediante dos conexiones, una ubicada en la parte inferior y la otra en la parte superior,
 definiendo un circuito cerrado en el que el flujo queda completamente dominado por convección natural.
-El sistema completo modela el movimiento de un fluido en régimen de convección natural a través de
-una fuente fría de neutrones alojada próxima al núcleo de un reactor de investigación \cite{fuente-fria}.
-En la Figura \ref{esquemaFuenteFria} puede apreciarse un diagrama del sistema.
+En la Figura \ref{esquemaFuenteFria} puede apreciarse un diagrama del sistema completo.
 
 \begin{figure}[ht]
 \centering{}\includegraphics[scale = 0.25]{acople_ri_enief.png}
@@ -30,29 +30,124 @@ En el esquema se ejemplifica una de las elecciones posibles para las variables q
 \label{esquemaFuenteFria}
 \end{figure}
 
+
+\subsection*{Subsistemas de estudio}
+Los parámetros del modelo del intercambiador de calor son los siguientes:
+flujo de calor por unidad de superficie $q_0"=-2\cdot 10^5 W/m^2$, 
+longitud de cañerías $L=30$ $m$, 
+sumatoria de coeficientes de pérdida de carga concentrada $\sum K_i=1.72$, 
+rugosidad de cañerías $\epsilon=0.5\cdot 10^{-3}$ $m$.
+Las áreas de las interfaces de acople son $A_2^1=A_2^2=0.03$ $m^2$.
+La altura total $\Delta z$ de este subsistema es equivalente a la de la cavidad bidimensional.
+El fluido de trabajo es agua ($\rho=10^3$, $c_p=4184$ $J/KgK$).
+La evolución de las variables de presión $p$, caudal $Q$ y temperatura $T$ en el subsistema se calcula mediante un código cero-dimensional escrito para este propósito,
+que resuelve ecuaciones de pérdida de carga en una red hidráulica con flujo turbulento 
+y de transferencia de energía en un intercambiador de calor con flujo constante 
+Las ecuaciones del modelo son las siguientes \cite{iedelchik} \cite{kays}:
+
+\begin{equation}
+\left\{ \begin{array}{rcl}
+p_2^1 + \rho g \Delta z &=& p_2^2 + \rho \frac{1}{2} \left( \frac{Q_1^1}{A_2^1} \right)^2  \left( \frac {f_D L} {D} + \sum_i K_i \right) \\ [0.2cm]
+\displaystyle T_2^2 &=& \displaystyle T_2^1 + 2 \frac {q_0" L}{\frac{D}{2} \frac{Q_1^1}{A_2^1}\rho c_p}
+\label{eq-intercambiador}
+\end{array}
+\right.
+\end{equation}
+donde $p_2^i$ es la presión del subsistema promediada en la interfaz correspondiente,
+$Q_2^i$ es el caudal en esta interfaz,
+$T_2^i$ es la temperatura promediada en esta interfaz,
+$g$ es la aceleración generada por el campo gravitatorio,
+$f_D$ es el factor de Darcy de pérdida de carga distribuida,
+y $D$ es el diámetro de la tubería.
+Notar que el subíndice en cada variable refiere a la numeración global del subsistema, y el supraíndice indica el número de interfaz local,
+como se convino previamente en \ref{1:abordaje}.
+En este modelo se supone que el flujo de calor es nulo en la dirección axial en cada interfaz de acople.
+Esta aproximación es correcta ya que las interfaces se seleccionaron lejos de fuentes y sumideros, donde los gradientes de temperatura son despreciables.
+Con este modelo, ninguna de las dos ecuaciones puede recibir valores de contorno \textit{Dirichlet} en ambas interfaces,
+ya que los valores de caudal y temperatura en una interfaz determinan el valor en la otra.
+Por lo tanto, en la estrategia de acoplamiento, la primera ecuación debe tener, o bien ambos contornos con condiciones de tipo \textit{Neumann}, 
+o bien uno con condición de tipo \textit{Neuman} y otro con condición de tipo \textit{Dirichlet}.
+La segunda ecuación debe tener uno de los bordes con condición de tipo \textit{Dirichlet} y otro con condición de tipo \textit{Neumann}.
+Esta condición es necesaria a pesar de que el flujo de calor recibido no va a ser utilizado, basado en la hipótesis de que es despreciable.
+Si el flujo de calor fuera efectivamente apreciable, debería cambiarse el modelo en la ecuación planteada.
+
+La cavidad bidimensional se modela con $L_0=0.3$ $m$, y $A_1^1=A_1^2=0.03$ $m^2$.
+Los parámetros del fluido de trabajo son: $\rho_0=10^3$ $Kg/m^3$ a la temperatura de referencia $T_{ref}$,
+$\mu=6\cdot 10^{-4}$ $Kg/ms$, $c_p=4184$ $J/KgK$, 
+$k=0.64$ $W/mK$ y $\beta=0.44\cdot10^{-3}K^{-1}$.
+Se considera que el fluido tiene una fuente interna que se modela como $f_0=10^6$ $W/m^3$.
+La evolución de las variables en este subsistema se calcula resolviendo las ecuaciones de Navier-Stokes 
+y de transporte de energía.
+Se utiliza la aproximación de \textit{Boussinesq} considerando variaciones de densidad solo en el término de fuerza volumétrica.
+Las ecuaciones implementadas del modelo son las siguientes \cite{gunzburger} \cite{kays}:
+
+\begin{equation}
+\left\{ \begin{array}{rcl}
+\displaystyle \frac {\partial \bar{u}}{\partial t} + ( \bar{u} \cdot \nabla) \bar{u}  + \frac {\nabla p}{\rho_0} - 
+\nabla \cdot \left[ \left( \nu + \nu_T \right) \left( \nabla \bar{u} + \nabla \bar{u}^T \right) \right] && \\
+- \left( 1- \beta (T-T_{ref}) \right)\bar{g} &=& 0 \\ [0.2cm]
+\nabla \cdot \bar{u} &=& 0 \\ [0.2cm]
+\displaystyle \frac {\partial T}{\partial t} + ( \bar{u} \cdot \nabla) T =0 - \frac {k}{\rho_0 c_p} \Delta T &=& \displaystyle \frac{f_0}{\rho_0 c_p}
+\label{eq-cavidad}
+\end{array}
+\right.
+\end{equation}
+donde $\bar{u}$ es el campo de velocidades dentro de la cavidad,
+$p$ el campo de presiones y
+$T$ el campo de temperaturas.
+
+Las ecuaciones (\ref{eq-cavidad}) se resuelven mediante la formulación \textit{Petrov-Galerkin} \cite{galerkin} de elementos finitos, 
+con elementos lineales para aproximar los campos de presiones, velocidades y temperaturas, 
+estabilizando con los métodos \textit{SUPG} \cite{supg} y \textit{PSPG} \cite{pspg}.
+El método \textit{SUPG} (\textit{Streamline Upwind Petrov-Galerkin}) se utiliza para estabilizar problemas de transporte con alto número de \textit{Peclet} (\textit{Pe}).
+El \textit{Pe} es un número adimensional que relaciona la velocidad de advección de un flujo y la velocidad de difusión, y está relacionado con el número de \textit{Reynolds} (\textit{Re}).
+En las ecuaciones de \textit{Navier-Stokes}, el método estabiliza las evoluciones con alto \textit{Re},
+y consiste en la adición de una difusividad extra en la dirección de las líneas de corriente.
+El método \textit{PSPG} (Pressure Stabilizing Petrov-Galerkin) se utiliza para evadir la condición \textit{LBB}\footnote{
+La condición \textit{Ladyzhenskaya-Babuska-Breezi (LBB)} o \textit{inf-sup}
+es una condición necesaria y suficiente para que el problema de \textit{Stokes}
+discretizado mediante algún método \textit{Galerkin}
+quede bien planteado.
+},
+que básicamente impone restricciones sobre los espacios de elementos utilizados.
+
+En las paredes se imponen condiciones de no deslizamiento para las ecuaciones de \textit{Navier-Stokes} y de flujo de energía nulo para la ecuación de energía.
+En las interfaces de acople, deben definirse una serie de condiciones de borde.
+En las ecuaciones de \textit{Navier-Stokes}, en cada interfaz pueden setearse valores de velocidades normales, suponiendo velocidades tangenciales nulas (bajo la hipótesis de flujo paralelo),
+o valores de fuerzas normales (presión), suponiendo que las fuerzas tangenciales son nulas.
+En la ecuación de energía, cada borde necesita o bien un perfil de temperaturas o bien un perfil de flujo de calor.
+Los cálculos se realizaron implementando diferentes estrategias y verificando que los mismos convergieran.
+
+La malla de cálculo se genera con \textbf{Gmsh} \cite{gmsh} y se discretiza el dominio en $43874$ elementos triangulares
+con un tamaño medio de arista de $\Delta x \approx 0.005m$.
+El cálculo se realiza con \textbf{Par-GPFEP} \cite{gpfep} \cite{pargpfep}.
+Las modificaciones de \textbf{Par-GPFEP} que fueron necesarias para implementar el acoplamiento son comentadas en el Apéndice \ref{C:pargpfep}.
+
+
+\subsection*{Estrategia de resolución}
+
 En cada interfaz de acople existen incógnitas de velocidades, fuerzas, temperatura y flujo de calor.
 En el caso de las velocidades la estrategia implementada es definir una variable integral, 
-el caudal volumétrico, que servirá como una de las variables de acoplamiento\footnote{
+el caudal volumétrico $Q$, que servirá como una de las variables de acoplamiento\footnote{
 Cuando se utilizan variables integrales o promediadas para el acoplamiento, es necesario definir una estrategia extra en el subdominio que la recibe.
 Como cada subproblema solo queda bien definido si la condición de borde está dada sobre todos los puntos del borde, estos valores deben distribuirse considerando algún perfil.
 Por ejemplo, para el caso del subdominio que recibe un valor de caudal, y está modelado con ecuaciones bi-dimensionales, necesita definir un perfil de velocidades a lo largo de toda la sección de acople.
-La definición del perfil se basa en alguna hipótesis que la persona que está modelando considera adecuada conforme a la física del problema.
+La definición del perfil se basa en alguna hipótesis que el modelador considera adecuada conforme a la física del problema.
 Este paso debe analizarse con cuidado ya que los resultados del acoplamiento dependen de ello.
 }.
-En el caso de las fuerzas se utilizan valores promediados para la fuerza normal (presión).
+En el caso de las fuerzas se utilizan valores promediados para la fuerza normal (presión $p$).
 Las fuerzas tangenciales se consideran nulas bajo la hipótesis de que son despreciables en las interfaces de acople.
 Esta hipótesis es correcta cuando el flujo es paralelo, 
 y por ello se selecciona como interfaz de acople aquella que se corresponda con el perfil de velocidades lo más plano posible, lejos de las curvas.
-Los valores de temperatura de acople también corresponden a valores promediados en la interfaz,
-y el flujo de calor corresponde al flujo integral a través de ella.
+Los valores de temperatura de acople también corresponden a valores $T$ promediados en la interfaz,
+y el flujo de calor $q''$ de acople corresponde al flujo integral a través de ella.
 En los subsistemas bi-dimensionales, los perfiles de velocidadades y temperaturas construidos a partir de las variables recibidas se consideran planos,
 bajo la hipótesis de flujo paralelo.
 Con esta estrategia, existen cuatro incógnitas en cada interfaz de cada subsistema. 
 Considerando los dos subsistemas, existen en total dieciseis incógnitas.
-Por lo tanto el sistema queda definido por ocho ecuaciones de continuidad de campos de variables
-y otras ocho ecuaciones de residuos que relacionan las incógnitas de forma similar 
-a la que se presentó en la sección \ref{1:abordaje}.
 
+El sistema de ecuaciones de incógnitas queda definido por ocho ecuaciones de continuidad de variables \ref{continuidad}
+y otras ocho ecuaciones modelos \ref{ecuaciones-modelos} que todavía deben ser seleccionadas.
 Las ecuaciones de continuidad en las interfaces implican que:
 
 \begin{equation}
@@ -68,39 +163,13 @@ q"_2^2&=& - q"_2^1
 \end{array}
 \right.
 \end{equation}
-donde $Q$ es caudal, $P$ es presión, $T$ es temperatura y $q"$ es flujo de calor. 
-Notar que el subíndice en cada variable refiere a la numeración global del subsistema, y el supraíndice indica el número de interfaz local,
-como se convino previamente en el \hyperlink{chapter.1}{Capítulo 1}.
-Al evaluar los residuos en cada interfaz, se genera una ecuación no lineal por cada incógnita en cada interfaz.
-Para que las ecuaciones queden bien planteadas se selecciona solo una de las relaciones para el par presión-caudal
-y solo una para el par temperatura-flujo de calor en cada interfaz.
-Así entonces, entre las dos interfaces del subsistema 1 se generan cuatro ecuaciones de residuos
-\footnote{
-Cada ecuación de residuo relaciona las incógnitas según el modelo aplicado.
-En $R_{p,Q}$ se considera dependencia entre el caudal $Q$, la presión $p$ y la temperatura $T$, y en 
-$R_{T,q"}$ se considera dependencia entre el caudal $Q$, la temperatura $T$ y el flujo de calor $q"$.
-} del tipo $(R_m)_{i}^{l}=0$:
 
-%~ \begin{equation}
-%~ \[
-%~ \begin{Bmatrix*}
-%~ (R_{p,Q})_{1}^{1}  \;(Q_1^1, p_1^1, T_1^1, q"_1^1, Q_1^2, p_1^2, T_1^2, q"_1^2) = 0 \\
-%~ (R_{T,q"})_{1}^{1} \;(Q_1^1, p_1^1, T_1^1, q"_1^1, Q_1^2, p_1^2, T_1^2, q"_1^2) = 0 \\
-%~ (R_{p,Q})_{1}^{2}  \;(Q_1^1, p_1^1, T_1^1, q"_1^1, Q_1^2, p_1^2, T_1^2, q"_1^2) = 0 \\
-%~ (R_{T,q"})_{1}^{2} \;(Q_1^1, p_1^1, T_1^1, q"_1^1, Q_1^2, p_1^2, T_1^2, q"_1^2) = 0 
-%~ \end{matrix*}\right
-%~ \]
-%~ 
-%~ y entre las dos interfaces del subsistema 2 se generan otras 4 ecuaciones de residuos:
-%~ 
-%~ \[
-%~ \begin{Bmatrix*}
-%~ (R_{p,Q})_{2}^{1}  \;(Q_2^1, p_2^1, T_2^1, q"_2^1, Q_2^2, p_2^2, T_2^2, q"_2^2) = 0 \\
-%~ (R_{T,q"})_{2}^{1} \;(Q_2^1, p_2^1, T_2^1, q"_2^1, Q_2^2, p_2^2, T_2^2, q"_2^2) = 0 \\
-%~ (R_{p,Q})_{2}^{2}  \;(Q_2^1, p_2^1, T_2^1, q"_2^1, Q_2^2, p_2^2, T_2^2, q"_2^2) = 0 \\
-%~ (R_{T,q"})_{2}^{2} \;(Q_2^1, p_2^1, T_2^1, q"_2^1, Q_2^2, p_2^2, T_2^2, q"_2^2) = 0
-%~ \end{matrix*}\right
-%~ \]
+Las ecuaciones modelos deben ser seleccionadas en base a la combinación de condiciones de borde propuesta para resolver el acoplamiento.
+Independientemente de cuál fuera ésta,
+para que el problema quede bien planteado debe serleccionarse solo una de las relaciones para el par \textit{presión-caudal}
+y solo una para el par ºtextit{temperatura-flujo de calor} en cada interfaz.
+Así entonces, considerando las dos interfaces del subsistema 1 se generan cuatro ecuaciones de residuos:
+
 \begin{equation}
 \left\{ \begin{array}{rcl}
 (R_{p,Q})_{1}^{1}  \;(Q_1^1, p_1^1, T_1^1, Q_1^2, p_1^2, T_1^2) &=& 0 \\
@@ -111,7 +180,9 @@ $R_{T,q"}$ se considera dependencia entre el caudal $Q$, la temperatura $T$ y el
 \right.
 \label{residuos-1}
 \end{equation}
-y entre las dos interfaces del subsistema 2 se generan otras cuatro ecuaciones de residuos:
+donde $(R_{p,Q})_1^i$ es el residuo del par \textit{presión-caudal} en la interfaz $i$ y
+$(R_{T,q''})_1^i$ es el residuo del par \textit{temperatura-flujo de calor} en la interfaz $i$.
+Entre las dos interfaces del subsistema 2 se generan otras cuatro ecuaciones de residuos:
 
 \begin{equation}
 \left\{ \begin{array}{rcl}
@@ -123,11 +194,11 @@ y entre las dos interfaces del subsistema 2 se generan otras cuatro ecuaciones d
 \right.
 \label{residuos-2}
 \end{equation}
-
 Notar que según la estrategia de acoplamiento seleccionada, algunas de las dependencias pueden anularse.
 En la Figura \ref{esquemaFuenteFria} se presenta una estrategia en la que las condiciones de borde dinámicas son 
 de tipo de tipo Dirichlet para la interfaz inferior de la cavidad y la interfaz superior del intercambiador de calor, 
 y de tipo de tipo Neumann para las restantes.
+
 Como el circuito es cerrado es necesario proveer un valor de referencia para la presión.
 En la formulación desarrollada se fija un valor de presión aritrario en la interfaz superior del intercambiador de calor,
 por lo que la ecuación $(R_{p,Q})_{2}^{1}=0$ queda descartada, y es sustituida por la siguiente:
@@ -136,83 +207,10 @@ por lo que la ecuación $(R_{p,Q})_{2}^{1}=0$ queda descartada, y es sustituida 
 p_2^1 = 0.
 \end{equation*}
 
-\subsection*{Subsistemas de estudio}
-Los parámetros del modelo del intercambiador de calor son los siguientes:
-flujo de calor por unidad de superficie $q_0"=-2\cdot 10^5 W/m^2$, 
-longitud de cañerías $L=30$ $m$, 
-sumatoria de coeficientes de pérdida de carga concentrada $\sum K_i=1.72$, 
-rugosidad de cañerías $\epsilon=0.5\cdot 10^{-3}$ $m$.
-Las áreas de las interfaces de acople son $A_2^1=A_2^2=0.03$ $m^2$.
-La altura total $\Delta z$ de este subsistema es equivalente a la de la cavidad bidimensional.
-La evolución de las variables $\{p,Q,T,q"\}$ en el subsistema se calcula mediante un código cero-dimensional
-que resuelve ecuaciones de pérdida de carga en una red hidráulica con flujo turbulento \cite{iedelchik}
-y de transferencia de energía en un intercambiador de calor con flujo constante \cite{kays}:
-
-\begin{equation}
-\left\{ \begin{array}{rcl}
-p_2^1 + \rho g \Delta z &=& p_2^2 + \rho \frac{1}{2} \left( \frac{Q_1^1}{A_2^1} \right)^2  \left( \frac {f_D L} {D} + \sum_i K_i \right) \\ [0.2cm]
-\displaystyle T_2^2 &=& \displaystyle T_2^1 + 2 \frac {q_0" L}{\frac{D}{2} \frac{Q_1^1}{A_2^1}\rho c_p}
-\label{eq-intercambiador}
-\end{array}
-\right.
-\end{equation}
-donde $f_D$ es el factor de Darcy de pérdida de carga distribuida y $D$ es el diámetro de la tubería.
-En este modelo se supone que el flujo de calor es nulo en la dirección axial en cada interfaz de acople.
-Esta aproximación es correcta ya que las interfaces se seleccionaron lejos de fuentes y sumideros, donde los gradientes de temperatura son despreciables.
-Con este modelo, ninguna de las dos ecuaciones puede recibir valores de contorno \textit{Dirichlet} en ambas interfaces,
-ya que los valores de caudal y temperatura en una interfaz determinan el valor en la otra.
-Por lo tanto, en la estrategia de acoplamiento, la primera ecuación debe tener, o bien ambos contornos con condiciones de tipo \textit{Neumann}, 
-o bien uno con condición de tipo \textit{Neuman} y otro con condición de tipo \textit{Dirichlet}.
-La segunda ecuación debe tener uno de los bordes con condición de tipo \textit{Dirichlet} y otro con condición de tipo \textit{Neumann}.
-Esta condición es necesaria a pesar de que el flujo de calor recibido no va a ser utilizado, basado en la hipótesis de que es despreciable.
-Si el flujo de calor fuera efectivamente apreciable, debería cambiarse el modelo en la ecuación planteada.
-
-La cavidad bidimensional se modela con $L_0=0.3$ $m$, y $A_1^1=A_1^2=0.03$ $m^2$.
-El fluido de trabajo es agua ($\rho_0=10^3$ $Kg/m^3$, $\mu=6\cdot 10^{-4}$ $Kg/ms$, $c_p=4184$ $J/KgK$, 
-$k=0.64$ $W/mK$, $\beta=0.44\cdot10^{-3}K^{-1}$)
-con fuente interna $f_0=10^6$ $W/m^3$.
-La evolución de las variables $\{p,Q,T,q"\}$ en este subsistema se calcula resolviendo las ecuaciones de Navier-Stokes {\cite{gunzburger}}
-y de transporte de energía \cite{kays}. 
-Se utiliza la aproximación de \textit{Boussinesq} considerando variaciones de densidad solo en el término de fuerza volumétrica:
-
-\begin{equation}
-\left\{ \begin{array}{rcl}
-\displaystyle \frac {\partial \bar{u}}{\partial t} + ( \bar{u} \cdot \nabla) \bar{u}  + \frac {\nabla p}{\rho_0} - 
-\nabla \cdot \left[ \left( \nu + \nu_T \right) \left( \nabla \bar{u} + \nabla \bar{u}^T \right) \right] && \\
-- \left( 1- \beta (T-T_{ref}) \right)\bar{g} &=& 0 \\ [0.2cm]
-\nabla \cdot \bar{u} &=& 0 \\ [0.2cm]
-\displaystyle \frac {\partial T}{\partial t} + ( \bar{u} \cdot \nabla) T =0 - \frac {k}{\rho_0 c_p} \Delta T &=& \displaystyle \frac{f_0}{\rho_0 c_p}
-\label{eq-cavidad}
-\end{array}
-\right.
-\end{equation}
-donde $\rho_0$ es la densidad del fluido a la temperatura de referencia $T_{ref}$.
-
-Las ecuaciones (\ref{eq-cavidad}) se resuelven mediante una formulación de elementos finitos, 
-con elementos lineales para aproximar los campos de presiones, velocidades y temperaturas, 
-estabilizando con los métodos \textit{SUPG} \cite{supg} y \textit{PSPG} \cite{pspg}.
-El método \textit{SUPG} (\textit{Streamline Upwind Petrov-Galerkin}) se utiliza para estabilizar problemas de transporte con alto número de \textit{Peclet} (\textit{Pe}).
-El \textit{Pe} es un número adimensional que relaciona la velocidad de advección de un flujo y la velocidad de difusión, y está relacionado con el número de \textit{Reynolds} (\textit{Re}).
-En las ecuaciones de \textit{Navier-Stokes}, el método estabiliza las evoluciones con alto \textit{Re},
-y consiste en la adición de una difusividad extra en la dirección de las líneas de corriente.
-El método \textit{PSPG} (Pressure Stabilizing Petrov-Galerkin) se utiliza para evadir la condición \textit{LBB},
-que básicamente impone restricciones sobre los espacios de elementos utilizados en el problema de \textit{Stokes}.
-
-Las paredes imponen condiciones de no deslizamiento para las ecuaciones de \textit{Navier-Stokes} y de flujo de energía nulo para la ecuación de energía.
-En las interfaces de acople, deben definirse una serie de condiciones de borde.
-En las ecuaciones de \textit{Navier-Stokes}, en cada interfaz pueden setearse valores de velocidades normales, suponiendo velocidades tangenciales nulas (bajo la hipótesis de flujo paralelo),
-o valores de fuerzas normales (presión), suponiendo que las fuerzas tangenciales son nulas.
-En la ecuación de energía, cada borde necesita o bien un perfil de temperaturas o bien un perfil de flujo de calor.
-Los cálculos se realizaron implementando diferentes estrategias y verificando que los mismos convergieran.
-
-La malla de cálculo se genera con \textbf{Gmsh} \cite{gmsh} y se discretiza el dominio en $43874$ elementos triangulares con un tamaño medio de arista de $\Delta x \approx 0.005m$. 
-
-Como se mencionó previamente, no existe necesidad de que ambos códigos utilicen el mismo paso temporal de cálculo.
+El programa \textit{maestro} utilizado es \textbf{Coupling}.
+La comunicación entre códigos se da por MPI en modo SISD.
+Como se mencionó en \ref{1:evolucion}, no existe necesidad de que ambos códigos utilicen el mismo paso temporal de cálculo.
 Sin embargo en ambos modelos se utiliza $\Delta t=0.01s$, debido a que ninguno requiere una mayor discretización temporal.
-
-Los cálculos cero-dimensionales se realizan con un programa escrito para este propósito.
-Los cálculos bi-dimensionales se realizan con \textbf{Par-GPFEP} \cite{gpfep} \cite{pargpfep}.
-Las modificaciones necesarias para implementar el acoplamiento de \textbf{Par-GPFEP} son comentadas en el Apéndice \ref{C:pargpfep}.
 
 \subsection*{Resultados del cálculo}
 
@@ -268,7 +266,9 @@ la evolución de las líneas de corriente y del campo de temperatura en la cavid
 
 \subsection*{Análisis de métodos de resolución del sistema de ecuaciones de residuos}
 
-Se exploran diferentes métodos numéricos para resolver el sistema de ecuaciones de residuos presentado en \ref{residuos-1} y \ref{residuos-2}.
+Se exploran diferentes métodos numéricos para resolver el acoplamiento presentado en las ecuaciones \ref{residuos-1} y \ref{residuos-2}.
+El parámetro de interés aquí no es la cantidad de iteraciones de cada método sino la cantidad de evaluaciones de funciones que cada uno requiere,
+ya que el tiempo de cálculo está directamente relacionado con ellas.
 En la Figura \ref{iteraciones_ri} puede apreciarse la cantidad de evaluaciones requeridas 
 por cada método para disminuir los residuos debajo de cierta tolerancia prefijada, para cada paso temporal.
 El método de \textit{Newton} calcula la matriz jacobiana en cada iteración.
@@ -337,60 +337,27 @@ El SSP del RA10 se dividió en tres subsistemas:
 \end{itemize}
 
 En el trabajo presentado los subsistemas se acoplaron mediante una estrategia de acoplamiento débil \cite{ra10-paper} \cite{ra10-enief}.
-Durante el trabajo se realizaron tareas de validación de las herramientas de cálculo.
+
+Previo a este trabajo, se realizaron tareas de validación de las herramientas de cálculo.
 Para ello se estudió un sistema similar para el que se conocían datos experimentales de tiempo de vaciado.
 Estos datos sirvieron para contrastar los resultados obtenidos con las herramientas de cálculo.
-El sistema analizado fue el tanque del reflector del \textit{mockup} del reactor OPAL, 
-montado por INVAP en San Carlos de Bariloche, \cite{invap-mockup}.
-
-Debido a que el mockup del OPAL está abierto a la atmósfera, no cuenta con línea de ecualización de presiones y por lo tanto no se consideró en el modelo.
-
+El sistema analizado fue el \textit{mockup} del SSP del reactor OPAL \cite{invap-mockup},
+montado por INVAP en San Carlos de Bariloche.
+Debido a que el \textit{mockup} del SSP del OPAL está abierto a la atmósfera,
+no cuenta con línea de ecualización de presiones y por lo tanto ésta no se consideró en el modelo.
 En un estudio \cite{cnea-informe-mockup} se analizó el detalle fluídico tridimensional en el tanque reflector durante la descarga,
 modelando con ecuaciones cero-dimensionales la pérdida de carga en la red hidráulica 
 y acoplando los subsistemas de forma débil.
-En el estudio aquí presentado se analiza con mayor detalle la distribución de caudales a través del arreglo de válvulas,
-modelando el comportamiento del resto del sistema con ecuaciones cero-dimensionales.
-El propósito de este estudio es investigar si existe algún efecto que podría no estar siendo considerado en el otro modelo.
+El estudio que a continuación se presenta es otro estudio que analiza con mayor detalle la distribución de caudales a través del arreglo de válvulas,
+modelando el comportamiento del resto del sistema con ecuaciones cero-dimensionales,
+y acoplando los subsistemas de forma fuerte, con la estrategia descripta en los dos primeros capítulos.
+El propósito de este estudio es investigar si existe algún efecto en las cañerías que podría no estar siendo considerado en el otro modelo.
 
 \subsection*{Subsistemas de estudio}
 
 Se proponen dos subsistemas de estudio:
 el primero incluye el tanque del reflector acoplado a una porción de la red hidráulica en la descarga,
 y el segundo modela el arreglo de válvulas.
-Ambos están conectados a través de una sección de la tubería,
-en la cual quedan acoplados los valores de velocidades y fuerzas.
-La estretegia implementada es similar a la utilizada en \ref{3:ff} ya que se utilizan como variables de acoplamiento el caudal volumétrico y la presión promedio.
-Las fuerzas tagenciales se consideran nulas.
-A fines de cumplir con esta hipóteisis, la interfaz de acople se selecciona lejos de los codos.
-El subsistema tanque del reflector tiene como incógnitas la presión $p_1^1$ y el caudal $Q_1^1$ en la interfaz de acople $I_1^1$.
-Asimismo, el subsistema arreglo de válvulas tiene como incógnitas $p_2^1$ y $Q_2^1$ en $I_{2_1}$.
-Las ecuaciones de continuidad implican que:
-
-\begin{equation}
-\left\{ \begin{array}{rcl}
-p_1^1 &=& p_2^1 \\
-Q_1^1 &=& Q_2^1
-\end{array}
-\right.
-\end{equation}
-
-Se utiliza la siguiente estrategia:
-condiciones de borde de tipo \textit{Neumann} en la interfaz de acople para el subsistema tanque del reflector,
-y condiciones de borde de tipo \textit{Dirichlet} para el subsistema arreglo de válvulas\footnote{
-Se podrían haber definido otras estrategias.
-La estrategia implementada permite resolver las ecuaciones en ambos subdominios de una forma cómoda.
-En el modelo tri-dimensional, por ejemplo, el valor de caudal recibido es útil para construir valores para las condiciones de borde del modelo turbulento utilizado.
-}.
-En base al caudal recibido en este subsistema se calcula un perfil de velocidades.
-Las ecuaciones de residuos quedan entonces:
-
-\begin{equation}
-\left\{ \begin{array}{rcl}
-(R_{p,Q})_{1}^{1}  \;(p_1^1) &=& 0 \\
-(R_{p,Q})_{2}^{1}  \;(Q_2^1) &=& 0
-\end{array}
-\right.
-\end{equation}
 
 El primer subsistema se analiza con ecuaciones cero-dimensionales,
 realizando balances de masa y energía.
@@ -403,7 +370,6 @@ queda modelada a través de la siguiente ecuación \cite{bird}:
 \label{eq-tanque}
 \end{equation}
 donde $p_1^1$ es la presión en la interfaz de acople,
-que se recibe como dato de contorno,
 $A_T$ es la área transversal del tanque del reflector, 
 $A_D$ es la sección transversal de la línea de descarga,
 $\Delta h_{red}$ es la altura total de la columna de líquido en el subsistema,
@@ -420,8 +386,6 @@ donde $v_D$ es la velocidad del fluido en la línea de descarga,
 $\frac {f_D*l_D}{D}$ es el factor de pérdida de carga distribuida en las tuberías,
 (en función del factor de Darcy $f_D$, la longitud de tuberías $l_D$ y el diámetro de las mismas $D$)
 y $\sum_i K_i$ es la sumatoria de factores de pérdida de carga concetrada.
-
-CB
 
 La Tabla \ref{tabla-tanque} reúne los parámetros del subsistema.
 Los datos geométricos pueden consultarse en las referencias \cite{invap-mockup}.
@@ -454,6 +418,7 @@ el caudal de descarga $Q_1^1$ puede calcularse simplemente como:
 Q_1^1 = -\dot{h} A_D
 \label{eq-qd}
 \end{equation}
+Todos estos cálculos se realizan con un programa escrito para este propósito.
 
 El subsistema arreglo de válvulas es modelado con una malla tridimensional de elementos tetraédricos realizada en \textbf{Salomé} \cite{salome}.
 El caudal ingresa a través del extremo superior y se reparte entre los múltiples caños que comunican los colectores.
@@ -469,10 +434,11 @@ Más adelante se estudia la validez de éstas aproximaciones.
 Los datos dimensionales de las cañerías pueden consultarse en las referencias \cite{invap-mockup}.
 
 Debido a que el régimen del fluido es turbulento durante la mayor parte de la descarga,
-y una simulación DNS demandaría elevados recursos computacionales,
-se utiliza un modelo de turbulencia de tipo RANS para modelar la fricción interna del fluido.
-El modelo utilizado es el modelo $\kappa-\epsilon$ \textit{realizable}, en el que
-las ecuaciones se estabilizan mediante un método de control de coeficientes \cite{k-e-realizable}.
+y una simulación DNS (Simulación Numérica Directa, por sus siglas en inglés \textit{Direct Numerical Simulation} demandaría elevados recursos computacionales,
+se utiliza un modelo de turbulencia de tipo RANS (Promedio de Reynolds de Navier-Stokes, por sus siglas en inglés \textit{Reynolds-Averaged Navier–Stokes})
+para modelar la fricción interna del fluido.
+El modelo utilizado es el modelo $\kappa-\epsilon$ \textit{realizable} \cite{k-e-realizable},
+en el que las ecuaciones se estabilizan mediante un método de control de coeficiente.
 El sistema de ecuaciones resultantes en el segundo subsistema es:
 
 \begin{equation}
@@ -498,43 +464,90 @@ $c_\mu=0.09$, $c_1=0.126$, $c_2=1.92$ y $c_\epsilon=0.07$ \cite{durbin}.
 
 En las ecuaciones de \textit{Navier-Stokes}, cada borde necesita un perfil de velocidades normales o de fuerzas normales,
 y otro de velocidades tangenciales o de fuerzas tangenciales \cite{gunzburger}.
-Las condiciones de borde al ingreso de la cañería dependen del valor $Q_2^1$ impuesto,
-a partir del cual se define un perfil de velocidades plano del fluido.
-En base a estas velocidades se calcula un valor para la intensidad turbulenta $I_T$,
-y con ella se aproximan los valores de $\kappa$ y $\epsilon$ en la interfaz.
+Si la condición de borde de ingreso de la cañería es el valor del caudal $Q_2^1$,
+a partir de éste puede definirse un perfil de velocidades del fluido.
+El regímen de flujo es turbulento durante la mayor parte de la descarga y por tanto este perfil puede suponerse plano.
+En base a estas velocidades puede calcularse un valor para la intensidad turbulenta $I_T$,
+y con ella aproximarse los valores de $\kappa$ y $\epsilon$ en la interfaz.
+Si la condición de borde de ingreso a la cañería es el valor de presión media,
+la intensidad turbulenta $I_T$ en cada paso de evolución temporal puede calcularse de forma aproximada a partir de la solución para el caudal en el paso previo.
 En la descarga de la cañería se impone una fuerza normal que depende de la presión atmosférica,
 despreciando las fuerzas tangenciales.
-Las ecuaciones de $\kappa$ y $\epsilon$ no requieren condiciones contorno en esta interfaz.
+Las ecuaciones de $\kappa$ y $\epsilon$ no requieren condiciones de contorno en esta interfaz.
 Para evitar la resolución de la capa límite en las paredes de las tuberías se implementa un modelo de pared,
 en el que se reemplaza la misma por una tracción tangencial equivalente a la que realizaría la misma sobre la corriente externa
 \cite{k-e}.
 Este modelo impone condiciones de tipo \textit{Dirichlet} para $\kappa$ y $\epsilon$ en la frontera en que se impone la ley de pared.
 
-El sistema de ecuaciones (\ref{eq-mani}) es resuelto en pasos fraccionados \cite{lew} mediante una formulación de elementos finitos con elementos lineales, 
+El sistema de ecuaciones (\ref{eq-mani}) es resuelto en pasos fraccionados \cite{lew} mediante la formulación \textit{Petrov-Galerkin} \cite{galerkin} de elementos finitos con elementos lineales, 
 estabilizada mediante \textit{SUPG} \cite{supg} y \textit{PSPG} \cite{pspg}.
 En el primer paso fraccionado se resuelve el transporte de $\kappa$,
 en el segundo paso se resuelve el transporte de $\epsilon$,
 y en el último paso se resuelven en forma monolítica las ecuaciones de \textit{Navier-Stokes}.
 
-Una vez resueltas las ecuaciones es posible calcular el valor de la presión promedio $<p_2^1>$ en la interfaz $I_{2_1}$,
+Una vez resueltas las ecuaciones,
+si la condición de borde en la interfaz de acople $I_{2_1}$ había sido el caudal $Q_2^1$,
+es posible calcular el valor de la presión promedio $<p_2^1>$ en esta interfaz
 a partir de los valores $<P^*_{I_2^1}>$ y $<\kappa_{I_2^1}>$ promediados en ella:
 
 \begin{equation}
 <p_2^1> = <P^*_{I_2^1}> - \frac {2}{3} <\kappa_{I_2^1}>
 \end{equation}
 
-Los cálculos cero-dimensionales se realizan con un programa escrito para este propósito.
-Los cálculos tri-dimensionales se realizan con \textbf{Par-GPFEP}.
+Si la condición de borde en la interfaz de acople hubiera sido la presión promedio $<p_2^1>$,
+el caudal $Q_2^1$ se calcula simplemente mediante integración numérica del campo de velocidades en los nodos de la interfaz.
 
-\subsection*{Resultados del cálculo}
+Todos estos cálculos se realizan con \textbf{Par-GPFEP}.
+
+\subsection{Estrategia de resolución}
+
+Los dos subsistemas están conectados a través de una sección de la tubería,
+en la cual quedan acoplados los valores de velocidades y fuerzas.
+La estretegia implementada es similar a la utilizada en \ref{3:ff} y consiste en utilizar como variables de acoplamiento el caudal volumétrico $Q$ y la presión promedio $p$.
+Las fuerzas tagenciales se consideran nulas.
+A fines de cumplir con esta hipóteisis, la interfaz de acople se selecciona lejos de los codos.
+El subsistema tanque del reflector tiene como incógnitas la presión $p_1^1$ y el caudal $Q_1^1$ en la interfaz de acople $I_1^1$.
+Asimismo, el subsistema arreglo de válvulas tiene como incógnitas $p_2^1$ y $Q_2^1$ en $I_{2_1}$.
+Las ecuaciones de continuidad implican que:
+
+\begin{equation}
+\left\{ \begin{array}{rcl}
+p_1^1 &=& p_2^1 \\
+Q_1^1 &=& Q_2^1
+\end{array}
+\right.
+\end{equation}
+
+Se utiliza la siguiente estrategia:
+condiciones de borde de tipo \textit{Neumann} en la interfaz de acople para el subsistema tanque del reflector,
+y condiciones de borde de tipo \textit{Dirichlet} para el subsistema arreglo de válvulas\footnote{
+Se podrían haber definido otras estrategias.
+La estrategia implementada permite resolver las ecuaciones en ambos subdominios de una forma cómoda.
+En el modelo tri-dimensional, por ejemplo, el valor de caudal recibido es útil para construir valores para las condiciones de borde del modelo turbulento utilizado.
+}.
+En base al caudal recibido en este subsistema se calcula un perfil de velocidades.
+Las ecuaciones de residuos quedan entonces:
+
+\begin{equation}
+\left\{ \begin{array}{rcl}
+(R_{p,Q})_{1}^{1}  \;(p_1^1) &=& 0 \\
+(R_{p,Q})_{2}^{1}  \;(Q_2^1) &=& 0
+\end{array}
+\right.
+\end{equation}
+
+El programa \textit{maestro} utilizado es \textbf{Coupling}.
+La comunicación entre códigos se da por MPI en modo SIMD.
+
+\subsection*{Evolución de la descarga del SSP}
 
 Se realizan cálculos utilizando mallas del modelo tri-dimensional con diferente refinamiento para estudiar la convergencia de los resultados.
 La primera es una malla con $\Delta x=0.01m$ y 1145659 de elementos. 
 La segunda es malla tiene $\Delta x=0.008m$ y 1806202 elementos.
 La tercera es la malla más fina y tiene $\Delta x=0.005m$ y 2951259 elementos.
 Se utiliza $\Delta t=0.01s$ en los cálculos con las dos primeras mallas y $\Delta t=0.005s$ en los cálculos con la última malla.
-Las ecuaciones de residuos se resuelven estudiando diferentes métodos numericos.
-mediante el método de Broyden ortonormal, 
+Las ecuaciones de residuos se resuelven
+mediante el método de \textit{Broyden ortonormal},
 con reinicialización de la matriz jacobiana cada 100 pasos temporales.
 En la Figura \ref{qpvst} se reportan los resultados obtenidos para la evolución de los caudales y de las presiones en la interfaz de acople.
 
@@ -565,9 +578,9 @@ En la Figura \ref{qpvst} se reportan los resultados obtenidos para la evolución
 
 En la Figura \ref{hvst} se observa la evolución de la altura de la superficie libre del líquido en el tanque durante los primeros quince segundos obtenida en diferentes cálculos.
 La curva azul reporta los resultados obtenidos con la malla más gruesa, la curva roja los resultados obtenidos con la malla intermedia y la curva violeta los resultados obtenidos con la malla más fina.
-La curva verde muestra resultados de análisis estudiando la condición inicial de gas de relleno en las cañerías, que será comentada en la sección \ref{3:level-set}.
-Las curvas cyan y gris muestran resultados del cálculo del modelo tri-dimensional del tanque con acoplamiento débil al modelo cero dimensional de la red hidráulica \cite{ra10-paper},
-obtenidas sin utilizar modelo de turbulencia, y utilizando el modelo \textit{RANS} previamente comentado.
+La curva verde muestra resultados de análisis estudiando la condición inicial de gas de relleno en las cañerías, que será descripta en la sección \ref{3:level-set}.
+Las curvas cyan y gris muestran resultados del cálculo del modelo tri-dimensional del tanque con acoplamiento débil al modelo cero dimensional de la red hidráulica \cite{ra10-paper}.
+La primera curva fue obtenida sin utilizar modelo de turbulencia, y la segunda utilizando el modelo RANS previamente comentado.
 Comparativamente se muestran también los valores experimentales reportados en la referencia \cite{invap-mockup}.
 
 \begin{figure}[ht]
@@ -588,8 +601,9 @@ Tras este transitorio inicial, todos los modelos predicen una pendiente de vacia
 Esta pendiente se corresponde con similares caudales de descarga entre los diferentes modelos, 
 con lo que se verifica que la pérdida de carga total considerada en dos modelos independientes (modelo tri-dimensional del tanque acoplado, y modelo cero-dimensional del tanque acoplado) es similar.
 La curva experimental presenta ciertas ondulaciones que se deben al efecto que el oleaje en la superficie del líquido genera sobre el punto de medición.
-Estas variaciones son filtradas en el modelo tri-dimensional del tanque ya que la curva reporta una altura efectiva, calculada a partir del volumen restante de líquido en el tanque.
-Transcurridos los diez segundos de descarga, existe un quiebre en las curvas del modelo tri-dimensional del tanque.
+Estas variaciones son filtradas en los modelos utilizados, 
+ya que las curvas calculadas reportan alturas efectivas, computadas a partir del volumen restante de líquido en el tanque.
+Transcurridos diez segundos de evolución, existe un quiebre en las curvas del modelo tri-dimensional del tanque.
 Este quiebre se corresponde al momento en el que las cañerías succionan tanto gas que es posible desacoplar el modelo cero-dimensional de pérdida de carga,
 basándose en la hipótesis de que se establece una vena gaseosa entre el punto de succión y el orificio de descarga.
 Esta hipótesis es conservativa para el objetivo de estudio previsto,
@@ -612,7 +626,7 @@ En la Figura \ref{hvstv} se compara la evolución de la superficie libre ante fa
 \label{hvstv} 
 \end{figure}
 
-Como puede observarse no es posible notar diferencias considerables en la evolución de la descarga.
+Como puede observarse no es posible notar diferencias considerables en la evolución.
 La pérdida de carga total del arreglo de válvulas es levemente sensible a la válvula que falla.
 
 \subsection*{Transporte de superficie libre en las tuberías}
@@ -650,14 +664,13 @@ El campo del level set es reinicializado mediante cálculos geométricos cada 10
 En la Figura \ref{hvst} se compara la evolución obtenida de la superficie libre con los resultados anteriores,
 y en la Figura \ref{hvstls} se compara la evolución durante el transitorio inicial.
 Puede observarse que al modelar el transporte del gas la descarga se acelera durante el primer instante, debido a la menor pérdida de carga.
-Sin embargo, este efecto no tiene mayor peso.
+Sin embargo, este fenómeno no tiene mayor influencia.
 La evolución posterior es similar a la obtenida sin el modelado de la superficie libre,
 y por lo tanto la aproximación realizada inicialmente es conservativa, ya que considera una mayor pérdida de carga.
 
+En la Figura \ref{evol-ls} se observa la evolución de la superficie libre en el arreglo de válvulas durante los primeros instantes de tiempo.
 
-En la Figura \ref{evol-ls} se observa la evolución de la superficie libre durante los primeros instantes de tiempo.
-
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{minipage}[t]{.48\textwidth}
 \centering
 \subfloat[t = 0 s]{\includegraphics[scale=0.15]{0ms.png}}\\
@@ -681,7 +694,7 @@ En la Figura \ref{evol-ls} se observa la evolución de la superficie libre duran
 
 \subsection*{Conclusiones del análisis}
 La herramienta de análisis de acoplamiento fuerte de subsistemas permite incorporar el estudio de la inercia fluídica en la red hidráulica de descarga.
-Este estudio concluye que los modelos que incluyen el fenómeno inercial del fluido en la red hidráulica del \textit{mockup} del OPAL predicen un retraso de la descarga en un máximo de un segundo 
+Este estudio revela que los modelos que incluyen el fenómeno inercial del fluido en la red hidráulica del \textit{mockup} del SSP del OPAL predicen un retraso de la descarga en un máximo de un segundo 
 respecto a los modelos que no lo incluyen.
 Como la inclusión del efecto inercial modela una dinámica similar a la reportada experimentalmente durante el transitorio inicial y,
 además, es conservativa en función del objetivo de estudio establecido, debería ser considerada en futuros análisis de seguridad.
@@ -689,9 +702,7 @@ además, es conservativa en función del objetivo de estudio establecido, deber�
 \subsection*{Análisis de métodos de resolución del sistema de ecuaciones de residuos}
 
 A fines de comparar la efectividad de diferentes métodos numéricos se realizaron distintos cálculos utilizando la malla más gruesa.
-El parámetro de interés aquí no es la cantidad de iteraciones de cada método sino la cantidad de evaluaciones de funciones que cada uno requiere,
-ya que el tiempo de cálculo está directamente relacionado con ellas.
-La Figura \ref{nonlinear_fevals} compara la cantidad de evaluación de funciones en función de paso temporal para diferentes métodos de resolución.
+La Figura \ref{nonlinear_fevals} compara la cantidad de evaluaciones de funciones en función del paso temporal para diferentes métodos de resolución.
 
 \begin{figure}[ht]
 \centering
@@ -722,7 +733,7 @@ Ahora el objetivo radica en intentar generar semillas que aceleren la convergenc
 
 Se propone utilizar un método de extrapolación, a partir de la información de los resultados que se van obteniendo en los sucesivos pasos.
 La semillas para $\bar{x}_n$ y para $\mathbb{B}_n$ podrían tener órdenes de extrapolación $k_{\bar{x}}$ y $k_{\mathbb{B}}$ diferentes.
-En el paso $n$, se van a utilizar los valores de los vectores $\bar{x}_i$ , con $i  \in  \left \{ n-1-k_{\bar{x}}, n-1\right \}$,
+En el paso $n$, se van a utilizar los valores de los vectores $\bar{x}_i$, con $i  \in  \left \{ n-1-k_{\bar{x}}, n-1\right \}$,
 y los valores de las matrices $\mathbb{B}_j$, con $j  \in  \left \{ n-1-k_{\mathbb{B}}, n-1\right \}$.
 Estas extrapolaciones son válidas solo cuándo $n>k_{\bar{x}}+1$ y $n>k_{\mathbb{B}+1}$ respectivamente.
 
@@ -739,10 +750,10 @@ Los métodos con algún órden de extrapolación para $\bar{x}_n$ son más efici
 \end{figure}
 La Figura \ref{nonlinear_fevals_ex} reporta la cantidad de evaluaciones de funciones requeridas para la convergencia en cada paso temporal,
 jugando con diferentes órdenes de extrapolación para $\bar{x}_n$ y $\mathbb{B}_n$.
-Las evaluaciones de funciones aquí están directamente relacionadas con las iteraciones para la convergencia,
+Las evaluaciones de funciones aquí están directamente relacionadas con las iteraciones necesarias para la convergencia,
 ya que el método de \textit{Broyden} realiza una sola evaluación en cada iteración.
 Al comienzo del cálculo todos los esquemas numéricos requieren excesivas iteraciones para converger,
-y luego comienzan a converger con menor cantidad.
+y luego comienzan a converger con menor cantidad de iteraciones.
 El cálculo con órden nulo de extrapolación para ambas variables es el que más tarda en bajar la cantidad de iteraciones.
 Le siguen todos aquellos esquemas sin extrapolación para la matriz $\mathbb{B}_n$.
 Los esquemas con $k_{\mathbb{B}}=3$ y $k_{\mathbb{B}}=5$ son los que más rápidamente bajan la cantidad de iteraciones,
@@ -755,8 +766,8 @@ Este efecto puede observarse a partir de los $10s$ de cálculo.
 Por el contrario, los esquemas con bajo órden de extrapolación para $\mathbb{B}_n$ y algún órden de extrapolación para $\bar{x}_n$ son más eficientes en esta etapa.
 Aquí podría pensarse que los esquemas de extrapolación son inestables ante perturbaciones en $\mathbb{B}_n$, pero estables para perturbaciones en $\bar{x}_n$.
 
-En base a estos resultados, se deduce que el esquema de generación de semillas ideal
-requeriría órdenes de extrapolación $k_{\bar{x}}$ y $k_{\mathbb{B}}$ dependientes del tiempo,
+En base a estos resultados, se deduce que el esquema de generación de semillas idóneo
+requiere órdenes de extrapolación $k_{\bar{x}}$ y $k_{\mathbb{B}}$ dependientes del tiempo,
 comenzando con alto $k_{\mathbb{B}}$ y bajo $k_{\bar{x}}$, y tendiendo a $k_{\mathbb{B}}=0$ y alto $k_{\bar{x}}$ a medida que avanza el cálculo.
 
 \section{Resolución de redes hidráulicas de múltiples componentes}
@@ -765,7 +776,7 @@ comenzando con alto $k_{\mathbb{B}}$ y bajo $k_{\bar{x}}$, y tendiendo a $k_{\ma
 \subsection*{Presentación del problema}
 \label{3:redes-presentacion}
 
-Con el interés de conocer el comportamiento de la metodología de resolución
+Con interés en conocer el comportamiento de la metodología de resolución
 para problemas abordados mediante el Método de Descomposición Dijsunta de Dominios en sistemas con grandes cantidades de incógnitas,
 se propuso analizar redes hidráulicas de múltiples componentes interconectados.
 La idea es utilizar modelos sencillos que describan el comportamiento de cada componente particular para poder centrar el análisis solo en el estudio de convergencia
@@ -779,26 +790,10 @@ Debido a la metodología de abordaje propuesta en el trabajo, las interfaces deb
 Por lo tanto, cada porción del sistema que comprende una ramificación es pensada como un subdominio diferente,
 de modo que cada subdominio contenga tres interfaces de acoplamiento.
 La Figura \ref{net16} esquematiza un modelo de estudio con 5 subsistemas acoplados.
-Cada subdominio es modelado con balances cero-dimensionales de conservación de masa y energía.
-Las ecuaciones resultantes para un subsistema genérico que no contiene bordes del dominio original son las siguientes:
-\begin{equation}
-\left \{
-\begin{array}{rcl}
-\frac{p_1}{\rho} + \frac{{v_1}^2}{2} &=& \frac{p_2}{\rho} + \frac{{v_2}^2}{2} + gz_2 + \Delta u_{12} \\
-\frac{p_1}{\rho} + \frac{{v_1}^2}{2} &=& \frac{p_3}{\rho} + \frac{{v_3}^2}{2} + gz_3 + \Delta u_{13} \\
-A_1 v_1 &=& A_2 v_2 + A_3 v_3
-\end{array}
-\right .
-\label{net-eq}
-\end{equation}
-donde los subíndices $1$, $2$ y $3$ refieren a diferentes extremos locales del contorno del subdominio,
-$p_i$, $v_i$, $z_i$, y $A_i$ indican \textit{presión}, \textit{velocidad}, \textit{altura} y \textit{área} de la sección en el extremo $i$ respectivamente,
-y $\Delta u_{ij}$ refiere a la diferencia de energía del flujo entre los exremos $i$ y $j$.
-El extremo 1 siempre corresponde al izquierdo de cada subdominio, y las otros se numeran en forma horaria creciente.
-Deben prestarse algunas consideraciones extras en las ecuaciones para los subsistemas que requieren condiciones $CB_{k,l}$ sobre extremos que pertenecían al borde original del sistema completo,
-donde $k$ indica el subsistema y $l$ el extremo local.
+Los parámetros geométricos de cada subsistema se sortean aleatoriamente entre valores típicos.
+El fluido de trabajo es agua a temperatura y presión ambiente.
 
-\begin{figure}
+\begin{figure}[ht]
 \centering{}
 \begin{tikzpicture}
 
@@ -845,15 +840,33 @@ donde $k$ indica el subsistema y $l$ el extremo local.
 \draw[-|] (n14.center) to[in=180, out=0] (n15.west);
 \draw[-|] (n14.center) to[in=180, out=0] (n16.west);
 
-
 \end{tikzpicture}
 \caption[Descomposición disjunta de dominios en el modelado de redes hidráulicas]
 {Descomposición disjunta de dominios en un modelo de red hidráulica con 16 incógnitas en las interfaces de acoplamiento.
-La incógnita $v_{i,j}$ refiere a la velocidad en el extremo $j$ del subsistema $i$.
-La incógnita $P_{i,j}$ agrupa las presiones estática y dinámica en el extremo $j$ del subsistema $i$.
+La incógnita $v_{i,j}$ refiere a la velocidad media en el extremo $j$ del subsistema $i$.
+La incógnita $P_{i,j}$ agrupa las presiones estática y dinámica medias en el extremo $j$ del subsistema $i$.
 Las incógnitas pueden reducirse rápidamente a la mitad aplicando las relaciones de continuidad \ref{continuidad}.}
 \label{net16}
 \end{figure}
+
+Cada subdominio es modelado con balances cero-dimensionales de conservación de masa y energía.
+Las ecuaciones resultantes para un subsistema genérico que no contiene bordes del dominio original son las siguientes:
+\begin{equation}
+\left \{
+\begin{array}{rcl}
+\frac{p_1}{\rho} + \frac{{v_1}^2}{2} &=& \frac{p_2}{\rho} + \frac{{v_2}^2}{2} + gz_2 + \Delta u_{12} \\
+\frac{p_1}{\rho} + \frac{{v_1}^2}{2} &=& \frac{p_3}{\rho} + \frac{{v_3}^2}{2} + gz_3 + \Delta u_{13} \\
+A_1 v_1 &=& A_2 v_2 + A_3 v_3
+\end{array}
+\right .
+\label{net-eq}
+\end{equation}
+donde los subíndices $1$, $2$ y $3$ refieren a diferentes extremos locales del contorno del subdominio,
+$p_i$, $v_i$, $z_i$, y $A_i$ indican \textit{presión}, \textit{velocidad}, \textit{altura} y \textit{área} de la sección en el extremo $i$ respectivamente,
+y $\Delta u_{ij}$ refiere a la diferencia de energía del flujo entre los exremos $i$ y $j$.
+El extremo 1 siempre corresponde al izquierdo de cada subdominio, y las otros se numeran en forma horaria creciente.
+Deben prestarse algunas consideraciones extras en las ecuaciones para los subsistemas que requieren condiciones $CB_{k,l}$ sobre extremos que pertenecían al borde original del sistema completo,
+donde $k$ indica el subsistema y $l$ el extremo local.
 
 Los términos de presión estática $\frac{p_i}{\rho}$ y presión dinámica $\frac{{v_i}^2}{2}$ para el extremo $i$ pueden agruparse en una única incógnita $P_i$ para simplificar el cálculo:
 
@@ -874,7 +887,7 @@ $f_{D_i}$ corresponde al \textit{factor de Darcy} del flujo en esa porción
 y $K_{i,t}$ corresponde al \textit{factor de pérdida de carga concentrada t} de cualquier componente hidráulico presente lo largo de algún punto de esa porción de cañería.
 Bajo algunas modificaciones sería posible incorporar cambios en las secciones a lo largo de estas porciones, pero no se realizó por simplicidad.
 
-Considerando que el flujo corre por la red hidráulica en régimen laminar, $f_{D_i}$ puede modelarse como \cite{white}:
+Considerando que el flujo corre por la red hidráulica en régimen laminar, el \textit{factor de Darcy} $f_{D_i}$ puede modelarse como \cite{white}:
 \begin{equation}
 f_{D_{{i},lam}} = \frac{64}{Re_{D_i}}
 \label{f-lam}
@@ -886,17 +899,25 @@ Bajo esta aproximación, la ecuación \ref{du} queda lineal en $v_i$ y en $v_j$ 
 \label{du}
 \end{equation}
 
+
+\subsection*{Estrategia de resolución}
+\label{resolucion-net}
+
 Conforme al esquema de resolución descripto en la sección \ref{1:abordaje},
 es necesario definir una estrategia para las condiciones de borde en las interfaces de acoplamiento de cada subsistema.
 La estrategia propuesta es establecer condiciones de tipo \textit{Dirichlet} sobre las interfaces ubicadas a la izquierda de cada subdominio (fijando $v$)
 y condiciones de tipo \textit{Neumann} sobre las interfaces ubicadas a la derecha (fijando $P$).
+Considerando las ecuaciones de continuidad \ref{continuidad} se seleccionan una serie de ecuaciones modelos \ref{ecuaciones-modelos}
+a partir de las relaciones \ref{net-eq} de manera que cada subproblema quede bien planteado.
+En cada interfaz de acoplamiento $j$ de cada subsistema $i$ queda definida una ecuación de residuo:
 
-Cada subdominio es modelado con funciones \textit{esclavas} sencillas escritas en \texttt{Octave}.
-Los parámetros geométricos de cada subsistema se sortean aleatoriamente entre valores típicos.
-El fluido de trabajo es agua a temperatura y presión ambiente.
-Los códigos esclavos calculan el valor de las incógnitas en cada una de las interfaces de acoplamiento a partir de los datos recibidos como condiciones de borde.
-El sistema de ecuaciones de residuos \ref{sistema-simple} resultante tras aplicar las ecuaciones de continuidad \ref{continuidad} entre subdominios,
-es resuelto por una función \textit{maestra}.
+\begin{equation}
+(R_{p,Q})_{i}^{j}=0 \\
+\end{equation}
+donde $R_{p,Q}$ es la diferencia entre el valor de la variable calculada en la interfaz $j$ del subsistema $i$ y el valor de la semilla correspondiente.
+
+Las ecuaciones de cada subsistema son resueltas mediante funciones escritas en \texttt{Octave}.
+En este caso el acoplamiento de funciones se da a través de una función \textit{maestra} también escrita en \texttt{Octave}.
 
 \subsection*{Redes hidráulicas con regímenes de flujo laminar}
 \label{laminar}
@@ -904,7 +925,7 @@ es resuelto por una función \textit{maestra}.
 En la Figura \ref{net_linear} (a) se pueden observar la cantidad de iteraciones requeridas por diferentes métodos para la convergencia de resultados
 en sistemas hidráulicos laminares sin pérdidas de carga concentrada,
 variando la cantidad de subsistemas acoplados.
-La cantidad de incógnitas en el eje $x$ corresponde a una simplificación obtenida tras aplicar las ecuaciones de continuidad.
+La cantidad de incógnitas en el eje $x$ corresponde a la simplificación obtenida tras aplicar las ecuaciones de continuidad \ref{continuidad}.
 
 \begin{figure}[ht]
 	\begin{minipage}{0.5\linewidth}
@@ -925,11 +946,11 @@ En la figura se observa que el método del punto fijo requiere excesiva cantidad
 Las mismas ascienden hasta 1000 para sistemas con 16 incógnitas reducidas,
 pero este valor puede variar dependiendo de las semillas iniciales y de los parámetros del sistema.
 El método de \textit{Broyden} requiere decenas de iteraciones para cada sistema.
-El método de \textit{Newton-Raphson}, el método de la \textit{secante} (construye la matriz jacobiana solo en la primera iteración y luego la utiliza sin cambios en las siguientes iteraciones)
-y el método de \textit{Shamanskii} (construye la matriz jacobiana cada $m$ iteraciones)
+El método de \textit{Newton-Raphson}, el método de la \textit{secante}
+y el método de \textit{Shamanskii} de tipo $m$=2
 requieren solo una iteración, debido a que los sistemas de cálculo son lineales
 (las tres curvas se encuentran superpuestas).
-Sin embargo, el parámetro de comparación de interés en estos casos para medir la eficiencia de cada método es la cantidad total de evaluaciones que requiere.
+Sin embargo, el parámetro de comparación de interés es la cantidad total de evaluaciones que requiere cada método.
 En la Figura \ref{net_linear} (b) se observa que la ventaja obtenida por los métodos que construyen la matriz jacobiana es despreciable frente al método de \textit{Broyden}.
 
 Debido a que los métodos \textit{quasi-Newton} han presentado elevada confiabilidad en la resolución de sistemas acoplados a lo largo de todo el trabajo,
@@ -939,25 +960,29 @@ y en la Figura \ref{net_linear_its_broy} se reportan los resultados.
 \begin{figure}[ht]
 \centering
 \includegraphics[scale = 1]{net_linear_its_broy.pdf}
-\caption[Comparación de diferentes esquemas \textit{quasi-Newton} para la resolución de sistemas de redes hidráulicas con regímenes de flujo laminar]
-{Comparación de diferentes esquemas \textit{quasi-Newton} para la resolución de sistemas de redes hidráulicas con regímenes de flujo laminar.}
+\caption[Comparación de diferentes esquemas de \textit{Broyden} para la resolución de sistemas de redes hidráulicas con regímenes de flujo laminar]
+{Comparación de diferentes esquemas de \textit{Broyden} para la resolución de sistemas de redes hidráulicas con regímenes de flujo laminar.}
 	\label{net_linear_its_broy}
 \end{figure}
 
 Además del método \textit{Broyden ortonormal}, que en este estudio se comporta con igual eficiencia que el método de \textit{Broyden} (ambas curvas se solapan),
 existen formulaciones que aproximan directamente la inversa de la matriz jacobiana (\textit{Broyden inverso 1} y \textit{Broyden inverso 2}).
-Estos métodos se conocen en la bibliografía como \textit{bad Broyden update} (\textit{mala actualización de Broyden}) \cite{griewank} y en la figura puede verse que tienen eficiencia inferior.
+Estos métodos se conocen en la bibliografía como \textit{bad Broyden update} (mala actualización de Broyden) \cite{griewank} y en la figura puede verse que tienen eficiencia inferior.
 
 El método de \textit{Broyden} se utilizó también mejorando la semilla inicial para la matriz $\mathbb{B}_n$.
-En los otros estudios reportados se utiliza la matriz identidad,
+En los otros esquemas reportados se utiliza la matriz identidad,
 pero aquí se reemplazó por una matriz con \textit{unos} en los elementos que corresponden a posiciones llenas de la matriz jacobiana original,
 y \textit{ceros} en el resto de los elementos.
 Este llenado es sencillo de implementar ya que simplemente depende de las relaciones de dependecia de las residuos y las incógnitas, que \textit{a priori} son conocidas.
-Con esta implementación puede observarse en la curva de \textit{Broyden con} $\mathbb{B}_{0,aprox}$ que la convergencia mejora a medida que la cantidad de incógnitas aumenta.
+Con esta implementación puede observarse en la curva de \textit{Broyden} con $\mathbb{B}_{0,aprox}$ que la convergencia mejora a medida que la cantidad de incógnitas aumenta.
 Una mejor semilla para la matriz $\mathbb{B}_{0}$ hubiera podido generarse con un cálculo de diferencias finitas,
 similar al que se venía utilizando para inicializar las matrices en las aplicaciones analizadas en \ref{3:ff} y \ref{3:mockup}.
 En este caso los resultados hubieran coincidido con los resultados del método de la secante, que efectúa el cálculo aproximado de $\mathbb{J}$ y luego converge en una sola iteración.
 
+Comúnmente las incógnitas tienen una numeración global, conforme al orden en el que se construyen las columnas de la matriz jacobiana
+(cada columna representa la derivada del vector residuo respecto de alguna incógnita).
+De ser posible, los residuos suelen ordenarse de forma tal que el residuo $i$ compute la diferencia entre el valor calculado y el valor \textit{guess} para la incógnita $i$.
+En estos casos utilizar la matriz identidada como semilla para $\mathbb{B}_{0}$ es una buena propuesta.
 La curva \textit{Broyden / residuos desordenados} corresponde a un esquema en el que el residuo $i$ se corresponde con alguna incógnita $j$ distinta de $i$.
 Utilizar la matriz identidad como semilla para $\mathbb{B}_n$ es una mala propuesta en este caso,
 ya que para cada fila $i$, el \textit{uno} debería ubicarse en la posición $j$.
@@ -1001,7 +1026,7 @@ solo se comporta bien a baja cantidad de incógnitas, y cuando la cantidad de in
 \subsection*{Estrategia de acoplamiento extendida}
 \label{3:strategy-extended}
 
-Si bien la estrategia de acoplamiento presentada en el \hyperlink{chapter.2}{Capítulo 2}
+Si bien la estrategia de resolución presentada en el \hyperlink{chapter.2}{Capítulo 2}
 corresponde a un equema para resolver problemas que han sido formulados mediante el Método de Descomposición Disjunta de Dominios,
 el sistema de ecuaciones acoplado a resolver podría provenir de otras formulaciones,
 y también ser abordados mediante la misma estrategia.
@@ -1009,7 +1034,7 @@ Es decir, la herramienta de acoplamiento puede ser utilizada para resolver cualq
 siempre que existan diferentes códigos que se encarguen de resolver parcialmente algunas de ellas.
 
 A continuación se propone un modelo simplificado para el análisis de la dinámica de núcleo de un reactor nuclear.
-En los dos últimos apartados se presentan dos ejemplos de acoplamiento neutrónico-termohidráulico utilizando este modelo.
+En los dos últimos apartados se presentan ejemplos de acoplamiento neutrónico-termohidráulico utilizando este modelo.
 
 \subsection*{Presentación del problema}
 \label{3:neut-th}
@@ -1047,15 +1072,11 @@ En caso contrario, debe repetirse el cálculo considerando otra distribución de
 \Delta \bar{\phi} = \frac{1}{k_{eff}}\Sigma \bar{\phi}
 \label{eq-nucleo}
 \end{equation}
-
 donde $\bar{\phi}$ es una función vectorial con el valor del flujo neutrónico en cada punto del espacio para diferentes grupos de energía,
-un vector con el valor del flujo neutrónico a diferentes grupos de energía en cada punto\footnote{
-Los puntos de cálculo pueden corresponder a nodos en formulaciones de diferencias finitas o de elementos finitos, o a celdas integrales en formulaciones de volúmenes finitos.	
-} de cálculo del reactor,
 $\Sigma$ es la matriz de secciones eficaces asociada a diferentes reacciones para diferentes grupos de energía,
 y $k_{eff}$ es el factor de criticidad del reactor.
 En el modelo propuesto las secciones eficaces dependen de la densidad del refrigerante $N_{ref}$, de la temperatura del refrigerante $T_{ref}$, de la temperatura del combustible $T_{comb}$, 
-y del valor histórico de quemado $B$ el material\cite{lamarsh},
+y del valor histórico de quemado $B$ del material \cite{lamarsh},
 para cada punto espacial y cada grupo de energía, de modo que:
 
 \begin{equation}
@@ -1065,7 +1086,7 @@ para cada punto espacial y cada grupo de energía, de modo que:
 
 La ecuación \ref{eq-nucleo} requiere condiciones de borde en el contorno del dominio de cálculo.
 En el primer ejemplo analizado se utilizan condiciones de borde homogéneas\footnote{
-Imponer un flujo nulo en el contorno del dominio implica utilizar la hipótesis de que el flujo se hace nulo a alguna distancia del borde (en la \textit{distancia extrapolada} \cite{lamarsh}),
+Imponer un flujo $\bar{phi}$ nulo en el contorno del dominio implica utilizar la hipótesis de que el flujo se hace nulo a alguna distancia del borde (en la \textit{distancia extrapolada} \cite{lamarsh}),
 y asumir al mismo tiempo que esta distancia es despreciable, para de esta forma no extender el dominio de cálculo.
 } sobre $\phi$.
 En el segundo ejemplo analizado se imponen condiciones de flujo entrante nulo.
@@ -1081,7 +1102,7 @@ P = \int_{vol} E_{fis,i} \Sigma_{fis,i} \phi_{i}
 donde $E_{fis,i}$ es la energía liberada por fisiones ocurridas en el rango de energía $i$,
 $\Sigma_{fis,i}$ es la sección eficaz de fisión condensada en el grupo de energía $i$ y
 $\phi_{i}$ es la componente del flujo neutrónico también dondensada en el grupo de energía $i$.
-La distribución de potencia $\bar{P}$ hallada es utilizada como fuente de energía en los cálculos acoplados de transferencia de energía.
+La distribución de potencia ${P}$ hallada es utilizada como fuente de energía en los cálculos acoplados de transferencia de energía.
 
 Los fenómenos hidrodinámicos y de transferencia de calor se modelan con ecuaciones uni-dimensionales y transitorias.
 La transferencia de calor a través de las estructuras de combustibles se modela con la siguiente ecuación diferencial:
@@ -1094,7 +1115,7 @@ donde $\rho$ es la densidad del medio difusivo,
 $T_{comb}$ es la temperatura del combustible,
 $k$ es el coeficiente de conductividad térmica y
 $S$ es la fuente interna de energía.
-Éste último término es el que tiene la información de la distribución de potencia generada en el núcleo del reactor.
+Este último término es el que tiene la información de la distribución de potencia generada en el núcleo del reactor.
 El modelo se completa con condiciones de borde adecuadas.
 El refrigerante fluye alrededor de las estructuras con temperatura media $T_{sk}$ y la energía transferida entre ambos se da por convección:
 
@@ -1103,7 +1124,7 @@ El refrigerante fluye alrededor de las estructuras con temperatura media $T_{sk}
 \label{relap-conveccion}
 \end{equation}
 donde $h$ es el coeficiente de transferencia de calor que debe obtenerse a partir de algún modelo adecuado para el régimen de flujo,
-y n es la dirección normal al borde del dominio de cálculo de $T_{comb}$.
+y $n$ es la dirección normal al borde del dominio de cálculo de $T_{comb}$.
 
 El modelo hidrodinámico del comportamiento del refrigerante considera una mezcla del fluido en fases líquida y gaseosa.
 Las ecuaciones básicas diferenciales de este modelo son seis \cite{manual-relap-modelos}.
@@ -1159,7 +1180,7 @@ debido a la aceleración relativa entre las fases.
 El coeficiente $C$ dependen del modelo que se utilice según el régimen de flujo.
 
 Las últimas dos ecuaciones hidrodinámicas son las ecuaciones de conservación de energía $U_i$ para cada fase.
-Considerando algunas simplificaciones\cite{manual-relap-modelos}, las ecuaciones son las siguientes:
+Considerando algunas simplificaciones \cite{manual-relap-modelos}, las ecuaciones son las siguientes:
 
 \begin{equation}
 \left \{
@@ -1195,10 +1216,10 @@ de transferencia de calor en la interfaz y con estructuras,
 de fricción en la interfaz y con estructuras, y
 de disipación viscosa.
 
-\subsection*{Modelo de resolución}
+\subsection*{Estrategia de resolución}
 \label{3:modelo-nt}
 
-La evolución temporal se discretiza en intervalos grupos de días.
+La evolución temporal se discretiza en intervalos de una cierta cantidad de días.
 En el primer paso de cálculo se supone que el valor $B$ del quemado es nulo para todas las zonas físicas definidias,
 y a partir del segundo paso el valor del quemado se actualiza localmente suponiendo que el último ritmo de fisiones calculado en esa zona se mantiene constante.
 En cada paso de quemado,
@@ -1215,8 +1236,12 @@ El cálculo termohidráulico arroja variables promediadas en diferentes zonas ax
 En el cálculo neutrónico, se definen zonas axiales en base a la misma discretización,
 en cada una de las cuales las secciones eficaces son calculadas a partir de las variables termohidráulicas de la zona correspondiente.
 y del valor histórico del quemado que se va almacenando en diferentes regiones físicas predefinidas.
-La potencia calculada se integra en cada una de ellas.
+La potencia calculada se integra también en cada zona axial.
 Con este modelo, quedan definidas cuatro variables de acoplamiento en cada posición axial $i$: $T_{comb,i}$, $T_{ref,i}$ y $N_{ref,i}$ y $P_i$.
+
+En los dos ejemplos presentados a continuación, el código \textit{maestro} utilizado es \textbf{Newton}.
+La comunicación entrecódigos \textit{esclavos} se da por manejo de archivos,
+y con este fin se desarrollaron funciones de lectura y escritura específicas para los códigos de cálculo utilizados.
 
 \subsection*{Acoplamiento neutrónico-termohidráulico utilizando \textbf{RELAP5} y \textbf{Fermi}}
 \label{3:relap-fermi}
@@ -1256,7 +1281,7 @@ a partir de tablas de secciones eficaces proporcionadas por DIFRA (departamento 
 
 La evolución temporal se discretiza en intervalos de 10 días.
 Se definen cinco zonas axiales de acoplamiento.
-Con el modelode resolución previamente comentado, quedan definidas en total veinte incógnitas de acoplamiento.
+Con el modelo de resolución previamente comentado, quedan definidas en total veinte incógnitas de acoplamiento.
 En la Figura \ref{esquema-fermi-relap} se esquematiza la estrategia para un paso de quemado genérico.
 Los mapeos entre las variables termohidráulicas y las secciones eficaces fueron implementados en la función \textit{th2xs} en el código \textit{maestro} \textbf{Newton}.
 Las potencias $P_i$ calculadas por el código neutrónico son escaleadas mediante la función $P2p$ a valores $p_i$ en el cálculo de residuos.
@@ -1362,24 +1387,21 @@ En este ejemplo los programas \textbf{Fermi} y \textbf{RELAP5} se comunican con 
 El modelo neutrónico es resuelto con \textbf{Fermi} \cite{fermi}.
 %\textbf{Fermi} es un código de núcleo desarrollado por Guido Giuntoli que calcula el flujo neutrónico a un grupo de energía a partir de un esquema de elementos finitos de la ecuación \ref{eq-nucleo}.
 \textbf{Fermi} es un código de núcleo que calcula el flujo neutrónico a un grupo de energía a partir de un esquema de elementos finitos de la ecuación \ref{eq-nucleo}.
-Las ecuaciones modelos presentadas en \ref{relap-calor}, \ref{relap-masa}, \ref{relap-momento} y \ref{relap-energia}
+Las ecuaciones modelos presentadas en \ref{relap-calor}, \ref{relap-masa}, \ref{relap-momento} y \ref{relap-energia},
 los modelos de cierre necesarios para formular problemas bien definidos que ajusten a los distintos regímenes de flujo,
 y las ecuaciones modelos para las condiciones de borde de cada una de estas ecuaciones,
 son resueltas con \textbf{RELAP5}.
-\textbf{RELAP5} es un código de análisis de seguridad de reactores nucleares desarrollado por el Laboratorio Nacional de Idaho (INL por sus siglas en inglés, \textit{Idaho National Laboratory}.
+\textbf{RELAP5} es un código de análisis de seguridad de reactores nucleares desarrollado por el Laboratorio Nacional de Idaho (INL por sus siglas en inglés, \textit{Idaho National Laboratory}).
 \textbf{RELAP5} ha sido validado en cálculos termohidráulicos de reactores nucleares y debido al amplio uso que tiene este código a nivel internacional
 se decidió utilizar en la resolución del problema modelado en la presente sección,
 para demostrar la posibilidad de uso en acoplamientos mediante la estrategia descripta en el \hyperlink{chapter.2}{Capítulo 2}.
 \textbf{RELAP5} resuelve las ecuaciones \ref{relap-calor}, \ref{relap-masa}, \ref{relap-momento} y \ref{relap-energia} a partir de esquemas semi-implícitos de diferencias finitas.
 
-La comunicación entre códigos se implementó mediante manejo de archivos,
-y con este fin se desarrollaron funciones de lectura y escritura específicas para los códigos de cálculo utilizados.
-
 La resolución del sistema acoplado se llevó a cabo utilizando tres métodos diferentes.
 En la Figura \ref{fig-relap-fermi} se muestra la cantidad de evaluaciones de funciones en cada paso de quemado requerida por cada método,
 y la Tabla \ref{tab-relap-fermi} integra la cantidad total de evaluaciones y el tiempo consumido por cada uno.
-El primer método utilizado fue el método explícito \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}).
 
+El primer método utilizado fue el método explícito \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}), y es el que consume mayor tiempo de cálculo.
 El segundo método utilizado es otro método explícito, el método del punto fijo.
 Este método demuestra la ventaja de mantener a los diferentes programas \textit{exclavos} corriendo en paralelo.
 Por último, se utilizó el método de \textit{Broyden} que en previas aplicaciones había demostrado muy buenos resultados.
@@ -1453,9 +1475,6 @@ Las ecuaciones hidrodinámicas son resueltas con \textbf{RELAP5}.
 La evolución temporal se discretiza en intervalos de 10 días.
 La altura del núcleo se discretiza en tramos de 5 cm, con lo que quedan definidas 28 zonas axiales diferentes que se mantienen acopladas entre ambos modelos.
 Como en cada zona axial quedan definidas cuatro incógnitas de acoplamiento, en total existen 112 incógnitas.
-
-La comunicación entre códigos se implementó mediante manejo de archivos,
-por lo que en este caso se desarrollaron funciones específicas para la escritura y lectura de datos que a su vez son manipulados por \textit{scripts} de \textbf{PUMA}.
 
 \begin{minipage}{\textwidth}
 \begin{minipage}[b]{0.49\textwidth}
