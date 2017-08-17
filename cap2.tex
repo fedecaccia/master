@@ -61,7 +61,7 @@ El proceso que envía,
 necesita conocer la localización, el tamaño y el tipo de los datos, así como el
 proceso destino.
 
-Estas funcionalidades se implementaron siguiendo el protocolo del estándard Interfaz de Paso de Mensajes (MPI por sus siglas en inglés, \textit{Message Passing Interface}). 
+Estas funcionalidades se implementaron siguiendo el protocolo del estándard Interfaz de Paso de Mensajes (MPI, por sus siglas en inglés). 
 MPI es una especificación de paso de mensajes aceptada como estándar
 por todos los fabricantes de computadores. 
 El objetivo principal de MPI es proporcionar un estándar para escribir
@@ -71,16 +71,16 @@ la disponibilidad de las aplicaciones.
 
 Se utilizaron dos implementaciones alternativas.
 En la primera, cada código \textit{esclavo}, así como el código \textit{maestro},
-es ejecutado de manera independiente en uno (SISD por sus siglas en inglés, \textit{Single Instruction, Single Data})
-o múltiples procesos (SIMD por sus siglas en inglés, \textit{Single Instruction, Multiple Data}).
+es ejecutado de manera independiente en uno (SISD, por sus siglas en inglés)
+o múltiples procesos (SIMD, por sus siglas en inglés).
 El código \textit{maestro} publica una serie de puertos a los cuales cada código \textit{esclavo} puede conectarse\footnote{
 Para que los programas puedan encontrar los puertos publicados, es necesario que todos ellos pertenezcan a un mismo servicio de comunicación generado por el \textit{ompi-server}.
 }.
 Una vez aceptadas las conexiones, los programas pueden intercambiar mensajes con él siguiendo una lógica preestablecida.
 Cuando ya no es necesario que los programas continúen comunicándose, se cierran las conexiones.
 
-En la otra implementación, todos los programas son ejecutados al mismo tiempo en uno (MISD por sus siglas en inglés, \textit{Multiple Instruction, Single Data})
-o varios procesos (MIMD por sus siglas en inglés, \textit{Multiple Instruction, Multiple Data}).
+En la otra implementación, todos los programas son ejecutados al mismo tiempo en uno (MISD, por sus siglas en inglés)
+o varios procesos (MIMD, por sus siglas en inglés).
 En este tipo de ejecuciones todos los procesos cuentan con un único comunicador original, \textit{MPI\_COMM\_WORLD}, y por ello es necesario crear nuevos grupos de procesos y de comunicadores.
 Una vez establecidos los comunicadores, los programas ya pueden intercambiar mensajes con el código \textit{maestro} siguiendo la misma lógica que se establecerá para ambos modelos.
 Si bien esta implementación no es posible para nuevas conexiones una vez que los programas han sido ejecutados,

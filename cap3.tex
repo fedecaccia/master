@@ -272,7 +272,8 @@ ya que el tiempo de cálculo está directamente relacionado con ellas.
 En la Figura \ref{iteraciones_ri} puede apreciarse la cantidad de evaluaciones requeridas 
 por cada método para disminuir los residuos debajo de cierta tolerancia prefijada, para cada paso temporal.
 El método de \textit{Newton} calcula la matriz jacobiana en cada iteración.
-Este cálculo se realiza con diferencias finitas a primer órden y por lo tanto requiere 1 evaluación de los residuos en el punto inicial, y 8 evaluaciones extras para el cálculo de cada diferencia finita.
+Este cálculo se realiza con diferencias finitas a primer órden y por lo tanto requiere 1 evaluación de los residuos en el punto inicial,
+y 8 evaluaciones extras para el cálculo de cada diferencia finita.
 En total son 9 evaluaciones extras.
 Puede observarse que la cantidad de iteraciones del método para converger es en promedio una sola, ya que en general utiliza 10 evaluaciones en cada paso temporal.
 
@@ -304,7 +305,7 @@ a la investigación científica de haces de neutrones en diferentes rangos de en
 y al ensayo de materiales.
 El RA-10 es un reactor de pileta abierta de flujo ascendente, con combustibles de bajo enriquecimiento tipo placa y agua liviana como refrigerante.
 El núcleo del reactor está inmerso en un tanque que contiene agua pesada como material reflector.
-El SSP consiste en el accionamiento del vaciado este tanque.
+El SSP consiste en el accionamiento del vaciado de este tanque.
 El drenado del agua pesada disminuye drásticamente la reactividad, apagando el reactor.
 La tarea de estudio consistió en verificar si el diseño cumple con el criterio de éxito,
 a saber, completar el 55\% del vaciado en un tiempo inferior a los 15 segundos,
@@ -434,11 +435,11 @@ Más adelante se estudia la validez de éstas aproximaciones.
 Los datos dimensionales de las cañerías pueden consultarse en las referencias \cite{invap-mockup}.
 
 Debido a que el régimen del fluido es turbulento durante la mayor parte de la descarga,
-y una simulación DNS (Simulación Numérica Directa, por sus siglas en inglés \textit{Direct Numerical Simulation} demandaría elevados recursos computacionales,
-se utiliza un modelo de turbulencia de tipo RANS (Promedio de Reynolds de Navier-Stokes, por sus siglas en inglés \textit{Reynolds-Averaged Navier–Stokes})
+y una simulación Simulación Numérica Directa (DNS, por sus siglas en inglés) demandaría elevados recursos computacionales,
+se utiliza un modelo de turbulencia de tipo Promedio de Reynolds de Navier-Stokes (RANS, por sus siglas en inglés)
 para modelar la fricción interna del fluido.
 El modelo utilizado es el modelo $\kappa-\epsilon$ \textit{realizable} \cite{k-e-realizable},
-en el que las ecuaciones se estabilizan mediante un método de control de coeficiente.
+en el que las ecuaciones se estabilizan mediante un método de control de coeficientes.
 El sistema de ecuaciones resultantes en el segundo subsistema es:
 
 \begin{equation}
@@ -486,7 +487,7 @@ en el segundo paso se resuelve el transporte de $\epsilon$,
 y en el último paso se resuelven en forma monolítica las ecuaciones de \textit{Navier-Stokes}.
 
 Una vez resueltas las ecuaciones,
-si la condición de borde en la interfaz de acople $I_{2_1}$ había sido el caudal $Q_2^1$,
+si la condición de borde en la interfaz de acople $I_2^1$ había sido el caudal $Q_2^1$,
 es posible calcular el valor de la presión promedio $<p_2^1>$ en esta interfaz
 a partir de los valores $<P^*_{I_2^1}>$ y $<\kappa_{I_2^1}>$ promediados en ella:
 
@@ -507,7 +508,7 @@ La estretegia implementada es similar a la utilizada en \ref{3:ff} y consiste en
 Las fuerzas tagenciales se consideran nulas.
 A fines de cumplir con esta hipóteisis, la interfaz de acople se selecciona lejos de los codos.
 El subsistema tanque del reflector tiene como incógnitas la presión $p_1^1$ y el caudal $Q_1^1$ en la interfaz de acople $I_1^1$.
-Asimismo, el subsistema arreglo de válvulas tiene como incógnitas $p_2^1$ y $Q_2^1$ en $I_{2_1}$.
+Asimismo, el subsistema arreglo de válvulas tiene como incógnitas $p_2^1$ y $Q_2^1$ en $I_2^1$.
 Las ecuaciones de continuidad implican que:
 
 \begin{equation}
@@ -671,17 +672,17 @@ y por lo tanto la aproximación realizada inicialmente es conservativa, ya que c
 En la Figura \ref{evol-ls} se observa la evolución de la superficie libre en el arreglo de válvulas durante los primeros instantes de tiempo.
 
 \begin{figure}[ht]
-\begin{minipage}[t]{.48\textwidth}
+\begin{minipage}{.5\linewidth}
 \centering
-\subfloat[t = 0 s]{\includegraphics[scale=0.15]{0ms.png}}\\
-\subfloat[t = 0.6 s]{\includegraphics[scale=0.15]{600ms.png}}\\
-\subfloat[t = 1.2 s]{\includegraphics[scale=0.15]{1200ms.png}}
+\subfloat[t = 0 s]{\includegraphics[scale=0.135]{0ms.png}}\\
+\subfloat[t = 0.6 s]{\includegraphics[scale=0.135]{600ms.png}}\\
+\subfloat[t = 1.2 s]{\includegraphics[scale=0.135]{1200ms.png}}
 \end{minipage}\hfill
-\begin{minipage}[t]{.48\textwidth}
+\begin{minipage}{.5\linewidth}
 \centering
-\subfloat[t = 0.3 s]{\includegraphics[scale=0.15]{300ms.png}}\\
-\subfloat[t = 0.9 s]{\includegraphics[scale=0.15]{900ms.png}}\\
-\subfloat[t = 2.0 s]{\includegraphics[scale=0.15]{2000ms.png}}
+\subfloat[t = 0.3 s]{\includegraphics[scale=0.135]{300ms.png}}\\
+\subfloat[t = 0.9 s]{\includegraphics[scale=0.135]{900ms.png}}\\
+\subfloat[t = 2.0 s]{\includegraphics[scale=0.135]{2000ms.png}}
 \end{minipage}
 \caption[Transitorio inicial de la descarga del tanque a través del arreglo de válvulas del \textit{mockup} del reactor OPAL, con detalle de la evolución de la superficie libre]
 {Transitorio inicial de la descarga del tanque a través del arreglo de válvulas, con falla simple en la última válvula
@@ -777,7 +778,7 @@ comenzando con alto $k_{\mathbb{B}}$ y bajo $k_{\bar{x}}$, y tendiendo a $k_{\ma
 \label{3:redes-presentacion}
 
 Con interés en conocer el comportamiento de la metodología de resolución
-para problemas abordados mediante el Método de Descomposición Dijsunta de Dominios en sistemas con grandes cantidades de incógnitas,
+para problemas abordados mediante el Método de Descomposición Disjunta de Dominios en sistemas con grandes cantidades de incógnitas,
 se propuso analizar redes hidráulicas de múltiples componentes interconectados.
 La idea es utilizar modelos sencillos que describan el comportamiento de cada componente particular para poder centrar el análisis solo en el estudio de convergencia
 de resultados, analizando estados estacionarios.
@@ -800,24 +801,24 @@ El fluido de trabajo es agua a temperatura y presión ambiente.
 % Nodos
 \node [label={\small $S_3$}] at (0em,0em) (n8) {};
 
-\node [right of=n8, xshift=3em, yshift=-2em, align=center] (n13) {\small $v_{3,3}, \quad v_{5,1},$ \\ $P_{3,3}$ \quad $P_{5,1}$};
+\node [right of=n8, xshift=3em, yshift=-2em, align=center] (n13) {\small $v_{3}^{3}, \quad v_{5}^{1},$ \\ $P_{3}^{3}$ \quad $P_{5}^{1}$};
 \node [right of=n13, xshift=3em, yshift=-2em, label={\small $S_5$}] (n14) {};
-\node [right of=n14, xshift=2em, yshift=-2em] (n16) {\small $CB_{5,3}$};
-\node [right of=n14, xshift=2em, yshift=2em] (n15) {\small $CB_{5,2}$};
+\node [right of=n14, xshift=2em, yshift=-2em] (n16) {\small $CB_{5}^{3}$};
+\node [right of=n14, xshift=2em, yshift=2em] (n15) {\small $CB_{5}^{2}$};
 
-\node [right of=n8, xshift=3em, yshift=2em, align=center] (n9) {\small $v_{3,2}, \quad v_{4,1},$ \\ $P_{3,2}$ \quad $P_{4,1}$};
+\node [right of=n8, xshift=3em, yshift=2em, align=center] (n9) {\small $v_{3}^{2}, \quad v_{4}^{1},$ \\ $P_{3}^{2}$ \quad $P_{4}^{1}$};
 \node [right of=n9, xshift=3em, yshift=0em, label={\small $S_4$}] (n10) {};
-\node [right of=n10, xshift=2em, yshift=-2em] (n12) {\small $CB_{4,3}$};
-\node [right of=n10, xshift=2em, yshift=2em] (n11) {\small $CB_{4,2}$};
+\node [right of=n10, xshift=2em, yshift=-2em] (n12) {\small $CB_{4}^{3}$};
+\node [right of=n10, xshift=2em, yshift=2em] (n11) {\small $CB_{4}^{2}$};
 
-\node [left of=n8, xshift=-3em, yshift=2em, align=center] (n7) {\small $v_{1,3}, \quad v_{3,1},$ \\ $P_{1,3}$ \quad $P_{3,1}$};
+\node [left of=n8, xshift=-3em, yshift=2em, align=center] (n7) {\small $v_{1}^{3}, \quad v_{3}^{1},$ \\ $P_{1}^{3}$ \quad $P_{3}^{1}$};
 \node [left of=n7, xshift=-4em, yshift=3em, label={\small $S_1$}] (n2) {};
-\node [left of=n2, xshift=-1em, yshift=-0em] (n1) {\small $CB_{1}$};
+\node [left of=n2, xshift=-1em, yshift=-0em] (n1) {\small $CB_{1}^{1}$};
 
-\node [right of=n2, xshift=4em, yshift=3em, align=center] (n3) {\small $v_{1,2}, \quad v_{2,1},$ \\ $P_{1,2}$ \quad $P_{2,1}$};
+\node [right of=n2, xshift=4em, yshift=3em, align=center] (n3) {\small $v_{1}^{2}, \quad v_{2}^{1},$ \\ $P_{1}^{2}$ \quad $P_{2}^{1}$};
 \node [right of=n3, xshift=3em, yshift=0em, label={\small $S_2$}] (n4) {};
-\node [right of=n4, xshift=2em, yshift=2em] (n5) {\small $CB_{2,2}$};
-\node [right of=n4, xshift=2em, yshift=-2em] (n6) {\small $CB_{2,3}$};
+\node [right of=n4, xshift=2em, yshift=2em] (n5) {\small $CB_{2}^{2}$};
+\node [right of=n4, xshift=2em, yshift=-2em] (n6) {\small $CB_{2}^{3}$};
 
 % Conexiones
 \draw[|-] (n1.east) to [in=180, out=0] (n2.center);
@@ -843,9 +844,9 @@ El fluido de trabajo es agua a temperatura y presión ambiente.
 \end{tikzpicture}
 \caption[Descomposición disjunta de dominios en el modelado de redes hidráulicas]
 {Descomposición disjunta de dominios en un modelo de red hidráulica con 16 incógnitas en las interfaces de acoplamiento.
-La incógnita $v_{i,j}$ refiere a la velocidad media en el extremo $j$ del subsistema $i$.
-La incógnita $P_{i,j}$ agrupa las presiones estática y dinámica medias en el extremo $j$ del subsistema $i$.
-Las incógnitas pueden reducirse rápidamente a la mitad aplicando las relaciones de continuidad \ref{continuidad}.}
+La incógnita $v_{i}^{j}$ refiere a la velocidad media en el extremo $j$ del subsistema $i$.
+La incógnita $P_{i}^{j}$ agrupa las presiones estática y dinámica medias en el extremo $j$ del subsistema $i$.
+Las incógnitas pueden reducirse rápidamente a la mitad aplicando relaciones de continuidad de campos de variables.}
 \label{net16}
 \end{figure}
 
@@ -865,7 +866,7 @@ donde los subíndices $1$, $2$ y $3$ refieren a diferentes extremos locales del 
 $p_i$, $v_i$, $z_i$, y $A_i$ indican \textit{presión}, \textit{velocidad}, \textit{altura} y \textit{área} de la sección en el extremo $i$ respectivamente,
 y $\Delta u_{ij}$ refiere a la diferencia de energía del flujo entre los exremos $i$ y $j$.
 El extremo 1 siempre corresponde al izquierdo de cada subdominio, y las otros se numeran en forma horaria creciente.
-Deben prestarse algunas consideraciones extras en las ecuaciones para los subsistemas que requieren condiciones $CB_{k,l}$ sobre extremos que pertenecían al borde original del sistema completo,
+Deben prestarse algunas consideraciones extras en las ecuaciones para los subsistemas que requieren condiciones $CB_{k}^{l}$ sobre extremos que pertenecían al borde original del sistema completo,
 donde $k$ indica el subsistema y $l$ el extremo local.
 
 Los términos de presión estática $\frac{p_i}{\rho}$ y presión dinámica $\frac{{v_i}^2}{2}$ para el extremo $i$ pueden agruparse en una única incógnita $P_i$ para simplificar el cálculo:
@@ -909,12 +910,19 @@ La estrategia propuesta es establecer condiciones de tipo \textit{Dirichlet} sob
 y condiciones de tipo \textit{Neumann} sobre las interfaces ubicadas a la derecha (fijando $P$).
 Considerando las ecuaciones de continuidad \ref{continuidad} se seleccionan una serie de ecuaciones modelos \ref{ecuaciones-modelos}
 a partir de las relaciones \ref{net-eq} de manera que cada subproblema quede bien planteado.
-En cada interfaz de acoplamiento $j$ de cada subsistema $i$ queda definida una ecuación de residuo:
+En cada interfaz de acoplamiento de cada subsistema queda definida una ecuación de residuo:
 
 \begin{equation}
-(R_{p,Q})_{i}^{j}=0 \\
+\left \{
+\begin{array}{rcl}
+R_1 &=& v_1^{2,guess} - v_1^{2,calc} \\
+R_2 &=& v_1^{3,guess} - v_1^{3,calc} \\
+R_4 &=& P_2^{1,guess} - P_2^{1,calc} \\
+...
+\end{array}
+\right .
 \end{equation}
-donde $R_{p,Q}$ es la diferencia entre el valor de la variable calculada en la interfaz $j$ del subsistema $i$ y el valor de la semilla correspondiente.
+donde la cantidad de residuos depende del tamaño del sistema a analizar.
 
 Las ecuaciones de cada subsistema son resueltas mediante funciones escritas en \texttt{Octave}.
 En este caso el acoplamiento de funciones se da a través de una función \textit{maestra} también escrita en \texttt{Octave}.
@@ -1074,7 +1082,7 @@ En caso contrario, debe repetirse el cálculo considerando otra distribución de
 \end{equation}
 donde $\bar{\phi}$ es una función vectorial con el valor del flujo neutrónico en cada punto del espacio para diferentes grupos de energía,
 $\Sigma$ es la matriz de secciones eficaces asociada a diferentes reacciones para diferentes grupos de energía,
-y $k_{eff}$ es el factor de criticidad del reactor.
+y $k_{eff}$ es el factor de multiplicación del reactor.
 En el modelo propuesto las secciones eficaces dependen de la densidad del refrigerante $N_{ref}$, de la temperatura del refrigerante $T_{ref}$, de la temperatura del combustible $T_{comb}$, 
 y del valor histórico de quemado $B$ del material \cite{lamarsh},
 para cada punto espacial y cada grupo de energía, de modo que:
@@ -1240,7 +1248,7 @@ La potencia calculada se integra también en cada zona axial.
 Con este modelo, quedan definidas cuatro variables de acoplamiento en cada posición axial $i$: $T_{comb,i}$, $T_{ref,i}$ y $N_{ref,i}$ y $P_i$.
 
 En los dos ejemplos presentados a continuación, el código \textit{maestro} utilizado es \textbf{Newton}.
-La comunicación entrecódigos \textit{esclavos} se da por manejo de archivos,
+La comunicación entre códigos \textit{esclavos} se da por manejo de archivos,
 y con este fin se desarrollaron funciones de lectura y escritura específicas para los códigos de cálculo utilizados.
 
 \subsection*{Acoplamiento neutrónico-termohidráulico utilizando \textbf{RELAP5} y \textbf{Fermi}}
@@ -1250,7 +1258,8 @@ En el primer ejemplo analizado, se estudia el acoplamiento neutrónico-termohidr
 El dominio de cálculo neutrónico consiste en un modelo de núcleo sencillo propuesto para evaluar la estrategia de acoplamiento,
 con dimensiones y parámetros arbitrarios.
 Nueve elementos combustibles son dispuestos en un arreglo de 3x3 dentro de un núcleo cúbico de un metro de lado con generación de 100MW térmicos.
-En la Figura \ref{fuel_z5} puede observarse la geometría utilizada.
+En la Figura \ref{fuel_z5} puede observarse la geometría utilizada y la distribución del flujo neutrónico en el núcleo.
+Sobre el final del ciclo de quemado, la distribución del flujo apenas varía.
 
 \begin{figure}[ht]
 	\begin{minipage}{0.5\linewidth}
@@ -1263,7 +1272,7 @@ En la Figura \ref{fuel_z5} puede observarse la geometría utilizada.
 	\end{minipage}
 \caption[Núcleo simple en análisis de acoplamiento neutrónico-termohidráulico utilizando \textit{RELAP5} y \textit{Fermi}]
 {\textbf{(a)} Esquema de núcleo simple en análisis de acoplamiento neutrónico-termohidráulico utilizando \textbf{RELAP5} y \textbf{Fermi}.
-\textbf{(b)} Distribución del flujo neutrónico obtenido en un corte axial a 0.25 $cm$ desde la base del núcleo.
+\textbf{(b)} Distribución del flujo neutrónico obtenido en un corte axial a 0.25 $cm$ desde la base del núcleo a principio del ciclo de quemado.
 }
 \label{fuel_z5}
 \end{figure}
@@ -1385,61 +1394,68 @@ En este ejemplo los programas \textbf{Fermi} y \textbf{RELAP5} se comunican con 
 \end{figure}
 
 El modelo neutrónico es resuelto con \textbf{Fermi} \cite{fermi}.
-%\textbf{Fermi} es un código de núcleo desarrollado por Guido Giuntoli que calcula el flujo neutrónico a un grupo de energía a partir de un esquema de elementos finitos de la ecuación \ref{eq-nucleo}.
 \textbf{Fermi} es un código de núcleo que calcula el flujo neutrónico a un grupo de energía a partir de un esquema de elementos finitos de la ecuación \ref{eq-nucleo}.
 Las ecuaciones modelos presentadas en \ref{relap-calor}, \ref{relap-masa}, \ref{relap-momento} y \ref{relap-energia},
 los modelos de cierre necesarios para formular problemas bien definidos que ajusten a los distintos regímenes de flujo,
 y las ecuaciones modelos para las condiciones de borde de cada una de estas ecuaciones,
 son resueltas con \textbf{RELAP5}.
-\textbf{RELAP5} es un código de análisis de seguridad de reactores nucleares desarrollado por el Laboratorio Nacional de Idaho (INL por sus siglas en inglés, \textit{Idaho National Laboratory}).
+\textbf{RELAP5} es un código de análisis de seguridad de reactores nucleares desarrollado por el Laboratorio Nacional de Idaho (INL, por sus siglas en inglés).
 \textbf{RELAP5} ha sido validado en cálculos termohidráulicos de reactores nucleares y debido al amplio uso que tiene este código a nivel internacional
 se decidió utilizar en la resolución del problema modelado en la presente sección,
 para demostrar la posibilidad de uso en acoplamientos mediante la estrategia descripta en el \hyperlink{chapter.2}{Capítulo 2}.
 \textbf{RELAP5} resuelve las ecuaciones \ref{relap-calor}, \ref{relap-masa}, \ref{relap-momento} y \ref{relap-energia} a partir de esquemas semi-implícitos de diferencias finitas.
 
-La resolución del sistema acoplado se llevó a cabo utilizando tres métodos diferentes.
-En la Figura \ref{fig-relap-fermi} se muestra la cantidad de evaluaciones de funciones en cada paso de quemado requerida por cada método,
-y la Tabla \ref{tab-relap-fermi} integra la cantidad total de evaluaciones y el tiempo consumido por cada uno.
+La resolución del sistema acoplado se llevó a cabo utilizando cuatro métodos diferentes.
+Cada paso de quemado se consideró convergido cuando la norma infinito del residuo se hizo inferior a una tolerancia $tol$ absoluta prefijada.
+Esta tolerancia $tol$ se fijo en $0.1$.
+Esta propuesta implica iterar con la solución hasta que el residuo en cada variable caiga por debajo de $0.1$, que es la precisión de los resultados impresos por \textbf{RELAP5}.
+Exigir una mayor precisión en la impresión de resultados no es justificable debido a los modelos y las aproximaciones utilizadas.
+En todos los métodos se utilizó extrapolación lineal para proponer la semilla $\bar{x}_0^n$ en el cálculo del paso de quemado $n$.
+La Figura \ref{figura-relap-fermi} muestra la cantidad de evaluaciones de funciones requerida por cada método para la convergencia de la solución en cada paso de quemado,
+y la Tabla \ref{tabla-relap-fermi} integra la cantidad total de evaluaciones y el tiempo consumido por cada uno.
 
-El primer método utilizado fue el método explícito \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}), y es el que consume mayor tiempo de cálculo.
-El segundo método utilizado es otro método explícito, el método del punto fijo.
-Este método demuestra la ventaja de mantener a los diferentes programas \textit{exclavos} corriendo en paralelo.
-Por último, se utilizó el método de \textit{Broyden} que en previas aplicaciones había demostrado muy buenos resultados.
-Si bien este método requiere excesivas evaluaciones en la primera iteración del primer paso de cálculo para la construcción de la matriz jacobiana,
-en los siguientes pasos de quemado converge con pocas iteraciones, y finalmente
-este método es el que converge en la menor cantidad de tiempo.
-El método de \textit{Newton-Raphson}, otros métodos \textit{quasi-Newton} como el método de la \textit{secante} o \textit{Shamanskii} y los métodos \textit{Newton-Krylov}
-no fueron tenidos en cuenta puesto que hubieran requerido numerosas evaluaciones\footnote{
-Si bien los recursos utilizados serían elevados,
-no debería influir en el tiempo de cálculo cuando las evaluaciones solo son necesarias para la construcción de la matriz jacobiana,
-puesto que este tipo de cálculo es paralelizable.
-} de funciones debido a la gran cantidad de incógnitas del sistema.
-
-\begin{minipage}{\textwidth}
-\begin{minipage}[b]{0.49\textwidth}
+\begin{figure}[h]
   \centering
-  \includegraphics[scale=0.6]{fermi-relap-feval.pdf}
-  \label{fig-relap-fermi}
-  \captionsetup{width=0.8\textwidth}
-  \captionof{figure}[Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
+  \includegraphics[scale=1]{fermi-relap-feval.pdf}
+  \label{figura-relap-fermi}
+  \caption[Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
   {Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}.}
-\end{minipage}
-\hfill
-\begin{minipage}[b]{0.49\textwidth}
+\end{figure}
+
+\begin{table}[h]
   \centering
   \begin{tabular}{ l r r } \hline
-      Método & Evaluaciones & Tiempo \\
-      no lineal & totales & total [s] \\ \hline %\hline
-      Picard & 68 & 684 \\ %\hline            
+      Método no lineal& Evaluaciones totales & Tiempo total [s]\\ \hline %\hline
+      Broyden & 85 & 610 \\ %\hline
+      Picard & 68 & 684 \\ %\hline
       Punto fijo & 87 & 628  \\ %\hline
-      Broyden & 85 & 610 \\ \hline
+      Secante modificado & 370 & 2663  \\ \hline
    \end{tabular}
-   \label{tab-relap-fermi}
-   \captionsetup{width=0.8\textwidth}
-   \captionof{table}[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
+   \label{tabla-relap-fermi}
+   \caption[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
    {Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}.}
-  \end{minipage}
-\end{minipage}
+\end{table}
+
+El método \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}) es el que consume mayor tiempo de cálculo.
+El método del punto fijo demuestra la ventaja de mantener a los diferentes programas \textit{exclavos} corriendo en paralelo y concluye con un tiempo de cálculo inferior.
+Se ensayaron diferentes modificaciones del método de la \textit{secante} para el uso en este problema particular.
+El esquema implementado requiere la construcción de la matriz jacobiana en el primer paso temporal,
+y luego se evalúa si es necesario su reinicialización cada dos pasos temporales,
+en base a la cantidad de iteraciones que le toma para converger.
+Este método toma excesivas evaluaciones de funciones y recursos de cálculo asociado\footnote{
+Si bien el cálculo de la matriz jacobiana es paralelizable,
+esta paralelización hubiera requerido la múltiples ejecuciones del mismo programa al mismo tiempo.
+Se optó por serializar las sucesivas evaluaciones que requieren su contrucción debido a un criterio de diseño
+de mantener controlada la cantidad de ejecuciones de código disparadas por el código \textit{maestro}.
+}.
+Esquemas con menor frecuencia de reinicio resultan divergentes en algún punto del ciclo de quemado.
+Los esquemas con mayor frecuencia de reinicio, como el método de \textit{Newton-Raphson} (que reinicia la matriz jacobiana en cada iteración),
+convergen pero requieren muchas más evaluaciones asociadas.
+Por último, se utilizó el método de \textit{Broyden} que en previas aplicaciones había demostrado muy buenos resultados.
+Si bien este método requiere numerosas evaluaciones en la primera iteración del primer paso de cálculo para la construcción de la matriz jacobiana,
+en los siguientes pasos de quemado converge en pocas iteraciones, obteniendo el menor tiempo de cálculo total.
+Los métodos \textit{Newton-Krylov} no fueron tenidos en cuenta puesto que hubieran requerido numerosas evaluaciones de funciones
+debido a la gran cantidad de incógnitas del sistema.
 
 \subsection*{Acoplamiento neutrónico-termohidráulico utilizando RELAP y PUMA}
 \label{3:relap-puma}
@@ -1453,13 +1469,28 @@ El análisis de este reactor es un problema complejo, con gran cantidad de incó
 El dominio de cálculo neutrónico consiste en un núcleo de 1.4 metros de altura y 1.312 metros de diámetro equivalente.
 Este núcleo está compuesto por 61 elementos combustibles.
 Cada elemento combustible posee una sección transversal de forma hexagonal con 127 posiciones, entre las que se disponen barras con material combustible y absorbente.
-En la Figura \ref{carem} puede observarse un esquema del corte axial del núcleo del reactor.
+En la Figura \ref{carem_geom} puede observarse un esquema del núcleo del reactor.
+La malla de cálculo utilizada está compuesta por celdas pentahédricas.
+Los diferentes colores en la Figura \ref{carem_geom} representan diferentes materiales ficticios homogeneizados por zona en previos cálculos de celda.
+Las diferencias corresponden al grado de enriquecimiento de cada combustible y a la posibilidad que algunos tienen de alojar materiales de control.
+Las barras de control del Sistema de Ajuste y Control (SAC) se encuentran insertadas hasta la mitad de la longitud activa del núcleo durante todo el ciclo de quemado.
+No se detalla la dispoción de materiales porque no se considera relevante para el objetivo de estudio.
 
-\begin{figure}
-
-\caption[Esquema del núcleo del reactor CAREM en corte axial]
-{Esquema del núcleo del reactor CAREM en corte axial.}
-\label{carem}
+\begin{figure}[ht]
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.24]{carem_geom_1.png}
+	\end{minipage}
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.22]{carem_geom_2.png}
+	\end{minipage}
+\caption[Modelo de núcleo del reactor CAREM-25]
+{Modelo de núcleo del reactor CAREM-25:
+\textbf{(a)} Corte transversal.
+\textbf{(b)} Corte axial.
+}
+\label{carem_geom}
 \end{figure}
 La ecuación \ref{eq-nucleo} que modela el flujo neutrónico es resuelta con \textbf{PUMA} \cite{puma} a cinco grupos de energía.
 \textbf{PUMA} es un código de núcleo desarrollado por CNEA que calcula el flujo neutrónico a partir de un esquema de diferencias finitas de la ecuación \ref{eq-nucleo}.
@@ -1476,39 +1507,111 @@ La evolución temporal se discretiza en intervalos de 10 días.
 La altura del núcleo se discretiza en tramos de 5 cm, con lo que quedan definidas 28 zonas axiales diferentes que se mantienen acopladas entre ambos modelos.
 Como en cada zona axial quedan definidas cuatro incógnitas de acoplamiento, en total existen 112 incógnitas.
 
-\begin{minipage}{\textwidth}
-\begin{minipage}[b]{0.49\textwidth}
-  \centering
-  \includegraphics[scale=0.6]{puma-relap-feval.pdf}
-  \label{fig-relap-puma}
-  \captionsetup{width=0.8\textwidth}
-  \captionof{figure}[Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
-  {Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}.}
-\end{minipage}
-\hfill
-\begin{minipage}[b]{0.49\textwidth}
-  \centering
-  \begin{tabular}{ l r r } \hline
-      Método & Evaluaciones & Tiempo \\
-      no lineal & totales & total [s] \\ \hline %\hline
-      Picard & 100 & 1962 \\ %\hline            
-      Punto fijo & 113 & 1614  \\ %\hline
-      Broyden &  &  \\ \hline
-   \end{tabular}
-   \label{tab-relap-puma}
-   \captionsetup{width=0.8\textwidth}
-   \captionof{table}[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
-   {Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}.}
-  \end{minipage}
-\end{minipage}
+Durante la evolución de quemado no se realizó movimiento de barras de control para el mantenimiento de la criticidad.
+Se mantuvieron insertadas hasta la mitad del núcleo durante todo el ciclo para que el exceso o la falta de reactividad no sea tan abrupta en los extremos.
+El movimiento de barras hubiera incorporado un modelo extra en el acoplamiento\footnote{
+Así como la termohidráulica del núcleo genera alteraciones en la distribución de las secciones eficaces en función de la distribución de potencia,
+el movimiento de barras generaría también alteraciones en la distribución de las secciones eficaces en función de la distribución de potencia y del $k_{eff}$ del núcleo.
+} y aquí no fue considerado por simplicidad.
+En la Figura \ref{carem_power} puede observase cómo evoluciona la distribución de potencia en un corte axial a la mitad del núcleo,
+y en la Figura \ref{carem_burnup} se observa la evolución de la distribución de quemado correspondiente.
+La distribución de potencia se atenúa en el centro y se concentra en los anillos intermedios del núcleo a medida que avanza el ciclo de quemado.
+
+\begin{figure}[ht]
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.24]{carem_power_10day.png}
+	\end{minipage}
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.22]{carem_power_400day.png}
+	\end{minipage}
+\caption[Modelo de núcleo del reactor CAREM-25]
+{Evolución de la distribución de potencia en corte axial a la mitad del núcleo:
+\textbf{(a)} Distribuión de potencia en día 10.
+\textbf{(b)} Distribución de potencia en día 400.
+}
+\label{carem_power}
+\end{figure}
+
+\begin{figure}[ht]
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.24]{carem_burnup_10day.png}
+	\end{minipage}
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.22]{carem_burnup_400day.png}
+	\end{minipage}
+\caption[Modelo de núcleo del reactor CAREM-25]
+{Evolución de la distribución de quemado en corte axial a la mitad del núcleo:
+\textbf{(a)} Distribuión de quemado en día 10.
+\textbf{(b)} Distribución de quemado en día 400.
+}
+\label{carem_burnup}
+\end{figure}
+
+En la Figura \ref{carem-rho} se observa la evolución de la reactividad a lo largo del ciclo del quemado.
+La reactividad está relacionada con el factor de multiplicación $k_{eff}$ de la siguiente forma:
+\begin{equation}
+\rho = \frac{k_{eff}-1}{k_{eff}}
+\end{equation}
+y generalmente se expresa en \textit{pcm} (por ciento mil = $10^{-5}$).
+
+\begin{figure}[ht]
+	\centering
+  \includegraphics[scale=1]{carem-rho.pdf}
+\caption[Evolución de la reactividad en el ciclo de quemado del reactor CAREM-25]
+{Evolución de la reactividad en el ciclo de quemado del reactor CAREM-25.
+Durante todo el ciclo las barras de control del SAC permanecen insertadas hasta la mitad de la longitud activa del núcleo.}
+\label{carem-rho}
+\end{figure}
 
 En la resolución del sistema acoplado se consideraron solo tres métodos no lineales debido a las consideraciones comentadas en el ejemplo previo.
-En la Figura \ref{fig-relap-puma} se muestra la cantidad de evaluaciones de funciones en cada paso de quemado requerida por cada método,
-y la Tabla \ref{tab-relap-puma} integra la cantidad total de evaluaciones y el tiempo consumido por cada uno.
+También se tomó el mismo criterio de convergencia para cada paso de quemado.
 
-El método de \textit{Broyden} requiere numerosas iteraciones para converger en cada paso de quemado, lo que consume una excesiva cantidad de tiempo.
-El método del punto fijo, presenta una ventaja frente al método de \textit{Picard}.
-Debido a que el método del punto fijo posibilita el cálculo paralelo en ambos subdominios, y dado que el tiempo de cálculo consumido por cada uno de ellos es similar,
-consume un tiempo de cálculo inferior para el ciclo de quemado, aún cuando la cantidad total de evaluaciones de funciones que requiere es mayor.
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=1]{puma-relap-feval.pdf}
+  \label{fig-relap-puma}
+  \caption[Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
+  {Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{PUMA}.}
+\end{figure}
 
-A pesar de que solo se estudiaron tres métodos no lineales, la estrategia de acoplamiento desarrollada provee toda la estructura necesaria para investigar nuevas propuestas.
+\begin{table}[h]
+  \centering
+  \begin{tabular}{ l r r } \hline
+      Método no lineal & Evaluaciones totales & Tiempo total [s]\\ \hline %\hline
+      Picard & 100 & 2017 \\ %\hline            
+      Punto fijo & 111 & 1619  \\ \hline      
+   \end{tabular}
+   \label{tab-relap-puma}
+   \caption[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
+   {Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{PUMA}.}
+\end{table}
+
+Tras múltiples estudios se reporta en la Figura \ref{fig-relap-puma} y en la Tabla \ref{tab-relap-puma} algunos de los resultados obtenidos.
+La mayoría de los métodos fue incapaz de completar el ciclo de quemado asegurando la convergencia fuerte de los resultados en cada paso de evolución.
+El método de \textit{Picard} encontró pasos en los que queda estancado, iterando en series de valores que se repiten en ciclos.
+Debido a la existencia de estos casos se limitó el método a un máximo de diez iteraciones por paso de quemado,
+obligando a continuar con el cálculo en pasos en los que los residuos eran aún un orden de magnitud mayor al fijado por la tolerancia.
+Exceptuando esta consideración, ambos métodos explícitos pudieron completar el cálculo a lo largo del ciclo de quemado de manera robusta.
+El método del punto fijo aprovecha la ventaja de realizar las evaluaciones de funciones en paralelo y por lo tanto logra completar el cálculo en la menor cantidad de tiempo.
+
+El método implícito de \textit{Broyden} fue estudiado en detalle por haber sido el que mejores resultados había entregado a lo largo de todo el trabajo,
+incluyendo el modelo de acoplamiento neutrónico-termohidráulico del apartado previo.
+Se hicieron múltiples ensayos incluyendo incialización y reinicialización de matriz jacobiana,
+órdenes de extrapolación para el vector de incógnitas $\bar{x}_0^n$ y la matriz $\mathbb{B}_{0}^n$ y
+diferentes semillas para arrancar el cálculo.
+También se varió el parámetro de discretización temporal.
+En las simulaciones con inicialización de la matriz jacobiana, la cual demanda 113 evaluaciones de funciones extra,
+las soluciones para cada paso de quemado convergen con un promedio de 1 iteración durante los primeros 20 pasos de quemado aproximadamente.
+Este resultado es muy bueno, ya que los métodos explícitos convergen con un promedio de 2.5 iteraciones en cada paso de quemado.
+Sin embargo la mayoría de las simulaciones no se pudo completar,
+debido a que en algún punto de la evolución aparece una inestabilidad en la convergencia de los resultados en la primera zona acoplada del núcleo.
+Esta inestabilidad genera una mala actualización de la matriz de \textit{Broyden} y finalmente el método termina proponiendo valores \textit{guesses} sin sentido físico.
+Se desconoce si la inestabilidad encontrada se debe a algún fenómeno físico o a un \textit{bug} del modelo.
+
+En esta sección se ensayaron solo dos modelos de núcleo para estudiar el acoplamiento neutrónico-termohidráulico,
+por lo que para obtener conclusiones sobre la ventaja de las técnicas implícitas deberían estudiarse múltiples modelos alternativos.
+Cabe destacar que la estrategia de acoplamiento desarrollada provee toda la estructura necesaria para investigar nuevas propuestas.

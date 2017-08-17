@@ -60,9 +60,8 @@ En la sección \ref{3:extension-nucleo} se extendió la metodología de acoplami
 Se desarrolló un modelo de acoplamiento neutrónico-termohidráulico para el estudio de ciclos de quemado de combustibles y se evaluó la eficiencia de resolución de difererentes esquemas numéricos.
 Se analizaron dos núcleos diferentes, y en ambos se constató que la técnica de \textit{Picard} comúnmente utilizada no es la más eficiente ya que requiere evaluaciones serializadas
 que bien pueden paralelizarse utilizando el método del punto fijo.
-El método de \textit{Broyden} resultó ser eficiente en el primer modelo de núcleo, que tenía inferior cantidad de incógnitas,
-pero en el segundo núcleo de estudio requirió excesivas iteraciones para converger en cada paso de cálculo.
-
+El método de \textit{Broyden} resultó ser eficiente en el primer modelo de núcleo, que tenía inferior cantidad de incógnitas.
+En el segundo modelo de núcleo analizado resultó ser eficiente solo durante la primera mitad del ciclo de quemado, pero luego encontró inestabilidades.
 
 \section{Trabajos futuros}
 \label{trabajos-futuros}
