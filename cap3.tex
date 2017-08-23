@@ -1503,7 +1503,7 @@ Radialmente, respeta la distribución de material de combustible, \textit{gap} y
 Este modelo proviene de una monografía \cite{relap-carem} realizada durante el cursado de \textit{Modelado de sistemas termohidráulicos en reactores mediante códigos de planta}.
 Las ecuaciones hidrodinámicas son resueltas con \textbf{RELAP5}.
 
-La evolución temporal se discretiza en intervalos de 10 días.
+La evolución temporal se discretiza en intervalos de 5 y 10 días para diferentes simulaciones.
 La altura del núcleo se discretiza en tramos de 5 cm, con lo que quedan definidas 28 zonas axiales diferentes que se mantienen acopladas entre ambos modelos.
 Como en cada zona axial quedan definidas cuatro incógnitas de acoplamiento, en total existen 112 incógnitas.
 
@@ -1582,16 +1582,20 @@ También se tomó el mismo criterio de convergencia para cada paso de quemado.
   \centering
   \begin{tabular}{ l r r } \hline
       Método no lineal & Evaluaciones totales & Tiempo total [s]\\ \hline %\hline
-      Picard & 100 & 2017 \\ %\hline            
-      Punto fijo & 111 & 1619  \\ \hline      
+      Picard $\Delta t = 5s$& 243 &  11019 \\ %\hline      
+      Picard $\Delta t = 10s$& 104 & 4774 \\ %\hline            
+      Punto fijo $\Delta t = 5s$ & 139 & 5415 \\ %\hline            
+      Punto fijo $\Delta t = 10s$ & 107 & 3919  \\ \hline      
    \end{tabular}
    \label{tab-relap-puma}
    \caption[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
    {Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{PUMA}.}
 \end{table}
 
+comentar doble discretización temporal
+
 Tras múltiples estudios se reporta en la Figura \ref{fig-relap-puma} y en la Tabla \ref{tab-relap-puma} algunos de los resultados obtenidos.
-La mayoría de los métodos fue incapaz de completar el ciclo de quemado asegurando la convergencia fuerte de los resultados en cada paso de evolución.
+La mayoría de los métodos fueron incapaces de completar el ciclo de quemado asegurando la convergencia fuerte de los resultados en cada paso de evolución.
 El método de \textit{Picard} encontró pasos en los que queda estancado, iterando en series de valores que se repiten en ciclos.
 Debido a la existencia de estos casos se limitó el método a un máximo de diez iteraciones por paso de quemado,
 obligando a continuar con el cálculo en pasos en los que los residuos eran aún un orden de magnitud mayor al fijado por la tolerancia.
