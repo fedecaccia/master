@@ -54,7 +54,7 @@ La notación utilizada es la siguiente:
 \label{esquema-acoplamiento} 
 \end{figure}
 La idea ahora es resolver los subsistemas por separado, pero en principio esto no es posible porque las condiciones de borde de las interfaces de acople son desconocidas.
-Es decis, existen tantas incógnitas como variables en cada interfaz.
+Es decir, existen tantas incógnitas como variables en cada interfaz.
 Sin embargo, es posible notar que la unión $U_{i,j}^k$ que relaciona los sistemas $S_{i}$ y $S_{j}$ 
 mediante las interfaces $I_{S_{i}}^{l_1}$ e $I_{S_{j}}^{l_2}$ respectivamente, 
 define una relación de continuidad\footnote{
@@ -99,7 +99,7 @@ Considerando estas ecuaciones, el problema general abordado mediante el Método 
 \subsection*{Estrategia de resolución del acoplamiento}
 \label{1:ecuaciones}
 Una vez planteadas las ecuaciones del problema, es necesario definir una estrategia de resolución.
-A continuación se propone un ejemplo didáctico para comprender las estrategias de acoplamiento posteriormente cometadas.
+A continuación se propone un ejemplo didáctico para comprender las estrategias de acoplamiento posteriormente cometandas.
 
 \medskip
 
@@ -189,7 +189,7 @@ Esta condición define nuevamente una temperatura $(T_{calc})_{S_2}$ en la inter
 \end{equation}
 donde $\mathscr{D}$ es el operador que mapea condiciones de borde de tipo \textit{Neumann} en condiciones de borde de tipo \textit{Dirichlet}.
 Si $(T_{calc})_{S_2}$ coincide con $(T_{guess})_{S_1}$ inicialmente supuesta,
-los resultados están convergidos y entonces finaliza el cálculo
+los resultados están convergidos y entonces finaliza el cálculo.
 En caso contrario, el proceso debe repetirse, pero ahora se impone $(T_{calc})_{S_2}$ al primer subsistema.
 El cálculo continúa así hasta que los valores $\{(q''_{calc})_{S_1}, (T_{calc})_{S_2}\}$ convergen en iteraciones contiguas.
 
@@ -371,7 +371,7 @@ y se han presentado alternativas numéricas para la resolución de las mismas.
 En el \hyperlink{chapter.2}{Capítulo 2} se describe la estrategia para la resolución de problemas acoplados mediante diferentes programas de cálculo.
 Se presenta la estructura de comunicación definida y se describen las implementaciones necesarias para su funcionamiento.
 En el \hyperlink{chapter.3}{Capítulo 3} se muestran algunas aplicaciones de la herramienta estudiada.
-La primera aplicación es un sistema fluídico cerrado gobernado por fuerzas naturales, que se estudia subdividiéndolo en dos subsistemas, con dos interfaces de acople cada uno.
+La primera aplicación es un sistema fluídico cerrado gobernado por fuerzas de convección natural, que se estudia subdividiéndolo en dos subsistemas, con dos interfaces de acople cada uno.
 El siguiente sistema de estudio es el vaciado del tanque reflector de un reactor de investigación.
 Interesa analizar el tiempo de descarga ya que el mismo es diseñado como sistema de seguridad.
 Se abordan distintos modelos multiescala del mismo, para estudiar el detalle fluídico tridimensional en un componente del sistema,

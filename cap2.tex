@@ -15,7 +15,7 @@ Este programa se abstrae completamente de la física implicada en cada subsistem
 Simplemente recibe los valores para las incógnitas calculados por los diferentes programas y con ellos resuelve el sistema de ecuaciones de residuos \ref{sistema-simple}.
 En base a estos residuos propone\footnote{
 Esta propuesta reside en el método de resolución de ecuaciones no lineales seleccionado, ver sección \ref{1:metodos}.
-} nuevos valores para las inćognitas en las interfaces de acople y los comunica nuevamente a los demás programas.
+} nuevos valores para las incógnitas en las interfaces de acople y los comunica nuevamente a los demás programas.
 Este tipo de comunicación utilizado recibe el nombre de \textit{maestro-esclavo} \cite{maestro-esclavo},
 en el cual existe un programa \textit{maestro} que tiene el control unidireccional sobre los demás programas, que actúan bajo el rol de \textit{esclavos}.
 Además del envío y recepción de valores de variables, son funciones del código \textit{maestro} el envío de órdenes a sus \textit{esclavos} de comenzar el cálculo en un dado paso de evolución, reiniciar el cálculo o incluso abortar.
@@ -73,9 +73,8 @@ Se utilizaron dos implementaciones alternativas.
 En la primera, cada código \textit{esclavo}, así como el código \textit{maestro},
 es ejecutado de manera independiente en uno (SISD, por sus siglas en inglés)
 o múltiples procesos (SIMD, por sus siglas en inglés).
-El código \textit{maestro} publica una serie de puertos a los cuales cada código \textit{esclavo} puede conectarse\footnote{
-Para que los programas puedan encontrar los puertos publicados, es necesario que todos ellos pertenezcan a un mismo servicio de comunicación generado por el \textit{ompi-server}.
-}.
+El código \textit{maestro} publica una serie de puertos a los cuales cada código \textit{esclavo} puede conectarse.
+%\footnote{Para que los programas puedan encontrar los puertos publicados, es necesario que todos ellos pertenezcan a un mismo servicio de comunicación generado por el \textit{ompi-server}.}
 Una vez aceptadas las conexiones, los programas pueden intercambiar mensajes con él siguiendo una lógica preestablecida.
 Cuando ya no es necesario que los programas continúen comunicándose, se cierran las conexiones.
 
@@ -363,12 +362,12 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
 	\node at (0,10em)             (dummy) {}; % blank space
 
 	% Códigos
-	\node [block2] at (0,20em)          (maestro)   {\textbf{Maestro}};
+	\node [block2] at (0,23em)          (maestro)   {\textbf{Maestro}};
 	\node [block2, left=4.8em  of maestro] (esclavo1) {\textbf{Esclavo $1$}};	
 	\node [block2, right=4.8em of maestro] (esclavo2) {\textbf{Esclavo $2$}};
   
   % guess0
-  \node [block1, text width=2cm] at (0,16em) (guess0) {cálculo de \scriptsize \{$x^{guess}(t_{coup,1})$, $y^{guess}(t_{coup,1})$\}};
+  \node [block1, text width=2.5cm] at (0,16em) (guess0) {cálculo de \scriptsize \{$x^{guess}(t_{coup,j+1})$, $y^{guess}(t_{coup,j+1})$\}};
   
   % ci
   \node [anchor=east, text width=2cm, text centered] at (-7 em,18em) (ci1) {\scriptsize (condiciones iniciales)};
@@ -395,12 +394,12 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
   \node at (-7.3em,9em) (dummy51) {};
   \draw [dashed] ($(tl1n)+(1.2em,-0.3em)$) -- ($(dummy51)+(0.2em,-0.3em)$);
    
-  % Delta t coup 1
-  \node [anchor=east] at (-15.25em,17em) (tc0)  {\footnotesize $t_{coup,0}$};
-  \node [anchor=east] at (-15.25em,9em) (tc1)  {\footnotesize $t_{coup,1}$};
-  \node at(-17.5em,13em) (dtc1) {$\Delta t_{coup}$};
-  \draw[|-] ($(tc0.south)+(-1.75em,1em)$) to[out=-90, in=90] ($(dtc1.north)-(1em,0)$);
-  \draw[-|] ($(dtc1.south)-(1em,0)$) to[out=-90, in=90] ($(tc1.north)+(-1.75em,-1em)$);
+  % Delta t coup j
+  \node [anchor=east, text width=1cm, align=right] at (-15.75em,17em) (tc0)  {\footnotesize $t_{coup,j}$};
+  \node [anchor=east, text width=1cm, align=right] at (-15.75em,9em) (tc1)  {\footnotesize $t_{coup,j+1}$};
+  \node [text width=1cm, align=right] at (-18em,13em) (dtc1) {$\Delta t_{coup}$};
+  \draw[|-] ($(tc0.south)+(-1.75em,1em)$) to[out=-90, in=90] ($(dtc1.north)-(1.05em,0)$);
+  \draw[-|] ($(dtc1.south)-(1.05em,0)$) to[out=-90, in=90] ($(tc1.north)+(-1.75em,-1em)$);
   
   % flechas s1
   \draw[->] ($(tl10.east)+(1.8em,-0.7em)$) -- ($(tl10.east)+(1.8em,-2em)$);
@@ -449,118 +448,127 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
   % continue - restart
   \node [draw,rectangle, fill=white] at(-2em, -2em) (continuar) {\scriptsize continuar};
   \draw[arrow1] (si) -- (continuar);
-  \node [draw,rectangle, fill=white] at( 2em, -2em) (reinicio) {\scriptsize reinicio};
+  \node [draw,rectangle, fill=white] at( 2em, -2em) (reinicio) {\scriptsize reiniciar};
   \draw[arrow1] (no) -- (reinicio);
   
   % guess1
-  \node [block1, text width=2cm] at (0,-6em) (guess1) {cálculo de \scriptsize \{$x^{guess}(t_{coup,2})$, $y^{guess}(t_{coup,2})$\}};
+  \node [draw,rectangle, fill=white, text width=1.8cm, align=center] at (0,-6em) (actualizar) {\scriptsize $t_{coup,j} = t_{coup,j} + \Delta t$};
   
   % continuar->guess
-  \draw[arrow1, dashed] (continuar) -- (guess1);
+  \draw[arrow1, dashed] (continuar) -- (actualizar);
   
-  % s1  
-  \node [anchor=east] at (-11.5 em,-5em) (tl10) {\footnotesize $t_{e1,N}$};  
-  \node at (-7.3em,-5em) (dummy11) {};
-  \draw [dashed] ($(tl10)+(1em,-0.3em)$) -- ($(dummy11)-(0,0.3em)$);
-  
-  \node [anchor=east] at (-11.5 em,-7em) (tl11) {\footnotesize $t_{e1,N+1}$};  
-  \node at (-7.3em,-7em) (dummy21) {};
-  \draw [dashed] ($(tl11)+(1.4em,-0.3em)$) -- ($(dummy21)-(0,0.3em)$);
-  
-  \node [anchor=east] at (-11.5 em,-9em) (tl12) {\footnotesize $t_{e1,N+2}$};  
-  \node at (-7.3em,-9em) (dummy31) {};
-  \draw [dashed] ($(tl12)+(1.4em,-0.3em)$) -- ($(dummy31)-(0,0.3em)$);
-  
-  \node [anchor=east] at (-11.5 em,-11em) (tl1i) {\footnotesize $t_{e1,N+i}$};  
-  \node at (-7.3em,-11em) (dummy41) {};
-  \draw [dashed] ($(tl1i)+(1.4em,-0.3em)$) -- ($(dummy41)-(0,0.3em)$);
-  
-  \node [anchor=east] at (-11.5 em,-13em) (tl1n) {\footnotesize $t_{e1,N+N}$};  
-  \node at (-7.3em,-13em) (dummy51) {};
-  \draw [dashed] ($(tl1n)+(1.6em,-0.3em)$) -- ($(dummy51)+(0.2em,-0.3em)$);
-  
-  % Delta t coup 2
-  \node [anchor=east] at (-15.25em,-5em) (tc0)  {\footnotesize $t_{coup,1}$};
-  \node [anchor=east] at (-15.25em,-13em) (tc1)  {\footnotesize $t_{coup,2}$};
-  \node at(-17.5em,-9em) (dtc1) {$\Delta t_{coup}$};
-  \draw[|-] ($(tc0.south)+(-1.75em,1em)$) to[out=-90, in=90] ($(dtc1.north)-(1em,0)$);
-  \draw[-|] ($(dtc1.south)-(1em,0)$) to[out=-90, in=90] ($(tc1.north)+(-1.75em,-1em)$);
-  
-  % flechas s1
-  \draw[->] ($(tl10.east)+(1.8em,-0.7em)$) -- ($(tl10.east)+(1.8em,-2em)$);
-  \draw[->] ($(tl11.east)+(1.8em,-0.7em)$) -- ($(tl11.east)+(1.8em,-2em)$);
-  \draw[->] ($(tl12.east)+(1.8em,-0.7em)$) -- ($(tl12.east)+(1.8em,-2em)$);
-  \draw[->] ($(tl1i.east)+(1.8em,-0.7em)$) -- ($(tl1i.east)+(1.8em,-2em)$);
-  
-  % s2
-  \node [anchor=west] at (11.5 em,-5em) (tl20) {\footnotesize $t_{e2,N}$};
-  \node at (7.3em,-5em) (dummy12) {};
-  \draw [dashed] ($(dummy12)-(0,0.3em)$) -- ($(tl20.west)-(0em,0.3em)$);
-  
-  \node [anchor=west] at (11.5 em,-9em) (tl2i) {\footnotesize $t_{e2,N+i}$};
-  \node at (7.3em,-9em) (dummy22) {};
-  \draw [dashed] ($(dummy22)-(0,0.3em)$) -- ($(tl2i.west)-(0em,0.3em)$);
-  
-  \node [anchor=west] at (11.5 em,-13em) (tl2n) {\footnotesize $t_{e2,N+N}$};
-  \node at (7.3em,-13em) (dummy32) {};
-  \draw [dashed] ($(dummy32)-(0,0.3em)$) -- ($(tl2n.west)-(0em,0.3em)$);
-  
-  % flechas s2
-  \draw[->] ($(dummy12.east)+(2em,-1em)$) -- ($(dummy12.east)+(2em,-3.5em)$);
-  \draw[->] ($(dummy22.east)+(2em,-1em)$) -- ($(dummy22.east)+(2em,-3.5em)$);
-  
-  % send 1
-  \draw [arrow1] (guess1) to node [midway, above]{\footnotesize $x^{guess}$} ($(dummy11)-(0,1em)$);
-  \draw [arrow1] (guess1) to node [midway, above]{\footnotesize $y^{guess}$} ($(dummy12)-(0,1em)$);
-
-  % calc1
-  \node [block1, text width=2cm] at (0,-14em) (calc1) {cálculo de residuos};
-
-  % recv 1
-  \draw [arrow1] ($(dummy51)-(0,1em)$) to node [midway, above]{\footnotesize $y(x^{guess})$} (calc1);
-  \draw [arrow1] ($(dummy32)-(0,1em)$) to node [midway, above]{\footnotesize $x(y^{guess})$} (calc1);
-  
-  % Final node
-  \node at (0,-17em) (final) {...};
-  \draw [arrow1] (calc1) -- (final);
+  %~ % s1  
+  %~ \node [anchor=east] at (-11.5 em,-5em) (tl10) {\footnotesize $t_{e1,N}$};  
+  %~ \node at (-7.3em,-5em) (dummy11) {};
+  %~ \draw [dashed] ($(tl10)+(1em,-0.3em)$) -- ($(dummy11)-(0,0.3em)$);
+  %~ 
+  %~ \node [anchor=east] at (-11.5 em,-7em) (tl11) {\footnotesize $t_{e1,N+1}$};  
+  %~ \node at (-7.3em,-7em) (dummy21) {};
+  %~ \draw [dashed] ($(tl11)+(1.4em,-0.3em)$) -- ($(dummy21)-(0,0.3em)$);
+  %~ 
+  %~ \node [anchor=east] at (-11.5 em,-9em) (tl12) {\footnotesize $t_{e1,N+2}$};  
+  %~ \node at (-7.3em,-9em) (dummy31) {};
+  %~ \draw [dashed] ($(tl12)+(1.4em,-0.3em)$) -- ($(dummy31)-(0,0.3em)$);
+  %~ 
+  %~ \node [anchor=east] at (-11.5 em,-11em) (tl1i) {\footnotesize $t_{e1,N+i}$};  
+  %~ \node at (-7.3em,-11em) (dummy41) {};
+  %~ \draw [dashed] ($(tl1i)+(1.4em,-0.3em)$) -- ($(dummy41)-(0,0.3em)$);
+  %~ 
+  %~ \node [anchor=east] at (-11.5 em,-13em) (tl1n) {\footnotesize $t_{e1,N+N}$};  
+  %~ \node at (-7.3em,-13em) (dummy51) {};
+  %~ \draw [dashed] ($(tl1n)+(1.6em,-0.3em)$) -- ($(dummy51)+(0.2em,-0.3em)$);
+  %~ 
+  %~ % Delta t coup 2
+  %~ \node [anchor=east] at (-15.25em,-5em) (tc0)  {\footnotesize $t_{coup,1}$};
+  %~ \node [anchor=east] at (-15.25em,-13em) (tc1)  {\footnotesize $t_{coup,2}$};
+  %~ \node at(-17.5em,-9em) (dtc1) {$\Delta t_{coup}$};
+  %~ \draw[|-] ($(tc0.south)+(-1.75em,1em)$) to[out=-90, in=90] ($(dtc1.north)-(1em,0)$);
+  %~ \draw[-|] ($(dtc1.south)-(1em,0)$) to[out=-90, in=90] ($(tc1.north)+(-1.75em,-1em)$);
+  %~ 
+  %~ % flechas s1
+  %~ \draw[->] ($(tl10.east)+(1.8em,-0.7em)$) -- ($(tl10.east)+(1.8em,-2em)$);
+  %~ \draw[->] ($(tl11.east)+(1.8em,-0.7em)$) -- ($(tl11.east)+(1.8em,-2em)$);
+  %~ \draw[->] ($(tl12.east)+(1.8em,-0.7em)$) -- ($(tl12.east)+(1.8em,-2em)$);
+  %~ \draw[->] ($(tl1i.east)+(1.8em,-0.7em)$) -- ($(tl1i.east)+(1.8em,-2em)$);
+  %~ 
+  %~ % s2
+  %~ \node [anchor=west] at (11.5 em,-5em) (tl20) {\footnotesize $t_{e2,N}$};
+  %~ \node at (7.3em,-5em) (dummy12) {};
+  %~ \draw [dashed] ($(dummy12)-(0,0.3em)$) -- ($(tl20.west)-(0em,0.3em)$);
+  %~ 
+  %~ \node [anchor=west] at (11.5 em,-9em) (tl2i) {\footnotesize $t_{e2,N+i}$};
+  %~ \node at (7.3em,-9em) (dummy22) {};
+  %~ \draw [dashed] ($(dummy22)-(0,0.3em)$) -- ($(tl2i.west)-(0em,0.3em)$);
+  %~ 
+  %~ \node [anchor=west] at (11.5 em,-13em) (tl2n) {\footnotesize $t_{e2,N+N}$};
+  %~ \node at (7.3em,-13em) (dummy32) {};
+  %~ \draw [dashed] ($(dummy32)-(0,0.3em)$) -- ($(tl2n.west)-(0em,0.3em)$);
+  %~ 
+  %~ % flechas s2
+  %~ \draw[->] ($(dummy12.east)+(2em,-1em)$) -- ($(dummy12.east)+(2em,-3.5em)$);
+  %~ \draw[->] ($(dummy22.east)+(2em,-1em)$) -- ($(dummy22.east)+(2em,-3.5em)$);
+  %~ 
+  %~ % send 1
+  %~ \draw [arrow1] (guess1) to node [midway, above]{\footnotesize $x^{guess}$} ($(dummy11)-(0,1em)$);
+  %~ \draw [arrow1] (guess1) to node [midway, above]{\footnotesize $y^{guess}$} ($(dummy12)-(0,1em)$);
+%~ 
+  %~ % calc1
+  %~ \node [block1, text width=2cm] at (0,-14em) (calc1) {cálculo de residuos};
+%~ 
+  %~ % recv 1
+  %~ \draw [arrow1] ($(dummy51)-(0,1em)$) to node [midway, above]{\footnotesize $y(x^{guess})$} (calc1);
+  %~ \draw [arrow1] ($(dummy32)-(0,1em)$) to node [midway, above]{\footnotesize $x(y^{guess})$} (calc1);
+  %~ 
+  %~ % Final node
+  %~ \node at (0,-17em) (final) {...};
+  %~ \draw [arrow1] (calc1) -- (final);
   
   % Continue order 1
-  \node at($(continuar.south) - (0.7em,0)$) (c11) {};
-  \node at($(c11) - (0em,0.3em)$) (c12) {};
-  \node at($(c12) - (7em,0em)$) (c13) {};
-  \node at($(c13) - (0em,2em)$) (c14) {};
-  \draw [dashed, arrow1] (c11.center) -- (c12.center) -- (c13.center) -- (c14.center);
-  % Continue order 2
-  \node at($(continuar.south) + (0.7em,0)$) (c21) {};
-  \node at($(c21) - (0em,0.3em)$) (c22) {};
-  \node at($(c22) + (11em,0em)$) (c23) {};
-  \node at($(c23) - (0em,2em)$) (c24) {};
-  \draw [arrow1,dashed] (c21.center) -- (c22.center) -- (c23.center) -- (c24.center);
+  %~ \node at($(continuar.south) - (0.7em,0)$) (c11) {};
+  %~ \node at($(c11) - (0em,0.3em)$) (c12) {};
+  %~ \node at($(c12) - (7em,0em)$) (c13) {};
+  %~ \node at($(c13) - (0em,2em)$) (c14) {};
+  %~ \draw [dashed, arrow1] (c11.center) -- (c12.center) -- (c13.center) -- (c14.center);
+  %~ % Continue order 2
+  %~ \node at($(continuar.south) + (0.7em,0)$) (c21) {};
+  %~ \node at($(c21) - (0em,0.3em)$) (c22) {};
+  %~ \node at($(c22) + (11em,0em)$) (c23) {};
+  %~ \node at($(c23) - (0em,2em)$) (c24) {};
+  %~ \draw [arrow1,dashed] (c21.center) -- (c22.center) -- (c23.center) -- (c24.center);
   
   % Reinitial connection
   %\draw[arrow1, dashed] (reinicio.east) to[out=0, in=-10, distance=4cm] (guess0.south);
-  \node at($(reinicio.north) + (0.7em,0)$) (r1) {};
-  \node at($(r1) + (0em,0.6em)$) (r2) {};
-  \node at($(r2) + (4em,0em)$) (r3) {};
-  \node at($(r3) + (0em,12em)$) (r4) {};
-  \node at($(r4) - (6.5em,0em)$) (r5) {};
-  \node at($(r5) + (0em,3em)$) (r6) {};
-  \draw[arrow1,dashed] (r1.center) -- (r2.center) -- (r3.center) -- (r4.center) -- (r5.center) -- (r6.center);
+  %~ \node at($(reinicio.north) + (0.7em,0)$) (r1) {};
+  %~ \node at($(r1) + (0em,0.6em)$) (r2) {};
+  %~ \node at($(r2) + (4em,0em)$) (r3) {};
+  %~ \node at($(r3) + (0em,12em)$) (r4) {};
+  %~ \node at($(r4) - (6.5em,0em)$) (r5) {};
+  %~ \node at($(r5) + (0em,3em)$) (r6) {};
+  %~ \draw[arrow1,dashed] (r1.center) -- (r2.center) -- (r3.center) -- (r4.center) -- (r5.center) -- (r6.center);
   
-  % Reinit order 1
-  \node at($(reinicio.north) - (0.7em,0)$) (r11) {};
-  \node at($(r11) + (0em,0.3em)$) (r12) {};
-  \node at($(r12) - (16em,0em)$) (r13) {};
-  \node at($(r13) + (0em,19.5em)$) (r14) {};
-  \node at($(r14) + (2.5em,0em)$) (r15) {};
-  \draw[arrow1,dashed] (r11.center) -- (r12.center) -- (r13.center) -- (r14.center) -- (r15.center);
-  % Reinit order 2
-  \node at($(reinicio.north) + (0.7em,0)$) (r21) {};
-  \node at($(r21) + (0em,0.3em)$) (r22) {};
-  \node at($(r22) + (12em,0em)$) (r23) {};
-  \node at($(r23) + (0em,19.5em)$) (r24) {};
-  \node at($(r24) - (2.5em,0em)$) (r25) {};
-  \draw[arrow1,dashed] (r21.center) -- (r22.center) -- (r23.center) -- (r24.center) -- (r25.center);
+  %~ % Reinit order 1
+  %~ \node at($(reinicio.north) - (0.7em,0)$) (r11) {};
+  %~ \node at($(r11) + (0em,0.3em)$) (r12) {};
+  %~ \node at($(r12) - (16em,0em)$) (r13) {};
+  %~ \node at($(r13) + (0em,19.5em)$) (r14) {};
+  %~ \node at($(r14) + (2.5em,0em)$) (r15) {};
+  %~ \draw[arrow1,dashed] (r11.center) -- (r12.center) -- (r13.center) -- (r14.center) -- (r15.center);
+  
+  
+  
+  % Reinit order
+  \node at($(reinicio.east) + (11em,0em)$) (r23) {};
+  \node at($(r23) + (0em,22.0em)$) (r24) {};
+  \node at($(r24) - (14.5em,0em)$) (r25) {};
+  \node at($(r25) - (0em,2.em)$) (r26) {};
+  \draw[arrow1,dashed] (reinicio.east) -- (r23.center) -- (r24.center) -- (r25.center) -- (r26.center);
+  
+  % Continue order
+  \node at($(continuar.west) - (11em,0em)$) (c23) {};
+  \node at($(c23) + (0em,22.0em)$) (c24) {};
+  \node at($(c24) + (14.5em,0em)$) (c25) {};
+  \node at($(c25) - (0em,2.em)$) (c26) {};
+  \draw[arrow1,dashed] (continuar.west) -- (c23.center) -- (c24.center) -- (c25.center) -- (c26.center);
   
   
   % Cuadros

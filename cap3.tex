@@ -1424,22 +1424,23 @@ y la Tabla \ref{tabla-relap-fermi} integra la cantidad total de evaluaciones y e
 
 \begin{table}[h]
   \centering
-  \begin{tabular}{ l r r } \hline
-      Método no lineal& Evaluaciones totales & Tiempo total [s]\\ \hline %\hline
-      Broyden & 85 & 610 \\ %\hline
-      Picard & 68 & 684 \\ %\hline
-      Punto fijo & 87 & 628  \\ %\hline
-      Secante modificado & 370 & 2663  \\ \hline
+  \begin{tabular}{c c c c cc } \hline
+      \multicolumn{1}{c}{Método} & \multirow{1}{*}{$\Delta$t} & \multicolumn{1}{c}{Extrapolación} & \multicolumn{1}{c}{Extrapolación}  & \multicolumn{1}{c}{Evaluaciones} & \multicolumn{1}{c}{Tiempo} \\ % \hline
+      \multicolumn{1}{c}{no lineal} & [días] & \multicolumn{1}{c}{de $\bar{x}^n$} & \multicolumn{1}{c}{de $\mathbb{J}^n$} & \multicolumn{1}{c}{totales} & \multicolumn{1}{c}{total [s]}\\ \hline %\hline
+      Broyden & 10 & $\mathscr{O}(1)$ & $\mathscr{O}(1)$ & 85 & 610 \\ %\hline
+      Picard & 10 & $\mathscr{O}(1)$ & - & 68 & 684 \\ %\hline
+      Punto fijo & 10 & $\mathscr{O}(1)$ & - & 87 & 628  \\ %\hline
+      Shamanskii & 10 & $\mathscr{O}(1)$ & $\mathscr{O}(0)$& 370 & 2663  \\ \hline
    \end{tabular}
    \label{tabla-relap-fermi}
    \caption[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
    {Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}.}
 \end{table}
 
-El método \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}) es el que consume mayor tiempo de cálculo.
+El método \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}) es el método explícito que consume mayor tiempo de cálculo.
 El método del punto fijo demuestra la ventaja de mantener a los diferentes programas \textit{exclavos} corriendo en paralelo y concluye con un tiempo de cálculo inferior.
-Se ensayaron diferentes modificaciones del método de la \textit{secante} para el uso en este problema particular.
-El esquema implementado requiere la construcción de la matriz jacobiana en el primer paso temporal,
+Se ensayaron diferentes implementaciones del método de \textit{Shamanskii} para el uso en este problema particular.
+El esquema reportado requiere la construcción de la matriz jacobiana en el primer paso temporal,
 y luego se evalúa si es necesario su reinicialización cada dos pasos temporales,
 en base a la cantidad de iteraciones que le toma para converger.
 Este método toma excesivas evaluaciones de funciones y recursos de cálculo asociado\footnote{
@@ -1454,6 +1455,7 @@ convergen pero requieren muchas más evaluaciones asociadas.
 Por último, se utilizó el método de \textit{Broyden} que en previas aplicaciones había demostrado muy buenos resultados.
 Si bien este método requiere numerosas evaluaciones en la primera iteración del primer paso de cálculo para la construcción de la matriz jacobiana,
 en los siguientes pasos de quemado converge en pocas iteraciones, obteniendo el menor tiempo de cálculo total.
+La ganancia de tiempo obtenida hubiera sido mayor para un ciclo de quemado con mayor cantidad de pasos.
 Los métodos \textit{Newton-Krylov} no fueron tenidos en cuenta puesto que hubieran requerido numerosas evaluaciones de funciones
 debido a la gran cantidad de incógnitas del sistema.
 
@@ -1567,40 +1569,58 @@ Durante todo el ciclo las barras de control del SAC permanecen insertadas hasta 
 \label{carem-rho}
 \end{figure}
 
-En la resolución del sistema acoplado se consideraron solo tres métodos no lineales debido a las consideraciones comentadas en el ejemplo previo.
-También se tomó el mismo criterio de convergencia para cada paso de quemado.
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[scale=1]{puma-relap-feval.pdf}
-  \label{fig-relap-puma}
-  \caption[Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
-  {Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{PUMA}.}
-\end{figure}
+En la resolución del sistema acoplado se utilizaron los mismos métodos que los estudiados en el ejemplo previo,
+con mismo criterio de convergencia para cada paso de quemado.
+Se utilizaron extrapolaciones de órden 0 y órden 1 para la semilla $\bar{x}^n$ y diferente discretización temporal.
+Los métodos explícitos completan el ciclo de quemado de manera robusta y estable.
+El método de \textit{Picard} tiene problemas en algunos pasos de quemado,
+en los que queda iterando entre valores que se repiten en ciclos.
+Como el residuo en estos pasos era solo un orden de magnitud mayor a la tolerancia fijada,
+se optó por considerarlos convergido al cabo de 10 iteraciones y continuar con la evolución.
+El método del punto fijo, en cambio, converge en cada paso de quemado.
+Si bien la cantidad de evaluaciones de funciones  en cada paso de quemado es comparable entre los dos métodos,
+el método del punto fijo resuelve cada paso de quemado paralelizando las ejecuciones de código y por ello completa el ciclo en menor cantidad de tiempo.
 
-\begin{table}[h]
+La Tabla \ref{tab-relap-puma} resume las evaluaciones de funciones y los recursos temporales consumidos por cada método estudiado.
+En las Figuras \ref{fig-relap-puma-es} y \ref{fig-relap-puma-ep} se reporta la cantidad de evaluaciones de funciones requerida por distintos esquemas en cada paso de quemado,
+utilizando los métodos de \textit{Picard} y del punto fijo respectivamente.
+
+\begin{table}[h!]
   \centering
-  \begin{tabular}{ l r r } \hline
-      Método no lineal & Evaluaciones totales & Tiempo total [s]\\ \hline %\hline
-      Picard $\Delta t = 5s$& 243 &  11019 \\ %\hline      
-      Picard $\Delta t = 10s$& 104 & 4774 \\ %\hline            
-      Punto fijo $\Delta t = 5s$ & 139 & 5415 \\ %\hline            
-      Punto fijo $\Delta t = 10s$ & 107 & 3919  \\ \hline      
+  \begin{tabular}{ c c c c c } 
+      \hline
+      \multicolumn{1}{c}{Método} & \multirow{1}{*}{$\Delta$t} & \multicolumn{1}{c}{Extrapolación} & \multicolumn{1}{c}{Evaluaciones} & \multicolumn{1}{c}{Tiempo} \\ % \hline
+      \multicolumn{1}{c}{no lineal} & [días] & \multicolumn{1}{c}{de $\bar{x}^n$} & \multicolumn{1}{c}{totales} & \multicolumn{1}{c}{total [s]}\\ \hline %\hline
+      Picard & 5 & $\mathscr{O}(0)$ & 243 & 11019 \\ %\hline
+      Picard & 5 & $\mathscr{O}(1)$ & 195 & 9085  \\ %\hline
+      Picard & 10 & $\mathscr{O}(0)$ & 131 & 5898 \\ %\hline            
+      Picard & 10 & $\mathscr{O}(1)$ & 104 & 4774 \\ %\hline            
+      Punto fijo & 5 & $\mathscr{O}(0)$ & 139 & 5415 \\ %\hline            
+      Punto fijo & 5 & $\mathscr{O}(1)$ & 186 & 6990 \\ %\hline            
+      Punto fijo & 10 & $\mathscr{O}(0)$ & 101 & 3755  \\ % \hline      
+      Punto fijo & 10 & $\mathscr{O}(1)$ & 107 & 3919  \\ \hline      
    \end{tabular}
    \label{tab-relap-puma}
    \caption[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
    {Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{PUMA}.}
 \end{table}
 
-comentar doble discretización temporal
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=1]{puma-relap-feval-es.pdf}
+  \label{fig-relap-puma-es}
+  \caption[Evaluaciones de funciones utilizando el método de \textit{Picard} en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
+  {Evaluaciones de funciones utilizando el método de \textit{Picard} en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{PUMA}.}
+\end{figure}
 
-Tras múltiples estudios se reporta en la Figura \ref{fig-relap-puma} y en la Tabla \ref{tab-relap-puma} algunos de los resultados obtenidos.
-La mayoría de los métodos fueron incapaces de completar el ciclo de quemado asegurando la convergencia fuerte de los resultados en cada paso de evolución.
-El método de \textit{Picard} encontró pasos en los que queda estancado, iterando en series de valores que se repiten en ciclos.
-Debido a la existencia de estos casos se limitó el método a un máximo de diez iteraciones por paso de quemado,
-obligando a continuar con el cálculo en pasos en los que los residuos eran aún un orden de magnitud mayor al fijado por la tolerancia.
-Exceptuando esta consideración, ambos métodos explícitos pudieron completar el cálculo a lo largo del ciclo de quemado de manera robusta.
-El método del punto fijo aprovecha la ventaja de realizar las evaluaciones de funciones en paralelo y por lo tanto logra completar el cálculo en la menor cantidad de tiempo.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=1]{puma-relap-feval-ep.pdf}
+  \label{fig-relap-puma-ep}
+  \caption[Evaluaciones de funciones utilizando el método del punto fijo en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
+  {Evaluaciones de funciones utilizando el método del punto fijo en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{PUMA}.}
+\end{figure}
 
 El método implícito de \textit{Broyden} fue estudiado en detalle por haber sido el que mejores resultados había entregado a lo largo de todo el trabajo,
 incluyendo el modelo de acoplamiento neutrónico-termohidráulico del apartado previo.
