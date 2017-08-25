@@ -1559,6 +1559,10 @@ La reactividad está relacionada con el factor de multiplicación $k_{eff}$ de l
 \rho = \frac{k_{eff}-1}{k_{eff}}
 \end{equation}
 y generalmente se expresa en \textit{pcm} (por ciento mil = $10^{-5}$).
+Desde Principio De Ciclo (BOC, por sus siglas en inglés) hasta aproximadamente el día 50 la reactividad decrece debido al consumo del material físil.
+Para este punto, el consumo de venenos quemables incluidos en los elementos combustibles comienza a cobrar importancia y por ello se empieza incrementar la reactividad.
+El pico de reactividad ocurre aproximadamente a los 160 días y tras esto la reactividad continúa decreciendo hasta Fin De Ciclo (EOC, por sus siglas en inglés).
+Es necesario resaltar una vez más que esta dinámica puede variar si en el modelo se hubiera incluido el movimiento de barras de control.
 
 \begin{figure}[ht]
 	\centering
@@ -1568,7 +1572,6 @@ y generalmente se expresa en \textit{pcm} (por ciento mil = $10^{-5}$).
 Durante todo el ciclo las barras de control del SAC permanecen insertadas hasta la mitad de la longitud activa del núcleo.}
 \label{carem-rho}
 \end{figure}
-
 
 En la resolución del sistema acoplado se utilizaron los mismos métodos que los estudiados en el ejemplo previo,
 con mismo criterio de convergencia para cada paso de quemado.

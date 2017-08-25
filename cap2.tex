@@ -359,15 +359,23 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
   ]
 
 	% Dummy
-	\node at (0,10em)             (dummy) {}; % blank space
+	%\node at (0,10em)             (dummy) {}; % blank space
 
 	% Códigos
-	\node [block2] at (0,23em)          (maestro)   {\textbf{Maestro}};
+	\node [block2] at (0,25em)          (maestro)   {\textbf{Maestro}};
 	\node [block2, left=4.8em  of maestro] (esclavo1) {\textbf{Esclavo $1$}};	
 	\node [block2, right=4.8em of maestro] (esclavo2) {\textbf{Esclavo $2$}};
   
+  % Arranque Comunicadores
+  \node [block1, text width=2.5cm] at (0,22em) (comm0) {Creación de comunicadores};
+  \node [block1, text width=2.7cm, text centered, left=4.1em  of comm0] (comm1) {Creación de comunicadores};
+  \node [block1, text width=2.7cm, text centered, right=4.1em  of comm0] (comm2) {Creación de comunicadores};
+  \draw [arrow2] (comm0.west) -- (comm1.east);
+  \draw [arrow2] (comm0.east) -- (comm2.west);
+  
+  
   % guess0
-  \node [block1, text width=2.5cm] at (0,16em) (guess0) {cálculo de \scriptsize \{$x^{guess}(t_{coup,j+1})$, $y^{guess}(t_{coup,j+1})$\}};
+  \node [block1, text width=2.5cm] at (0,16em) (guess0) {Cálculo de \scriptsize \{$x^{guess}(t_{coup,j+1})$, $y^{guess}(t_{coup,j+1})$\}};
   
   % ci
   \node [anchor=east, text width=2cm, text centered] at (-7 em,18em) (ci1) {\scriptsize (condiciones iniciales)};
@@ -429,30 +437,34 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
   \draw [arrow1] (guess0) to node [midway, above]{\footnotesize $y^{guess}$} ($(dummy12)-(0,1em)$);
 
   % calc0
-  \node [block1, text width=2cm] at (0,8em) (calc0) {cálculo de residuos};
+  \node [block1, text width=2cm] at (0,8em) (calc0) {Cálculo de residuos};
 
   % recv 1
   \draw [arrow1] ($(dummy51)-(0,1em)$) to node [midway, above]{\footnotesize $y(x^{guess})$} (calc0);
   \draw [arrow1] ($(dummy32)-(0,1em)$) to node [midway, above]{\footnotesize $x(y^{guess})$} (calc0);
   
   % convergencia
-  \node [draw, ellipse, fill=white] at (0,4em) (convergencia) {\footnotesize convergencia?};
+  \node [draw, ellipse, fill=white] at (0,4em) (convergencia) {\footnotesize Convergencia?};
   \draw[arrow1] (calc0) -- (convergencia);
   
   % si-no
-  \node [draw, diamond, fill=white] at(-2em, 1em) (si) {\footnotesize sí};
+  \node [draw, diamond, fill=white] at(-2em, 1em) (si) {\footnotesize Sí};
   \draw[arrow1] (convergencia) -- (si);
-  \node [draw, diamond, fill=white] at( 2em, 1em) (no) {\footnotesize no};
+  \node [draw, diamond, fill=white] at( 2em, 1em) (no) {\footnotesize No};
   \draw[arrow1] (convergencia) -- (no);
   
   % continue - restart
-  \node [draw,rectangle, fill=white] at(-2em, -2em) (continuar) {\scriptsize continuar};
+  \node [draw,rectangle, fill=white] at(-2em, -2em) (continuar) {\scriptsize Continuar};
   \draw[arrow1] (si) -- (continuar);
-  \node [draw,rectangle, fill=white] at( 2em, -2em) (reinicio) {\scriptsize reiniciar};
+  \node [draw,rectangle, fill=white] at( 2em, -2em) (reinicio) {\scriptsize Reiniciar};
   \draw[arrow1] (no) -- (reinicio);
   
-  % guess1
-  \node [draw,rectangle, fill=white, text width=1.8cm, align=center] at (0,-6em) (actualizar) {\scriptsize $t_{coup,j} = t_{coup,j} + \Delta t$};
+  % t->t+dt
+  \node [draw,rectangle, fill=white, text width=2.5cm, align=center] at (0,-5em) (actualizar) {\scriptsize $t_{coup,j} = t_{coup,j} + \Delta t$};
+  
+  
+  % t<tf
+  \node [draw,rectangle, fill=white, text width=1.8cm, align=center, below=1em of actualizar] (minor) {\scriptsize $t_{coup} < t_{coup,final}?$};
   
   % continuar->guess
   \draw[arrow1, dashed] (continuar) -- (actualizar);
@@ -552,24 +564,30 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
   %~ \node at($(r12) - (16em,0em)$) (r13) {};
   %~ \node at($(r13) + (0em,19.5em)$) (r14) {};
   %~ \node at($(r14) + (2.5em,0em)$) (r15) {};
-  %~ \draw[arrow1,dashed] (r11.center) -- (r12.center) -- (r13.center) -- (r14.center) -- (r15.center);
-  
+  %~ \draw[arrow1,dashed] (r11.center) -- (r12.center) -- (r13.center) -- (r14.center) -- (r15.center);  
   
   
   % Reinit order
   \node at($(reinicio.east) + (11em,0em)$) (r23) {};
   \node at($(r23) + (0em,22.0em)$) (r24) {};
-  \node at($(r24) - (14.5em,0em)$) (r25) {};
+  \node at($(r24) - (13.5em,0em)$) (r25) {};
   \node at($(r25) - (0em,2.em)$) (r26) {};
   \draw[arrow1,dashed] (reinicio.east) -- (r23.center) -- (r24.center) -- (r25.center) -- (r26.center);
   
   % Continue order
-  \node at($(continuar.west) - (11em,0em)$) (c23) {};
-  \node at($(c23) + (0em,22.0em)$) (c24) {};
-  \node at($(c24) + (14.5em,0em)$) (c25) {};
+  \node at($(actualizar.west) - (12.1em,0em)$) (c23) {};
+  \node at($(c23) + (0em,26.0em)$) (c24) {};
+  \node at($(c24) + (13.5em,0em)$) (c25) {};
   \node at($(c25) - (0em,2.em)$) (c26) {};
-  \draw[arrow1,dashed] (continuar.west) -- (c23.center) -- (c24.center) -- (c25.center) -- (c26.center);
-  
+  \draw[arrow1,dashed] (actualizar.west) -- (c23.center) -- (c24.center) -- (c25.center) -- (c26.center);
+
+
+  % Arranque Comunicadores
+  \node [block1, text width=2.5cm] at ($(actualizar.south) - (0em,5em)$) (comm02) {Liberación de comunicadores};
+  \node [block1, text width=2.7cm, text centered, left=4.1em  of comm02] (comm12) {Liberación de comunicadores};
+  \node [block1, text width=2.7cm, text centered, right=4.1em  of comm02] (comm22) {Liberación de comunicadores};  
+  \draw [arrow2] (comm02.west) -- (comm12.east);
+  \draw [arrow2] (comm02.east) -- (comm22.west);
   
   % Cuadros
   \begin{pgfonlayer}{bg}    % select the background layer
