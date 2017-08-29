@@ -81,11 +81,11 @@ Se tiene que:
 \begin{equation}
 \begin{split}
   (x_m)_{S_i}^{I_l} = (\mathscr{F}_m)_{i}^{l} \left ( (\bar{x})_{S_i}^{I_1}, (\bar{x})_{S_i}^{I_2}, ..., 
-  (\bar{x})_{S_i}^{I_{L_i}}, (\alpha_i({\Gamma_i}) \right )
+  (\bar{x})_{S_i}^{I_{L_i}}, \alpha_i({\Gamma_i}) \right )
 \end{split}
 \label{ecuaciones-modelos}
 \end{equation}
-donde $(\alpha_i({\Gamma_i})$ representa las condiciones de borde impuestas sobre la curva $\Gamma_i$.
+donde los valores $\alpha_i({\Gamma_i})$ representan las condiciones de borde impuestas sobre la curva $\Gamma_i$.
 Estas relaciones $(\mathscr{F}_m)_{i}^{l}$, básicamente, mapean condiciones de borde de un tipo, que son impuestas como datos, en condiciones de borde de otro tipo.
 Notar que algunas de las dependencias pueden anularse dependiendo del modelo de estudio utilizado en cada subsistema.
 Cuando la expresión \ref{ecuaciones-modelos} es más sencilla y solo involucra el valor de otro tipo de condición de borde para la misma interfaz,
@@ -99,12 +99,12 @@ Considerando estas ecuaciones, el problema general abordado mediante el Método 
 \subsection*{Estrategia de resolución del acoplamiento}
 \label{1:ecuaciones}
 Una vez planteadas las ecuaciones del problema, es necesario definir una estrategia de resolución.
-A continuación se propone un ejemplo didáctico para comprender las estrategias de acoplamiento posteriormente cometandas.
+A continuación se propone un problema didáctico para comprender las estrategias de acoplamiento posteriormente cometandas.
 
 \medskip
 
-\begin{EvalBox}{\textbf{Ejemplo:} Cálculo de temperaturas con el Método de Descomposición Disjunta de Dominios}
-
+\begin{EvalBox}{\textbf{Problema:} Cálculo de temperaturas con el Método de Descomposición Disjunta de Dominios}
+\setlength\parindent{16pt}
 Se desea resolver un problema de cálculo de campo de temperatura mediante el Método de Descomposición Disjunta de Dominios.
 El sistema global de análisis es una barra unidimensional de longitud $L$ con condiciones de borde homogéneas, fuente interna de energía $f$ y conductividad térmica $k$.
 El modelo matemático utilizado es el siguiente:
@@ -170,28 +170,28 @@ En el método \textit{Dirichlet-to-Neumann}, es necesario decidir qué subsistem
 y qué tipo de condición de borde se le va a aplicar.
 Estas primeras decisiones son arbitrarias.
 En la resolución del ejemplo se decide comenzar con el subsistema de la izquierda e
-imponer una temperatura $(T_{guess})_{S_1}$ (condición \textit{Dirichlet}) en su interfaz de acople.
+imponer una temperatura $(T^{guess})_{S_1}$ (condición \textit{Dirichlet}) en su interfaz de acople.
 Luego de realizar el cálculo de temperaturas queda definido un flujo de calor a través de esta interfaz.
 Es decir, uno de los valores de las incógnitas en la interfaz de acople se calcula como función del valor de la otra incógnita, 
 que fue supuesta como dato, a partir de la relación \ref{ecuaciones-modelos}.
 En este caso la relación recibe el nombre de operador \textit{Steklov-Poincaré} y se define como:
 \begin{equation}
-(q''_{calc})_{S_1} = \mathscr{N}_1\left ((T_{guess})_{S_1}\right )
+(q''^{calc})_{S_1} = \mathscr{N}_1\left ((T^{guess})_{S_1}\right )
 \label{q_n_t}
 \end{equation}
 donde $\mathscr{N}$ es el operador que mapea condiciones de borde de tipo \textit{Dirichlet} en condiciones de borde de tipo \textit{Neumann}
-y $(q''_{calc})_{S_1}$ es el flujo de calor calculado.
+y $(q''^{calc})_{S_1}$ es el flujo de calor calculado.
 En base a la relación de continuidad \ref{continuidad} este flujo de calor se impone en el segundo subsistema como condición de borde.
-Esta condición define nuevamente una temperatura $(T_{calc})_{S_2}$ en la interfaz de acople, mediante el operador \textit{Steklov-Poincaré} definido en este subdominio:
+Esta condición define nuevamente una temperatura $(T^{calc})_{S_2}$ en la interfaz de acople, mediante el operador \textit{Steklov-Poincaré} definido en este subdominio:
 \begin{equation}
-(T_{calc})_{S_2} = \mathscr{D}_2\left ((q''_{calc})_{S_1}\right )
+(T^{calc})_{S_2} = \mathscr{D}_2\left ((q''^{calc})_{S_1}\right )
 \label{t_d_q}
 \end{equation}
 donde $\mathscr{D}$ es el operador que mapea condiciones de borde de tipo \textit{Neumann} en condiciones de borde de tipo \textit{Dirichlet}.
-Si $(T_{calc})_{S_2}$ coincide con $(T_{guess})_{S_1}$ inicialmente supuesta,
+Si $(T^{calc})_{S_2}$ coincide con $(T^{guess})_{S_1}$ inicialmente supuesta,
 los resultados están convergidos y entonces finaliza el cálculo.
-En caso contrario, el proceso debe repetirse, pero ahora se impone $(T_{calc})_{S_2}$ al primer subsistema.
-El cálculo continúa así hasta que los valores $\{(q''_{calc})_{S_1}, (T_{calc})_{S_2}\}$ convergen en iteraciones contiguas.
+En caso contrario, el proceso debe repetirse, pero ahora se impone $(T^{calc})_{S_2}$ al primer subsistema.
+El cálculo continúa así hasta que los valores $\{(q''^{calc})_{S_1}, (T^{calc})_{S_2}\}$ convergen en iteraciones contiguas.
 
 Si inicialmente se hubiera impuesto una condición de tipo \textit{Neumann} en el primer subdominio, 
 necesariamente al segundo subdominio debería habérsele impuesto una condición de tipo \textit{Dirichlet},
@@ -205,41 +205,27 @@ Otra desventaja es que en general requiere demasiadas iteraciones para converger
 En algunos problemas el método puede quedar estancado, iterando en series de valores que se repiten en ciclo.
 Y en otros casos el método es divergente (sin ir más allá, para un cierto conjunto de parámetros del problema ejemplo analizado, el método diverge, ver \cite{coup-strong}).
 
-Existe una forma alternativa de resolver el acoplamiento. %, y es mediante una técnica implícita.
-Esta técnica es una metodología también iterativa, y consiste en la evaluación de residuos sucesivos construidos por diferencia entre valores propuestos y valores calculados.
-En primera instancia se propone un valor \textit{guess} para todas las incógnitas $(x_{m}^{guess})_{S_i}^{I_l}$.
-Estos valores deben respetar las relaciones de continuidad \ref{continuidad}.
-En segunda instancia se decide qué tipos de condiciones de borde va a recibir cada interfaz de cada subsistema,
-definiendo problemas parciales bien planteados.
-En el ejemplo analizado, sería posible definir condiciones de borde de tipo \textit{Dirichlet} en ambos subsistemas.
-En función de esta decisión, se toman los valores correspondientes del vector $\bar{x}_{guess}$ y se establecen como datos para cada problema parcial.
-Una vez resuelto el problema en cada subdominio, se calcula el valor de las variables que no fueron tomadas como dato en las interfaces de acople.
-En el ejemplo, si se había establecido un valor de temperatura como condición de borde de tipo \textit{Dirichlet} en ambas interfaces,
-se calcula entonces el valor del flujo de calor en la misma interfaz para cada subsistema, mediante los operadores de \textit{Steklov-Poincaré} $\mathscr{N}_1$ y $\mathscr{N}_2$:
-\begin{equation}
-\left\{\begin{matrix}
-(q''_{calc})_{S_1}  = \mathscr{N}_1\left ((T^{guess})_{S_1}\right ) \\
-(q''_{calc})_{S_2}  = \mathscr{N}_2\left ((T^{guess})_{S_2}\right )
-\end{matrix}\right.
-\label{qq_nn_tt}
-\end{equation}
-
-Al hacer esto se están resolviendo las ecuaciones \ref{ecuaciones-modelos},
-obteniéndose los valores $(x_{m}^{calc})_{S_i}^{I_l}$.
-Finalmente, se computan las diferencias entre los valores \textit{guess} y los valores calculados, obteniendo los residuos $(r_m)_{i}^{l}$:
+Existen formas alternativas para resolver el acoplamiento.
+Una de ellas es utilizar el método del punto fijo.
+En este método, inicialmente se propone un vector semilla $\{T^{guess},q''^{guess}\}$ con valores para todas las incógnitas al mismo tiempo.
+Se decide arbitrariamente el tipo de condición de borde impuesta a cada subsistema, con la condición de que deben cubrir todos los valores de cálculo.
+En el ejemplo presentado, alguno de los subsistemas debe calcular $\{T^{calc}$ y otro $\{q''^{calc}$.
+Luego se computan los residuos $(r_m)_{i}^{l}$ entre los valores propuestos y los valores calculados para cada variable.
 
 \begin{equation}
 (r_m)_{i}^{l} = (x_{m}^{guess})_{S_i}^{I_l} - (x_{m}^{calc})_{S_i}^{I_l}
 \label{ecuaciones-residuos}
 \end{equation}
 donde $m$ es el índice de incógnita, $l$ de la intefaz e $i$ del subsistema.
-En el ejemplo, las ecuaciones de residuos quedarían:
+Considerando que el primer subsistema se resuelve con condiciones de borde de tipo \textit{Dirichlet} y el segundo con condiciones de borde de tipo \textit{Neumann}
+el sistema de residuos queda:
+
 \begin{equation}
 \left\{\begin{matrix}
-(r_{q''})_{S1}^{1}  = (q''^{ guess})_{S_1} - (q''^{calc})_{S_1} \\
-(r_{q''})_{S2}^{1}  = (q''^{ guess})_{S_2} - (q''^{calc})_{S_2}
+(r_{q''})_{S1}^{1}  = (q''^{ guess}) - (q''^{calc})_{S_1} \\
+(r_{q''})_{S2}^{1}  = (T^{guess}) - (T^{calc})_{S_2}
 \end{matrix}\right.
-\label{res_qq}
+\label{res_qt}
 \end{equation}
 
 La convergencia fuerte de los subsistemas acoplados requiere que estos residuos sean nulos, y por lo tanto se busca el siguiente resultado:
@@ -249,20 +235,103 @@ La convergencia fuerte de los subsistemas acoplados requiere que estos residuos 
 \end{equation}
 donde $\bar{r}$ es el vector de residuos de las ecuaciones,
 y $\bar{x}^{guess}$ es el vector que contiene los valores $(x_m^{guess})_{S_i}^{I_l}$ propuestos.
-Comúnmente en la primera iteración esto no sucede, y por lo tanto es necesario repetir el proceso sucesivas veces hasta obtener convergencia.
-En la siguiente sección se comentan diferentes métodos numéricos para la resolución del sistema de ecuaciones \ref{sistema-simple}.
+Comúnmente en el primer cálculo esto no sucede, y por lo tanto es necesario realizar iteraciones hasta obtener convergencia.
+En el método del punto fijo, los valores calculados conforman directamente el vector semilla para cada nueva iteración.
+Es decir, en la iteración $n$, se utiliza como semilla $\bar{x}^{guess}_n$ el resultado de la iteración previa $\bar{x}^{calc}_{n-1}$.
+Si bien este método tiene similares desventajas al método \textit{Dirichlet-to-Neumann} porque es otro método explícito,
+acelera el tiempo de cálculo ya que permite resolver los diferentes subsistemas de estudio al mismo tiempo.
+
+Otra alternativa para resolver el acoplamiento es hacerlo en forma implícita.
+En este caso las elecciones para las condiciones de borde en cada subsistema son independientes entre sí.
+En el ejemplo presentado, ambos subsistemas podrían tener fronteras tipo \textit{Dirichlet}.
+Al igual que en el método del punto fijo, se propone un vector semilla $\{T^{guess},q''^{guess}\}$ con valores para todas las incógnitas al mismo tiempo.
+Ambos subsistemas imponen el valor $T^{guess}$ como condición de borde en sus interfaces de acoplamiento,
+y calculan el valor del flujo de calor en la misma interfaz, mediante los operadores de \textit{Steklov-Poincaré} $\mathscr{N}_1$ y $\mathscr{N}_2$:
+
+\begin{equation}
+\left\{\begin{matrix}
+(q''_{calc})_{S_1}  = \mathscr{N}_1\left ((T^{guess})_{S_1}\right ) \\
+(q''_{calc})_{S_2}  = \mathscr{N}_2\left ((T^{guess})_{S_2}\right )
+\end{matrix}\right.
+\label{qq_nn_tt}
+\end{equation}
+
+Finalmente, se computan los residuos:
+
+\begin{equation}
+\left\{\begin{matrix}
+(r_{q''})_{S1}^{1}  = (q''^{ guess})_{S_1} - (q''^{calc})_{S_1} \\
+(r_{q''})_{S2}^{1}  = (q''^{ guess})_{S_2} - (q''^{calc})_{S_2}
+\end{matrix}\right.
+\label{res_qq}
+\end{equation}
+
+Como en \ref{sistema-simple}, también se busca que los residuos sean nulos,
+pero en este caso en las iteraciones que pueden llegar a requerirse para obtener la convergencia deseada
+las semillas sucesivas se generan mediante algún método numérico de mayor órden de convergencia.
+Esta estrategia es robusta, evade el problema de quedar estancada proponiendo series de valores que se repiten en serie y debido a los mayores órdenes convergencia reduce los tiempos de cálculo.
+En la siguiente sección se comentan diferentes métodos numéricos que pueden utilizarse para generar estas semillas.
+
+
+%~ 
+%~ Existe una forma alternativa de resolver el acoplamiento. %, y es mediante una técnica implícita.
+%~ Esta técnica es una metodología también iterativa, y consiste en la evaluación de residuos sucesivos construidos por diferencia entre valores propuestos y valores calculados.
+%~ En primera instancia se propone un valor \textit{guess} para todas las incógnitas $(x_{m}^{guess})_{S_i}^{I_l}$.
+%~ Estos valores deben respetar las relaciones de continuidad \ref{continuidad}.
+%~ En segunda instancia se decide qué tipos de condiciones de borde va a recibir cada interfaz de cada subsistema,
+%~ definiendo problemas parciales bien planteados.
+%~ En el ejemplo analizado, sería posible definir condiciones de borde de tipo \textit{Dirichlet} en ambos subsistemas.
+%~ En función de esta decisión, se toman los valores correspondientes del vector $\bar{x}_{guess}$ y se establecen como datos para cada problema parcial.
+%~ Una vez resuelto el problema en cada subdominio, se calcula el valor de las variables que no fueron tomadas como dato en las interfaces de acople.
+%~ En el ejemplo, si se había establecido un valor de temperatura como condición de borde de tipo \textit{Dirichlet} en ambas interfaces,
+%~ se calcula entonces el valor del flujo de calor en la misma interfaz para cada subsistema, mediante los operadores de \textit{Steklov-Poincaré} $\mathscr{N}_1$ y $\mathscr{N}_2$:
+%~ \begin{equation}
+%~ \left\{\begin{matrix}
+%~ (q''_{calc})_{S_1}  = \mathscr{N}_1\left ((T^{guess})_{S_1}\right ) \\
+%~ (q''_{calc})_{S_2}  = \mathscr{N}_2\left ((T^{guess})_{S_2}\right )
+%~ \end{matrix}\right.
+%~ \label{qq_nn_tt}
+%~ \end{equation}
+%~ 
+%~ Al hacer esto se están resolviendo las ecuaciones \ref{ecuaciones-modelos},
+%~ obteniéndose los valores $(x_{m}^{calc})_{S_i}^{I_l}$.
+%~ Finalmente, se computan las diferencias entre los valores \textit{guess} y los valores calculados, obteniendo los residuos $(r_m)_{i}^{l}$:
+%~ 
+%~ \begin{equation}
+%~ (r_m)_{i}^{l} = (x_{m}^{guess})_{S_i}^{I_l} - (x_{m}^{calc})_{S_i}^{I_l}
+%~ \label{ecuaciones-residuos}
+%~ \end{equation}
+%~ donde $m$ es el índice de incógnita, $l$ de la intefaz e $i$ del subsistema.
+%~ En el ejemplo, las ecuaciones de residuos quedarían:
+%~ \begin{equation}
+%~ \left\{\begin{matrix}
+%~ (r_{q''})_{S1}^{1}  = (q''^{ guess})_{S_1} - (q''^{calc})_{S_1} \\
+%~ (r_{q''})_{S2}^{1}  = (q''^{ guess})_{S_2} - (q''^{calc})_{S_2}
+%~ \end{matrix}\right.
+%~ \label{res_qq}
+%~ \end{equation}
+%~ 
+%~ La convergencia fuerte de los subsistemas acoplados requiere que estos residuos sean nulos, y por lo tanto se busca el siguiente resultado:
+%~ \begin{equation}
+%~ \bar{r}(\bar{x}^{guess})=\bar{0}
+%~ \label{sistema-simple}
+%~ \end{equation}
+%~ donde $\bar{r}$ es el vector de residuos de las ecuaciones,
+%~ y $\bar{x}^{guess}$ es el vector que contiene los valores $(x_m^{guess})_{S_i}^{I_l}$ propuestos.
+%~ Comúnmente en la primera iteración esto no sucede, y por lo tanto es necesario repetir el proceso sucesivas veces hasta obtener convergencia.
+%~ En la siguiente sección se comentan diferentes métodos numéricos para la resolución del sistema de ecuaciones \ref{sistema-simple}.
 
 \subsection*{Métodos numéricos para la resolución de sistemas de ecuaciones de residuos}
 \label{1:metodos}
 
 Existen diferentes métodos numéricos para hallar las raíces del sistema de ecuaciones \ref{sistema-simple}.
-El método más básico es el método del punto fijo, que es un método iterativo explícito\footnote{
-Puede pensarse a este método como una combinación de múltiples métodos \textit{Dirichlet-to-Neumann} efectuados al mismo tiempo,
-en el que en cada iteración se realiza el cálculo en cada subdominio a partir de los resultados obtenidos en otros subdominios en la iteración previa.
-},
-y consiste en tomar como semilla $\bar{x}^{guess}_n$ para cada iteración $n$ al resultado $\bar{x}^{calc}_{n-1}$ de la iteración previa.
-Este método, al igual que el método \textit{Dirichlet-to-Neumann}, tiene bajo orden de convergencia,
-y tampoco permite combinar libremente la elección de condiciones de borde para los diferentes subdominios.
+%~ El método más básico es el método del punto fijo, que es un método iterativo explícito\footnote{
+%~ Puede pensarse a este método como una combinación de múltiples métodos \textit{Dirichlet-to-Neumann} efectuados al mismo tiempo,
+%~ en el que en cada iteración se realiza el cálculo en cada subdominio a partir de los resultados obtenidos en otros subdominios en la iteración previa.
+%~ },
+%~ y consiste en tomar como semilla $\bar{x}^{guess}_n$ para cada iteración $n$ al resultado $\bar{x}^{calc}_{n-1}$ de la iteración previa.
+%~ Este método, al igual que el método \textit{Dirichlet-to-Neumann}, tiene bajo orden de convergencia,
+%~ y tampoco permite combinar libremente la elección de condiciones de borde para los diferentes subdominios.
 
 Los métodos más eficientes para la resolución de sistemas de ecuaciones de residuos son métodos implícitos,
 en los que la semilla para cada iteración no es directamente el resultado obtenido en la iteración previa.

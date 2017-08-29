@@ -70,17 +70,16 @@ pretende mejorar la portabilidad, el rendimiento, la funcionalidad y
 la disponibilidad de las aplicaciones.
 
 Se utilizaron dos implementaciones alternativas.
-En la primera, cada código \textit{esclavo}, así como el código \textit{maestro},
-es ejecutado de manera independiente en uno (SISD, por sus siglas en inglés)
-o múltiples procesos (SIMD, por sus siglas en inglés).
-El código \textit{maestro} publica una serie de puertos a los cuales cada código \textit{esclavo} puede conectarse.
+En la primera, cada código \textit{esclavo}, así como el código \textit{maestro}, es ejecutado de manera independiente,
+y luego se establecen los comunicadores de acuerdo a las rutinas establecidas en el estándard MPI 2.0.
+En estas rutinas el código \textit{maestro} publica una serie de puertos a los cuales cada código \textit{esclavo} debe conectarse.
 %\footnote{Para que los programas puedan encontrar los puertos publicados, es necesario que todos ellos pertenezcan a un mismo servicio de comunicación generado por el \textit{ompi-server}.}
 Una vez aceptadas las conexiones, los programas pueden intercambiar mensajes con él siguiendo una lógica preestablecida.
 Cuando ya no es necesario que los programas continúen comunicándose, se cierran las conexiones.
 
-En la otra implementación, todos los programas son ejecutados al mismo tiempo en uno (MISD, por sus siglas en inglés)
-o varios procesos (MIMD, por sus siglas en inglés).
+En la otra implementación, todos los programas son ejecutados en simultáneo.
 En este tipo de ejecuciones todos los procesos cuentan con un único comunicador original, \textit{MPI\_COMM\_WORLD}, y por ello es necesario crear nuevos grupos de procesos y de comunicadores.
+%En este caso los comunicadores se establecen con rutinas establecidas en el estándard MPI 1.0.
 Una vez establecidos los comunicadores, los programas ya pueden intercambiar mensajes con el código \textit{maestro} siguiendo la misma lógica que se establecerá para ambos modelos.
 Si bien esta implementación no es posible para nuevas conexiones una vez que los programas han sido ejecutados,
 son mucho más seguras, ya que no dependen del éxito de encontrar los puertos requeridos para las conexiones.
@@ -243,11 +242,11 @@ En este modelo, la comunicación se establece solo mediante lectura y escritura 
 
 En este trabajo se utilizaron dos códigos \textit{maestros} que cumplen con la estrategia de acoplamiento descripta previamente.
 El primer código \textit{maestro} utilizado es el código \textbf{Coupling} \cite{coup-0d3d} \cite{coup-black} \cite{coup-hyd}.
-\textbf{Coupling} utiliza los modelos de comunicación por paso de mensaje entre programas ejecutados en modos SISD y SIMD.
+\textbf{Coupling} utiliza los modelos de comunicación por paso de mensaje entre programas ejecutados de manera independiente.
 El código está diseñado de tal forma que los códigos acoplados resuelvan las ecuaciones \ref{ecuaciones-modelos}
 para pares de incógnitas en las intefaces. 
 Cada par de incógnitas debe contener una variable que corresponda a una condición de borde de tipo \textit{Dirichlet} y otra variable que corresponda a una condición de borde de tipo \textit{Neumann}.
-Con la idea de extender estas capacidades al acoplamiento de programas en modos MISD y MIMD,
+Con la idea de extender estas capacidades al acoplamiento de programas que pudieran ser ejecutados en simultáneo,
 al acoplamiento de programas por lectura y escritura de archivos,
 y al acoplamiento de programas cuyos cálculos no dependieran exclusivamente de condiciones de borde dinámicas,
 sino también de otros parámetros del sistema que estuvieran acoplados\footnote{
@@ -277,12 +276,12 @@ A continuación se describen las instancias de acoplamiento.
 \subsection*{Acoplamiento en instancia 1: al principio del programa}
 
 En esta instancia es necesario establecer la comunicación \textit{MPI} entre el proceso \textit{raíz} del código \textit{esclavo} y el código maestro.
-Si ambos programas han sido ejecutados en los esquemas SISD o SIMD los pasos a realizar son los siguientes:
+Si ambos programas han sido ejecutados en forma independiente los pasos a realizar son los siguientes:
 \begin{itemize}
 \item búsqueda del puerto publicado por el el proceso \textit{raíz} del programa \textit{maestro};
 \item conexión del proceso \textit{raíz} del programa esclavo a este puerto y creación del comunicador.
 \end{itemize}
-Si, en cambio, los programas han sido ejecutados en los modos MISD o MIMD, los pasos a realizar son los siguientes:
+Si, en cambio, los programas han sido ejecutados en simultáneo, los pasos a realizar son los siguientes:
 \begin{itemize}
 \item creación de grupo global de procesos;
 \item creación de subgrupo local de procesos;
@@ -377,28 +376,31 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
   % guess0
   \node [block1, text width=2.5cm] at (0,16em) (guess0) {Cálculo de \scriptsize \{$x^{guess}(t_{coup,j+1})$, $y^{guess}(t_{coup,j+1})$\}};
   
+  % comm0 -- guess0
+  \draw [arrow1, dashed] (comm0) -- (guess0);
+  
   % ci
   \node [anchor=east, text width=2cm, text centered] at (-7 em,18em) (ci1) {\scriptsize (condiciones iniciales)};
   \node [anchor=west, text width=2cm, text centered] at ( 7 em,18em) (ci2) {\scriptsize (condiciones iniciales)};
  
   % s1
-  \node [anchor=east] at (-11.5 em,17em) (tl10) {\footnotesize $t_{e1,0}$};  
+  \node [anchor=east] at (-11.5 em,17em) (tl10) {\footnotesize $t_{e_1,0}$};  
   \node at (-7.3em,17em) (dummy11) {};
   \draw [dashed] ($(tl10)+(1em,-0.3em)$) -- ($(dummy11)-(0,0.3em)$);
   
-  \node [anchor=east] at (-11.5 em,15em) (tl11) {\footnotesize $t_{e1,1}$};  
+  \node [anchor=east] at (-11.5 em,15em) (tl11) {\footnotesize $t_{e_1,1}$};  
   \node at (-7.3em,15em) (dummy21) {};
   \draw [dashed] ($(tl11)+(1em,-0.3em)$) -- ($(dummy21)-(0,0.3em)$);
   
-  \node [anchor=east] at (-11.5 em,13em) (tl12) {\footnotesize $t_{e1,2}$};  
+  \node [anchor=east] at (-11.5 em,13em) (tl12) {\footnotesize $t_{e_1,2}$};  
   \node at (-7.3em,13em) (dummy31) {};
   \draw [dashed] ($(tl12)+(1em,-0.3em)$) -- ($(dummy31)-(0,0.3em)$);
   
-  \node [anchor=east] at (-11.5 em,11em) (tl1i) {\footnotesize $t_{e1,i}$};  
+  \node [anchor=east] at (-11.5 em,11em) (tl1i) {\footnotesize $t_{e_1,i}$};  
   \node at (-7.3em,11em) (dummy41) {};
   \draw [dashed] ($(tl1i)+(1em,-0.3em)$) -- ($(dummy41)-(0,0.3em)$);
   
-  \node [anchor=east] at (-11.5 em,9em) (tl1n) {\footnotesize $t_{e1,N}$};  
+  \node [anchor=east] at (-11.5 em,9em) (tl1n) {\footnotesize $t_{e_1,N_1}$};  
   \node at (-7.3em,9em) (dummy51) {};
   \draw [dashed] ($(tl1n)+(1.2em,-0.3em)$) -- ($(dummy51)+(0.2em,-0.3em)$);
    
@@ -416,15 +418,15 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
   \draw[->] ($(tl1i.east)+(1.8em,-0.7em)$) -- ($(tl1i.east)+(1.8em,-2em)$);
   
   % s2
-  \node [anchor=west] at (11.5 em,17em) (tl20) {\footnotesize $t_{e2,0}$};
+  \node [anchor=west] at (11.5 em,17em) (tl20) {\footnotesize $t_{e_2,0}$};
   \node at (7.3em,17em) (dummy12) {};
   \draw [dashed] ($(dummy12)-(0,0.3em)$) -- ($(tl20.west)-(0em,0.3em)$);
   
-  \node [anchor=west] at (11.5 em,13em) (tl2i) {\footnotesize $t_{e2,i}$};
+  \node [anchor=west] at (11.5 em,13em) (tl2i) {\footnotesize $t_{e_2,i}$};
   \node at (7.3em,13em) (dummy22) {};
   \draw [dashed] ($(dummy22)-(0,0.3em)$) -- ($(tl2i.west)-(0em,0.3em)$);
   
-  \node [anchor=west] at (11.5 em,9em) (tl2n) {\footnotesize $t_{e2,N}$};
+  \node [anchor=west] at (11.5 em,9em) (tl2n) {\footnotesize $t_{e_2,N_2}$};
   \node at (7.3em,9em) (dummy32) {};
   \draw [dashed] ($(dummy32)-(0,0.3em)$) -- ($(tl2n.west)-(0em,0.3em)$);
   
@@ -453,21 +455,30 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
   \node [draw, diamond, fill=white] at( 2em, 1em) (no) {\footnotesize No};
   \draw[arrow1] (convergencia) -- (no);
   
-  % continue - restart
-  \node [draw,rectangle, fill=white] at(-2em, -2em) (continuar) {\scriptsize Continuar};
-  \draw[arrow1] (si) -- (continuar);
+  % reiniciar
   \node [draw,rectangle, fill=white] at( 2em, -2em) (reinicio) {\scriptsize Reiniciar};
   \draw[arrow1] (no) -- (reinicio);
   
+  % continuar
+  \node [draw,rectangle, fill=white] at(-2em, -2em) (continuar) {\scriptsize Continuar};
+  \draw[arrow1] (si) -- (continuar);
+  
   % t->t+dt
-  \node [draw,rectangle, fill=white, text width=2.5cm, align=center] at (0,-5em) (actualizar) {\scriptsize $t_{coup,j} = t_{coup,j} + \Delta t$};
+  \node [draw,rectangle, fill=white, text width=3cm, align=center] at (0,-4.5em) (actualizar) {\scriptsize $t_{coup,j} = t_{coup,j} + \Delta t$};  
   
+  % t < tf
+  \node [draw,rectangle, fill=white, text width=2.5cm, align=center] at ($(actualizar.south)+(-3.45em,-1.5em)$) (minor1) {\scriptsize $t_{coup} < t_{coup,final}$};
   
-  % t<tf
-  \node [draw,rectangle, fill=white, text width=1.8cm, align=center, below=1em of actualizar] (minor) {\scriptsize $t_{coup} < t_{coup,final}?$};
+  % t > tf
+  \node [draw,rectangle, fill=white, text width=2.5cm, align=center] at ($(actualizar.south)+(+3.45em,-1.5em)$) (minor2) {\scriptsize $t_{coup} \geqslant t_{coup,final}$};
   
   % continuar->guess
   \draw[arrow1, dashed] (continuar) -- (actualizar);
+  \draw[arrow1, dashed] (actualizar) -- (minor1);
+  \draw[arrow1, dashed] (actualizar) -- (minor2);
+
+  
+  
   
   %~ % s1  
   %~ \node [anchor=east] at (-11.5 em,-5em) (tl10) {\footnotesize $t_{e1,N}$};  
@@ -575,19 +586,21 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
   \draw[arrow1,dashed] (reinicio.east) -- (r23.center) -- (r24.center) -- (r25.center) -- (r26.center);
   
   % Continue order
-  \node at($(actualizar.west) - (12.1em,0em)$) (c23) {};
-  \node at($(c23) + (0em,26.0em)$) (c24) {};
+  \node at($(minor1.west) - (8em,0em)$) (c23) {};
+  \node at($(c23) + (0em,26.7em)$) (c24) {};
   \node at($(c24) + (13.5em,0em)$) (c25) {};
   \node at($(c25) - (0em,2.em)$) (c26) {};
-  \draw[arrow1,dashed] (actualizar.west) -- (c23.center) -- (c24.center) -- (c25.center) -- (c26.center);
+  \draw[arrow1,dashed] (minor1.west) -- (c23.center) -- (c24.center) -- (c25.center) -- (c26.center);
 
-
-  % Arranque Comunicadores
+  % Liberacion Comunicadores
   \node [block1, text width=2.5cm] at ($(actualizar.south) - (0em,5em)$) (comm02) {Liberación de comunicadores};
   \node [block1, text width=2.7cm, text centered, left=4.1em  of comm02] (comm12) {Liberación de comunicadores};
   \node [block1, text width=2.7cm, text centered, right=4.1em  of comm02] (comm22) {Liberación de comunicadores};  
   \draw [arrow2] (comm02.west) -- (comm12.east);
   \draw [arrow2] (comm02.east) -- (comm22.west);
+  
+  % Minor2 -- liberacion
+  \draw[arrow1,dashed] (minor2) -- (comm02);
   
   % Cuadros
   \begin{pgfonlayer}{bg}    % select the background layer
@@ -618,16 +631,15 @@ En caso contrario, puede enviarles la órden de volver a calcular el mismo paso 
 En el ejemplo, cada código \textit{esclavo} resuelve ecuaciones diferenciales en distintos subsitemas.
 Estos subsistemas están acoplados entre sí en alguna interfaz en las que las variables \{$x,y$\} son incógnitas.
 Los cálculos se acoplan cada $\Delta t_{coup}$, pero cada programa utiliza subpasos de cálculos locales.
-El código \textbf{Esclavo 1} inicia recibiendo como \textit{guess} para el tiempo $t_{coup,1}$ la variable $x^{guess}$.
-El valor de $x^{guess}$ utilizado en los pasos intermedios de cálculo es simplemente una interpolación entre la condición incial y el valor recibido.
+Una vez generados los comunicadores,
+el código \textbf{Esclavo 1} recibe como \textit{guess} para el tiempo $t_{coup,1}$ la variable $x^{guess}$.
 El código \textbf{Esclavo 2} recibe alternativamente como \textit{guess} para el tiempo $t_{coup,1}$ la variable $y^{guess}$.
 Al finalizar $\Delta t_{coup}$ ambos programas devuelven al programa \textbf{Maestro} las variables conjugadas calculadas.
 \textbf{Maestro} computa los residuos entre los valores \textit{guess} previamente propuestos y los valores recibidos.
 Si el residuo no supera cierta tolerancia prefijada, envía la órden de reinicio a cada programa \textit{esclavo}, 
 para volver a calcular el mismo paso de acoplamiento, tras lo cual enviará nuevos valores \textit{guesses} propuestos.
-En caso contrario, cuando los resultados convergen, envía la órden de continuación, y ambos \textit{esclavos} prosiguen con el cálculo.
-Notar que en problemas sin evolución, el proceso es similar, pero todos los programas calculan un único paso temporal ficticio.
-Es necesario resaltar que el esquema también aplica para el caso de comunicación entre programas mediante lectura y escritura de archivos, en el que de cada programa \textit{esclavo} solo vive durante cada $\Delta t_{coup}$.
+En caso contrario, cuando los resultados convergen, envía la órden de continuación, y ambos \textit{esclavos} prosiguen con el cálculo para el siguiente paso de evolución.
+Al finalizar el cálculo se liberan los comunicadores.
 }
 \label{esquema-evolucion}
 \end{figure}
@@ -641,20 +653,25 @@ El programa \textit{esclavo} debe recibir una order para ejecutar estas acciones
 %\vspace{1cm} 
 \bigskip
 
-La Figura \ref{esquema-evolucion} esquematiza las instancias 2, 3 y 4 en la resolución de un problema sencillo
-en que se acoplan dos programas \textit{esclavos} al programa \textit{maestro},
-una vez que ya se ha completado la instancia 1.
-En este ejemplo, las variables $x,y$ son las incógnitas de acoplamiento.
+La Figura \ref{esquema-evolucion} esquematiza las instancias 1, 2, 3 y 4 en la resolución de un problema sencillo
+en que se acoplan dos programas \textit{esclavos} al programa \textit{maestro}.
+En este ejemplo, las variables $\{x,y\}$ son las incógnitas de acoplamiento.
 La estrategia definida consiste en imponer al primer subdominio un valor \textit{guess} para $x$ y al segundo subdominio un valor \textit{guess} para $y$.
-\textbf{Maestro} es el programa que se ocupa de proponer estos valores $guess$ y de enviarlos a los \textit{esclavos}.
-El programa \textbf{Esclavo 1} resuelve cada paso de evolución acoplado en función del valor $x_{guess}$ recibido, y envía a \textbf{Maestro} el valor $y$ calculado a partir de él.
+En primer lugar se establecen los comunicadores entre el programa \textit{maestro} y los programas \textit{esclavos}.
+\textbf{Maestro} es el programa que se ocupa de proponer los valores $guesses$ y de enviarlos a los \textit{esclavos}.
+El programa \textbf{Esclavo 1} resuelve cada paso de evolución acoplado $\Delta t_{coup}$ en función del valor $x_{guess}$ recibido, y envía a \textbf{Maestro} el valor $y$ calculado a partir de él.
 El programa \textbf{Esclavo 2} calcula $x$ en función de $y_{guess}$ y también envía el resultado a \textbf{Maestro}.
-\textbf{Maestro} entonces resuelve las ecuaciones de residuos, y decide si los resultados están convergidos o si es necesario continuar con las iteraciones.
+Notar que cada código $i$ puede utilizar una discretización de $N_i$ subpasos de evolución locales para resolver cada $\Delta t_{coup}$.
+Luego de que \textbf{Maestro} recibe los valores calculados, 
+resuelve las ecuaciones de residuos y decide si los resultados están convergidos o si es necesario continuar con las iteraciones dentro del paso de evolución.
+Una vez asegurada la convergencia, se actualiza el parámetro de evolución y se procede a resolver el paso siguiente.
+Cuando el parámetro de evolución alcanza el valor final $t_f$, se termina el cálculo y se procede a la liberación de comunicadores.
 
 En problemas que implican la resolución de casos estacionarios, es decir, sin evolución de variables, el esquema de abordaje es idéntico.
 En la Figura \ref{esquema-evolucion} podría pensarse que se resuelve un único paso temporal ficticio, sin la necesidad de imponer condiciones iniciales.
 
-Cuando la comunicación entre programas se realiza mediante manejo de archivos, se respeta la misma estructura de acoplamiento.
+Cuando la comunicación entre programas se realiza mediante manejo de archivos, se respeta la misma estructura de acoplamiento,
+exceptuando las instancias relacionaadas a la creación y liberación de comunicadores, que son reemplazadas por instancias de manejo de archivos.
 El código \textit{maestro} escribe los valores \textit{guess} para las variables de acoplamiento en el archivo de entrada del código \textit{esclavo}, y luego ordena su ejecución.
 El código \textit{esclavo} solo vive para resolver $\Delta t_{coup}$, es decir, finaliza una vez que escribe los valores calculados en algún archivo de salida,
 que luego será leído por el código \textit{maestro}.

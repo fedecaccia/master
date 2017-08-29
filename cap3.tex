@@ -208,7 +208,7 @@ p_2^1 = 0.
 \end{equation*}
 
 El programa \textit{maestro} utilizado es \textbf{Coupling}.
-La comunicación entre códigos se da por MPI en modo SISD.
+La comunicación entre códigos se da por MPI entre programas ejecutados de manera independiente.
 Como se mencionó en \ref{1:evolucion}, no existe necesidad de que ambos códigos utilicen el mismo paso temporal de cálculo.
 Sin embargo en ambos modelos se utiliza $\Delta t=0.01s$, debido a que ninguno requiere una mayor discretización temporal.
 
@@ -538,7 +538,7 @@ Las ecuaciones de residuos quedan entonces:
 \end{equation}
 
 El programa \textit{maestro} utilizado es \textbf{Coupling}.
-La comunicación entre códigos se da por MPI en modo SIMD.
+La comunicación entre códigos se da por MPI entre programas ejecutados en forma independiente.
 
 \subsection*{Evolución de la descarga del SSP}
 
@@ -1416,10 +1416,10 @@ y la Tabla \ref{tabla-relap-fermi} integra la cantidad total de evaluaciones y e
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=1]{fermi-relap-feval.pdf}
-  \label{figura-relap-fermi}
+  \includegraphics[scale=1]{fermi-relap-feval.pdf}  
   \caption[Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
   {Evaluaciones de funciones en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}.}
+  \label{figura-relap-fermi}
 \end{figure}
 
 \begin{table}[h]
@@ -1431,10 +1431,10 @@ y la Tabla \ref{tabla-relap-fermi} integra la cantidad total de evaluaciones y e
       Picard & 10 & $\mathscr{O}(1)$ & - & 68 & 684 \\ %\hline
       Punto fijo & 10 & $\mathscr{O}(1)$ & - & 87 & 628  \\ %\hline
       Shamanskii & 10 & $\mathscr{O}(1)$ & $\mathscr{O}(0)$& 370 & 2663  \\ \hline
-   \end{tabular}
-   \label{tabla-relap-fermi}
+   \end{tabular}   
    \caption[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
    {Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}.}
+   \label{tabla-relap-fermi}
 \end{table}
 
 El método \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}) es el método explícito que consume mayor tiempo de cálculo.
@@ -1522,7 +1522,7 @@ La distribución de potencia se atenúa en el centro y se concentra en los anill
 \begin{figure}[ht]
 	\begin{minipage}{0.5\linewidth}
 		\centering
-		\includegraphics[scale=0.24]{carem_power_10day.png}
+		\includegraphics[scale=0.23]{carem_power_10day.png}
 	\end{minipage}
 	\begin{minipage}{0.5\linewidth}
 		\centering
@@ -1539,7 +1539,7 @@ La distribución de potencia se atenúa en el centro y se concentra en los anill
 \begin{figure}[ht]
 	\begin{minipage}{0.5\linewidth}
 		\centering
-		\includegraphics[scale=0.24]{carem_burnup_10day.png}
+		\includegraphics[scale=0.28]{carem_burnup_10day.png}
 	\end{minipage}
 	\begin{minipage}{0.5\linewidth}
 		\centering
@@ -1602,27 +1602,27 @@ utilizando los métodos de \textit{Picard} y del punto fijo respectivamente.
       Punto fijo & 5 & $\mathscr{O}(0)$ & 139 & 5415 \\ %\hline            
       Punto fijo & 5 & $\mathscr{O}(1)$ & 186 & 6990 \\ %\hline            
       Punto fijo & 10 & $\mathscr{O}(0)$ & 101 & 3755  \\ % \hline      
-      Punto fijo & 10 & $\mathscr{O}(1)$ & 107 & 3919  \\ \hline      
-   \end{tabular}
-   \label{tab-relap-puma}
+      Punto fijo & 10 & $\mathscr{O}(1)$ & 107 & 3919  \\ \hline            
+   \end{tabular}   
    \caption[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
    {Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{PUMA}.}
+   \label{tab-relap-puma}
 \end{table}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=1]{puma-relap-feval-es.pdf}
-  \label{fig-relap-puma-es}
+  \includegraphics[scale=1]{puma-relap-feval-es.pdf}  
   \caption[Evaluaciones de funciones utilizando el método de \textit{Picard} en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
   {Evaluaciones de funciones utilizando el método de \textit{Picard} en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{PUMA}.}
+  \label{fig-relap-puma-es}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[scale=1]{puma-relap-feval-ep.pdf}
-  \label{fig-relap-puma-ep}
+  \includegraphics[scale=1]{puma-relap-feval-ep.pdf}  
   \caption[Evaluaciones de funciones utilizando el método del punto fijo en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{Fermi}]
   {Evaluaciones de funciones utilizando el método del punto fijo en cada paso de quemado en cálculo con \textbf{RELAP5} y \textbf{PUMA}.}
+  \label{fig-relap-puma-ep}
 \end{figure}
 
 El método implícito de \textit{Broyden} fue estudiado en detalle por haber sido el que mejores resultados había entregado a lo largo de todo el trabajo,

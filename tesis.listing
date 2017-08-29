@@ -1,4 +1,4 @@
-
+\setlength\parindent{16pt}
 Se desea resolver un problema de cálculo de campo de temperatura mediante el Método de Descomposición Disjunta de Dominios.
 El sistema global de análisis es una barra unidimensional de longitud $L$ con condiciones de borde homogéneas, fuente interna de energía $f$ y conductividad térmica $k$.
 El modelo matemático utilizado es el siguiente:
