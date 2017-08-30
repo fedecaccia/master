@@ -2,7 +2,7 @@
 \label{C:coupling}
 %\chapterquote{Negociemos Don Inodoro}{Fernando de la R\'{u}a, 2001}
 
-\textbf{Coupling} es un código escrito en \textit{Fortran 90}, desarrollado por Jorge Leiva, Pablo Blanco y Gustavo Buscaglia.
+\textbf{Coupling} es un código escrito en \texttt{Fortran 90}, desarrollado por Jorge Leiva, Pablo Blanco y Gustavo Buscaglia.
 Fue diseñado como programa \textit{maestro} en las funciones de acoplamiento explícito e implícito,
 estableciendo la comunicación con diversos programas \textit{esclavos} mediante funciones de MPI.
 Su desempeño fue validado en diversos trabajos de acoplamiento \cite{coup-0d3d} \cite{coup-black} \cite{coup-hyd} \cite{coup-strong}.
@@ -17,7 +17,7 @@ Las principales variables en la definición de un problema son las siguientes:
 \item Cantidad de uniones globales (variable \textit{Nbond}).
 \item Cantidad de superficies en cada subdominio (variable \textit{Nsupc}).
 \item Matriz de conectividades entre las interfaces de diferentes subdominios (variable con numeraciones locales \textit{Localsur} y globales \textit{Incid}.
-\item Cantidad de pares de variables incógntias en cada interfaz (variable \textit{Npair}).
+\item Cantidad de pares de variables incógnitas en cada interfaz (variable \textit{Npair}).
 Se supone que cada incógnita de cada interfaz está acompañada de otra variable incógnita relacionada con su gradiente.
 Por ejemplo, \textit{temperatura} y \textit{flujo de calor}, o \textit{velocidad} y \textit{presión}.
 \item Cantidad de nodos con incógnitas en cada interfaz (variable \textit{Nodpair}).
@@ -72,7 +72,7 @@ Existe una única unión entre ambos subdominios, la \textit{Unión 1}.
 Es necesario definir una numeración global de interfaces de acoplamiento.
 El subsistema tri-dimensional contiene la interfaz global \textit{Interfaz 1} y el subsistema cero-dimensional contiene la interfaz global \textit{Interfaz 2}.
 En cada interfaz existe un solo par de variables acopladas, el par \textit{caudal-presión}.
-El \textit{caudal} es impuesto como condición de borde \textit{esencial} al \textit{Subdominio 1} y la \textit{presión} como condición de borde \textit{natural} al \textit{Subdominio 2}.
+El {caudal} es impuesto como condición de borde \textit{esencial} al \textit{Subdominio 1} y la {presión} como condición de borde \textit{natural} al \textit{Subdominio 2}.
 La Figura \ref{ra10-coupling} resume las definiciones previas.
 
 \begin{figure}[h]

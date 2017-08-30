@@ -637,7 +637,7 @@ El código \textbf{Esclavo 2} recibe alternativamente como \textit{guess} para e
 Al finalizar $\Delta t_{coup}$ ambos programas devuelven al programa \textbf{Maestro} las variables conjugadas calculadas.
 \textbf{Maestro} computa los residuos entre los valores \textit{guess} previamente propuestos y los valores recibidos.
 Si el residuo no supera cierta tolerancia prefijada, envía la órden de reinicio a cada programa \textit{esclavo}, 
-para volver a calcular el mismo paso de acoplamiento, tras lo cual enviará nuevos valores \textit{guesses} propuestos.
+para volver a calcular el mismo paso de acoplamiento, tras lo cual enviará nuevos valores \textit{guess} propuestos.
 En caso contrario, cuando los resultados convergen, envía la órden de continuación, y ambos \textit{esclavos} prosiguen con el cálculo para el siguiente paso de evolución.
 Al finalizar el cálculo se liberan los comunicadores.
 }
@@ -658,7 +658,7 @@ en que se acoplan dos programas \textit{esclavos} al programa \textit{maestro}.
 En este ejemplo, las variables $\{x,y\}$ son las incógnitas de acoplamiento.
 La estrategia definida consiste en imponer al primer subdominio un valor \textit{guess} para $x$ y al segundo subdominio un valor \textit{guess} para $y$.
 En primer lugar se establecen los comunicadores entre el programa \textit{maestro} y los programas \textit{esclavos}.
-\textbf{Maestro} es el programa que se ocupa de proponer los valores $guesses$ y de enviarlos a los \textit{esclavos}.
+\textbf{Maestro} es el programa que se ocupa de proponer los valores \textit{guess} y de enviarlos a los \textit{esclavos}.
 El programa \textbf{Esclavo 1} resuelve cada paso de evolución acoplado $\Delta t_{coup}$ en función del valor $x_{guess}$ recibido, y envía a \textbf{Maestro} el valor $y$ calculado a partir de él.
 El programa \textbf{Esclavo 2} calcula $x$ en función de $y_{guess}$ y también envía el resultado a \textbf{Maestro}.
 Notar que cada código $i$ puede utilizar una discretización de $N_i$ subpasos de evolución locales para resolver cada $\Delta t_{coup}$.

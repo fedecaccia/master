@@ -66,7 +66,7 @@ Esta aproximación es correcta ya que las interfaces se seleccionaron lejos de f
 Con este modelo, ninguna de las dos ecuaciones puede recibir valores de contorno \textit{Dirichlet} en ambas interfaces,
 ya que los valores de caudal y temperatura en una interfaz determinan el valor en la otra.
 Por lo tanto, en la estrategia de acoplamiento, la primera ecuación debe tener, o bien ambos contornos con condiciones de tipo \textit{Neumann}, 
-o bien uno con condición de tipo \textit{Neuman} y otro con condición de tipo \textit{Dirichlet}.
+o bien uno con condición de tipo \textit{Neumann} y otro con condición de tipo \textit{Dirichlet}.
 La segunda ecuación debe tener uno de los bordes con condición de tipo \textit{Dirichlet} y otro con condición de tipo \textit{Neumann}.
 Esta condición es necesaria a pesar de que el flujo de calor recibido no va a ser utilizado, basado en la hipótesis de que es despreciable.
 Si el flujo de calor fuera efectivamente apreciable, debería cambiarse el modelo en la ecuación planteada.
@@ -167,7 +167,7 @@ q"_2^2&=& - q"_2^1
 Las ecuaciones modelos deben ser seleccionadas en base a la combinación de condiciones de borde propuesta para resolver el acoplamiento.
 Independientemente de cuál fuera ésta,
 para que el problema quede bien planteado debe serleccionarse solo una de las relaciones para el par \textit{presión-caudal}
-y solo una para el par ºtextit{temperatura-flujo de calor} en cada interfaz.
+y solo una para el par \textit{temperatura-flujo de calor} en cada interfaz.
 Así entonces, considerando las dos interfaces del subsistema 1 se generan cuatro ecuaciones de residuos:
 
 \begin{equation}
@@ -1061,7 +1061,7 @@ que también modifican las secciones eficaces.
 La dinámica del núcleo de un reactor nuclear acopla fuertemente múltiples fenómenos, y cualquier modelo que se utilice para estudiarla debe abordar el acoplamiento mediante alguna estrategia.
 En general, los códigos de cálculo utilizados en el área nuclear están validados para resolver solo alguno de estos fenómenos,
 por lo que suele requerirse un acoplamiento entre ellos para resolver la dinámica completa.
-Comúnmente este acoplamiento se resuelve mediante iteraciones explícitas de tipo \textit{Picard} dentro de cada paso de tiempo.
+Comúnmente, la evolución temporal se discretiza en diferentes pasos de quemado, y en cada uno de ellos el acoplamiento se resuelve mediante iteraciones explícitas de tipo Picard.
 
 En esta sección se propone un modelo simplificado para el análisis de la dinámica de núcleo de un reactor nuclear durante un ciclo de quemado de elementos combustibles,
 considerando solo los fenómenos neutrónico y termohidráulico.
@@ -1109,7 +1109,7 @@ P = \int_{vol} E_{fis,i} \Sigma_{fis,i} \phi_{i}
 \end{equation}
 donde $E_{fis,i}$ es la energía liberada por fisiones ocurridas en el rango de energía $i$,
 $\Sigma_{fis,i}$ es la sección eficaz de fisión condensada en el grupo de energía $i$ y
-$\phi_{i}$ es la componente del flujo neutrónico también dondensada en el grupo de energía $i$.
+$\phi_{i}$ es la componente del flujo neutrónico también condensada en el grupo de energía $i$.
 La distribución de potencia ${P}$ hallada es utilizada como fuente de energía en los cálculos acoplados de transferencia de energía.
 
 Los fenómenos hidrodinámicos y de transferencia de calor se modelan con ecuaciones uni-dimensionales y transitorias.
@@ -1240,9 +1240,9 @@ A veces, la estrategia de formulación del problema acoplado queda definida por 
 En este caso, además, una formulación diferente hubiera resultado en un problema mal planteado.
 }.
 El núcleo se discretiza axialmente en una serie de zonas en las cuales se trabaja con valores medios de las variables de acoplamiento.
-El cálculo termohidráulico arroja variables promediadas en diferentes zonas axiales del canal.
+El cálculo termohidráulico arroja variables promediadas en las diferentes zonas axiales del canal.
 En el cálculo neutrónico, se definen zonas axiales en base a la misma discretización,
-en cada una de las cuales las secciones eficaces son calculadas a partir de las variables termohidráulicas de la zona correspondiente.
+en cada una de las cuales las secciones eficaces son calculadas a partir de las variables termohidráulicas de la zona correspondiente,
 y del valor histórico del quemado que se va almacenando en diferentes regiones físicas predefinidas.
 La potencia calculada se integra también en cada zona axial.
 Con este modelo, quedan definidas cuatro variables de acoplamiento en cada posición axial $i$: $T_{comb,i}$, $T_{ref,i}$ y $N_{ref,i}$ y $P_i$.
@@ -1280,13 +1280,13 @@ El dominio de cálculo termohidráulico consiste en una simplificación de la ge
 considerando un único canal de refrigeración cilíndrico de sección similar a aquella por la que fluye todo el caudal del refrigerante.
 Este canal está en contacto con una única estructura que genera energía, 
 del mismo diámetro que el que tendrían los pines de los elementos combustibles y altura equivalente a la suma de todos ellos.
-Como el modelo es ficticio, el diámetro y la cantidada de pines asumen valores arbitrarios.
+Como el modelo es ficticio, el diámetro y la cantidad de pines asumen valores arbitrarios.
 La energía total generada en esta estructura es igual a la potencia total generada por el reactor. 
 Este tipo de modelos es comúnmente utilizado en análsis de acoplamiento neutrónico-termohidráulico \cite{pumita-relap}.
 Si bien la geometría de análisis es artificial, 
 es importante contar con modelos de secciones eficaces que representen fielmente la dependencia con las variables de estado termohidráulicas.
 Por este motivo se construyeron funciones de $\Sigma$ dependientes en $T_{comb}$, $T_{ref}$, $N_{ref}$ y el valor del quemado $B$
-a partir de tablas de secciones eficaces proporcionadas por DIFRA (departamento de DIvisión de Física de Reactores Avanzados de CNEA).
+a partir de tablas de secciones eficaces proporcionadas por DIFRA (DIvisión de Física de Reactores Avanzados de CNEA).
 
 La evolución temporal se discretiza en intervalos de 10 días.
 Se definen cinco zonas axiales de acoplamiento.
@@ -1636,7 +1636,7 @@ las soluciones para cada paso de quemado convergen con un promedio de 1 iteraci�
 Este resultado es muy bueno, ya que los métodos explícitos convergen con un promedio de 2.5 iteraciones en cada paso de quemado.
 Sin embargo la mayoría de las simulaciones no se pudo completar,
 debido a que en algún punto de la evolución aparece una inestabilidad en la convergencia de los resultados en la primera zona acoplada del núcleo.
-Esta inestabilidad genera una mala actualización de la matriz de \textit{Broyden} y finalmente el método termina proponiendo valores \textit{guesses} sin sentido físico.
+Esta inestabilidad genera una mala actualización de la matriz de \textit{Broyden} y finalmente el método termina proponiendo valores \textit{guess} sin sentido físico.
 Se desconoce si la inestabilidad encontrada se debe a algún fenómeno físico o a un \textit{bug} del modelo.
 
 En esta sección se ensayaron solo dos modelos de núcleo para estudiar el acoplamiento neutrónico-termohidráulico,

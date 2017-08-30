@@ -31,7 +31,7 @@ Warning--empty author in fermi
 Warning--empty author in newton-user-manual
 You've used 51 entries,
             2634 wiz_defined-function locations,
-            1278 strings with 16750 characters,
+            1278 strings with 16752 characters,
 and the built_in function-call counts, 14744 in all, are:
 = -- 927
 > -- 468
