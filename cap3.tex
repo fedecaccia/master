@@ -4,7 +4,7 @@
 %~ {The City's central computer told you? R2-D2, you know better than to trust a strange computer. }
 %~ {C-3PO, from Star Wars}
 
-\section{Movimiento por fuerza boyante en un circuito cerrado}
+\section{Fluidodinámica en una fuente fría de neutrones}
 \label{3:ff}
 
 \subsection*{Presentación del problema}
@@ -13,9 +13,13 @@ una fuente fría de neutrones alojada próxima al núcleo de un reactor de inves
 El sistema se estudia analizándolo en dos subsistemas separados,
 definiendo dos interfaces de acople,
 y en cada una de ellas dos pares de variables dinámicas.
-El primer subsistema modela un fluido en un tanque de paredes adiabáticas y con fuente interna de energía. 
-El segundo subsistema representa un circuito en el que el fluido transfiere energía en un intercambiador de calor para bajar su temperatura.
-Ambos se comunican mediante dos conexiones, una ubicada en la parte inferior y la otra en la parte superior,
+El primer subsistema se utiliza para estudiar el comportamiento bidimensional en la cavidad de la fuente fría,
+donde el fluido modera los neutrones recibidos desde el núcleo del reactor,
+incrementando su temperatura.
+Este fenómeno se modela a través de una fuente interna en el fluido.
+El segundo subsistema representa el circuito de enfriamiento en el cual el fluido disipa energía a través de un intercambiador de calor que en general es refrigerado por helio criogénico.
+El comportamiento en este subsistema queda bien descripto con balances cero-dimensionales.
+Ambos subsistemas se comunican mediante dos conexiones, una ubicada en la parte inferior y la otra en la parte superior,
 definiendo un circuito cerrado en el que el flujo queda completamente dominado por convección natural.
 En la Figura \ref{esquemaFuenteFria} puede apreciarse un diagrama del sistema completo.
 
@@ -23,7 +27,7 @@ En la Figura \ref{esquemaFuenteFria} puede apreciarse un diagrama del sistema co
 \centering{}\includegraphics[scale = 0.35]{fuente-fria.png}
 \caption[Modelo de la fuente fría compuesto por un subsistema cero-dimensional y otro subsistema bi-dimensional.]
 {Modelo de la fuente fría analizada. 
-El subsistema de la izquierda es el circuito de enfriado del fluido y se estudia con un código cero-dimensional.
+El subsistema de la izquierda es el circuito de enfriaiento y se estudia con un código cero-dimensional.
 El modelo de la derecha es una cavidad con una fuente de energía interna y se estudia con un código bi-dimensional.
 El sistema completo es abordado con una estrategia de acoplamiento mediante condiciones de borde dinámicas.}
 \label{esquemaFuenteFria}
@@ -31,9 +35,9 @@ El sistema completo es abordado con una estrategia de acoplamiento mediante cond
 
 
 \subsection*{Subsistemas de estudio}
-Los parámetros del modelo del intercambiador de calor son los siguientes:
-flujo de calor por unidad de superficie $q_0"=-2\cdot 10^5 W/m^2$, 
-longitud de cañerías $L=30$ $m$, 
+Los parámetros del modelo del circuito de enfriamiento son los siguientes:
+flujo de calor por unidad de superficie $q_0"=-2\cdot 10^5 W/m^2$ en el intercambiar de calor,
+longitud total de cañerías $L=30$ $m$, 
 sumatoria de coeficientes de pérdida de carga concentrada $\sum K_i=1.72$, 
 rugosidad de cañerías $\epsilon=0.5\cdot 10^{-3}$ $m$.
 Las áreas de las interfaces de acople son $A_2^1=A_2^2=0.03$ $m^2$.
@@ -47,10 +51,10 @@ y de transferencia de energía en un intercambiador de calor con flujo constante
 Las ecuaciones del modelo derivan de balances de masa, de energía mecánica y de energía interna en todo el subsistema y son las siguientes \cite{iedelchik} \cite{kays}:
 
 \begin{equation}
-\left\{ \begin{array}{rcl}
-Q_2^{1} & = & Q_2^{2} \\ [0.2cm]
-p_2^1 + \rho_0 g \left ( \Delta z + \beta (T_2^1 - T_{ref}) (H-\Delta z) \right ) - \rho \frac{1}{2} \left( \frac{Q_1^1}{A_2^1} \right)^2  \left( \frac {f_D L} {D} + \sum_i K_i \right) &=& p_2^2  \\ [0.2cm]
-\displaystyle T_2^1 + 2 \frac {q_0" L}{\frac{D}{2} \frac{Q_1^1}{A_2^1}\rho c_p} &=& \displaystyle T_2^2
+\left\{ \begin{array}{rl}
+Q_2^{2} =& Q_2^{1} \\ [0.2cm]
+p_2^2 =&  p_2^1 + \rho_0 g \left ( \Delta z + \beta (T_2^1 - T_{ref}) (H-\Delta z) \right ) - \rho \frac{1}{2} \left( \frac{Q_1^1}{A_2^1} \right)^2  \left( \frac {f_D L} {D} + \sum_i K_i \right)  \\ [0.2cm]
+\displaystyle T_2^2 =& \displaystyle T_2^1 + 2 \frac {q_0" L}{\frac{D}{2} \frac{Q_1^1}{A_2^1}\rho c_p}
 \label{eq-intercambiador}
 \end{array}
 \right.
@@ -83,12 +87,11 @@ Se utiliza la aproximación de \textit{Boussinesq} considerando variaciones de d
 Las ecuaciones implementadas del modelo son las siguientes \cite{gunzburger} \cite{kays}:
 
 \begin{equation}
-\left\{ \begin{array}{rcl}
-\displaystyle \frac {\partial \bar{u}}{\partial t} + ( \bar{u} \cdot \nabla) \bar{u}  + \frac {\nabla p}{\rho_0} - 
-\nabla \cdot \left[ \left( \nu + \nu_T \right) \left( \nabla \bar{u} + \nabla \bar{u}^T \right) \right] && \\
-- \left( 1- \beta (T-T_{ref}) \right)\bar{g} &=& 0 \\ [0.2cm]
-\nabla \cdot \bar{u} &=& 0 \\ [0.2cm]
-\displaystyle \frac {\partial T}{\partial t} + ( \bar{u} \cdot \nabla) T =0 - \frac {k}{\rho_0 c_p} \Delta T &=& \displaystyle \frac{f_0}{\rho_0 c_p}
+\left\{ \begin{array}{lr}
+\displaystyle \frac {\partial \bar{u}}{\partial t} + ( \bar{u} \cdot \nabla) \bar{u} = - \frac {\nabla p}{\rho_0}
++ \left( 1- \beta (T-T_{ref}) \right)\bar{g} \nabla \cdot \left[ \left( \nu + \nu_T \right) \left( \nabla \bar{u} + \nabla \bar{u}^T \right) \right] \\ [0.2cm]
+\nabla \cdot \bar{u} = 0 \\ [0.2cm]
+\displaystyle \frac {\partial T}{\partial t} + ( \bar{u} \cdot \nabla) T = \frac {k}{\rho_0 c_p} \Delta T + \frac{f_0}{\rho_0 c_p}
 \label{eq-cavidad}
 \end{array}
 \right.
@@ -202,31 +205,34 @@ La estrategia seleccionada es la siguiente:
 Así entonces, considerando las dos interfaces del subsistema 1 se generan cuatro ecuaciones de residuos:
 
 \begin{equation}
-\left\{ \begin{array}{rcl}
-(R_{p,Q})_{1}^{1}  &=& p_1^{1, guess} - p_1^{1, calc} \\
-(R_{T,q"})_{1}^{1} &=& q_{1}''^{1, guess} - q_{1}''^{1, calc} \\
-(R_{p,Q})_{1}^{2}  &=& Q_1^{2, guess} - Q_1^{2, calc} \\
-(R_{T,q"})_{1}^{2} &=& T_1^{2, guess} - T_1^{2, calc}
+\left\{ \begin{array}{rl}
+(R_{p,Q})_{1}^{1}  =& p_1^{1, guess} - p_1^{1, calc}(Q_1^{1, guess}, T_1^{1, guess}, p_1^{2, guess}, q_1''^{2, guess}) \\
+(R_{T,q"})_{1}^{1} =& q_{1}''^{1, guess} - q_{1}''^{1, calc}(Q_1^{1, guess}, T_1^{1, guess}, p_1^{2, guess}, q_1''^{2, guess}) \\
+(R_{p,Q})_{1}^{2}  =& Q_1^{2, guess} - Q_1^{2, calc}(Q_1^{1, guess}, T_1^{1, guess}, p_1^{2, guess}, q_1''^{2, guess}) \\
+(R_{T,q"})_{1}^{2} =& T_1^{2, guess} - T_1^{2, calc}(Q_1^{1, guess}, T_1^{1, guess}, p_1^{2, guess}, q_1''^{2, guess})
 \end{array}
 \right.
 \label{residuos-1}
 \end{equation}
 %~ donde $(R_{p,Q})_1^i$ es el residuo del par \textit{presión-caudal} en la interfaz $i$ y
 %~ $(R_{T,q''})_1^i$ es el residuo del par \textit{temperatura-flujo de calor} en la interfaz $i$.
-donde el supraíndice 1 indica la interfaz inferior y el supraíndice 2 indica la interfaz superior,
+donde el supraíndice 1 indica la interfaz inferior y el supraíndice 2 indica la interfaz superior.
+Notar que algunas dependencias pueden anularse con el modelo de estudio descripto previamente.
 y entre las dos interfaces del subsistema 2 se generan otras cuatro ecuaciones de residuos:
 
 \begin{equation}
-\left\{ \begin{array}{rcl}
-(R_{p,Q})_{2}^{1}  &=& Q_2^{1, guess} - Q_2^{1, calc} \\
-(R_{T,q"})_{2}^{1} &=& q_{2}''^{1, guess} - q_{2}''^{1, calc} \\
-(R_{p,Q})_{2}^{2}  &=& Q_2^{2, guess} - Q_2^{2, calc} \\
-(R_{T,q"})_{2}^{2} &=& T_2^{2, guess} - T_2^{2, calc}
+\left\{ \begin{array}{rl}
+(R_{p,Q})_{2}^{1}  =& Q_2^{1, guess} - Q_2^{1, calc}(p_2^{1, guess}, T_2^{1, guess}, p_2^{2, guess}, q_2''^{2, guess}) \\
+(R_{T,q"})_{2}^{1} =& q_{2}''^{1, guess} - q_{2}''^{1, calc}(p_2^{1, guess}, T_2^{1, guess}, p_2^{2, guess}, q_2''^{2, guess}) \\
+(R_{p,Q})_{2}^{2}  =& Q_2^{2, guess} - Q_2^{2, calc}(p_2^{1, guess}, T_2^{1, guess}, p_2^{2, guess}, q_2''^{2, guess})  \\
+(R_{T,q"})_{2}^{2} =& T_2^{2, guess} - T_2^{2, calc}(p_2^{1, guess}, T_2^{1, guess}, p_2^{2, guess}, q_2''^{2, guess}) 
 \end{array}
 \right.
 \label{residuos-2}
 \end{equation}
 donde el supraíndice 1 indica la interfaz superior y el supraíndice 2 indica la interfaz inferior.
+Aquí también pueden anularse algunas dependencias con el modelo de estudio utilizado.
+
 %~ Notar que según la estrategia de acoplamiento seleccionada, algunas de las dependencias pueden anularse.
 %~ En la Figura \ref{esquemaFuenteFria} se presenta una estrategia en la que las condiciones de borde dinámicas son 
 %~ de tipo de tipo Dirichlet para la interfaz inferior de la cavidad y la interfaz superior del intercambiador de calor, 
@@ -591,15 +597,15 @@ en el que las ecuaciones se estabilizan mediante un método de control de coefic
 El sistema de ecuaciones resultantes en el segundo subsistema es:
 
 \begin{equation}
-\left\{ \begin{array}{rcl}
-\displaystyle \frac{\partial \bar{U} }{\partial t} + ( \bar{U} \cdot \nabla) \bar{U} + \frac {\nabla P^*}{\rho} - 
-\nabla \cdot \left[ \left( \nu + \nu_T \right) \left( \nabla \bar{U} + \nabla U^T \right) \right] -\bar{f} &=& 0 \\
-\nabla \cdot \bar{U} &=& 0 \\
-\displaystyle \nu_T -c_\mu \frac{\kappa^2}{\epsilon} &=& 0\\
-\displaystyle \frac{\partial \kappa}{\partial t} + ( \bar{U} \cdot \nabla) \kappa - \frac{c_\mu} {2}{\kappa^2}{\epsilon} \left | \nabla \bar{U} + \nabla\bar{U}^T \right | ^2  
-- \nabla \cdot \left( c_\mu \frac{\kappa^2}{\epsilon} \nabla \kappa \right) + \epsilon &=& 0 \\
-\displaystyle \frac{\partial {\epsilon}}{\partial t} + ( \bar{U} \cdot \nabla) \epsilon - \frac{c_1} {2} \kappa \left | \nabla \bar{U} + \nabla \bar{U}^T \right | ^2
-- \nabla \cdot \left( c_{\epsilon} \frac{\kappa^2}{\epsilon} \nabla \epsilon \right) + c_2 \frac{\epsilon}{\kappa} &=& 0
+\left\{ \begin{array}{l}
+\displaystyle \frac{\partial \bar{U} }{\partial t} + ( \bar{U} \cdot \nabla) \bar{U} = - \frac {\nabla P^*}{\rho} + 
+\nabla \cdot \left[ \left( \nu + \nu_T \right) \left( \nabla \bar{U} + \nabla U^T \right) \right] +\bar{f} \\
+\nabla \cdot \bar{U} =0 \\
+\displaystyle \nu_T = c_\mu \frac{\kappa^2}{\epsilon} \\
+\displaystyle \frac{\partial \kappa}{\partial t} + ( \bar{U} \cdot \nabla) \kappa = \frac{c_\mu} {2}{\kappa^2}{\epsilon} \left | \nabla \bar{U} + \nabla\bar{U}^T \right | ^2  
++ \nabla \cdot \left( c_\mu \frac{\kappa^2}{\epsilon} \nabla \kappa \right) - \epsilon \\
+\displaystyle \frac{\partial {\epsilon}}{\partial t} + ( \bar{U} \cdot \nabla) \epsilon = \frac{c_1} {2} \kappa \left | \nabla \bar{U} + \nabla \bar{U}^T \right | ^2
++ \nabla \cdot \left( c_{\epsilon} \frac{\kappa^2}{\epsilon} \nabla \epsilon \right) - c_2 \frac{\epsilon}{\kappa}
 \label{eq-mani}
 \end{array} \right.
 \end{equation}
@@ -660,9 +666,9 @@ Asimismo, el subsistema arreglo de válvulas tiene como incógnitas $p_2^1$ y $Q
 Las ecuaciones de continuidad implican que:
 
 \begin{equation}
-\left\{ \begin{array}{rcl}
-p_1^1 &=& p_2^1 \\
-Q_1^1 &=& Q_2^1
+\left\{ \begin{array}{rl}
+p_1^1 =& p_2^1 \\
+Q_1^1 =& Q_2^1
 \end{array}
 \right.
 \end{equation}
@@ -678,9 +684,9 @@ En base al caudal recibido en este subsistema se calcula un perfil de velocidade
 Las ecuaciones de residuos quedan entonces:
 
 \begin{equation}
-\left\{ \begin{array}{rcl}
-(R_{p,Q})_{1}^{1}  \;(p_1^1) &=& 0 \\
-(R_{p,Q})_{2}^{1}  \;(Q_2^1) &=& 0
+\left\{ \begin{array}{rl}
+(R_{p,Q})_{1}^{1} =& Q_1^{1,guess} - Q_1^{1,calc}(p_1^{1,guess}) \\
+(R_{p,Q})_{2}^{1} =& p_2^{1,guess} - p_2^{1,calc}(Q_2^{1,guess})
 \end{array}
 \right.
 \end{equation}
@@ -783,14 +789,15 @@ La pérdida de carga total del arreglo de válvulas es levemente sensible a la v
 
 Como se comentó, en los cálculos realizados previamente no se consideró el gas de relleno en las tuberías durante los primeros instantes del drenado.
 Es de interés estudiar su influencia.
-Se utiliza la técnica de level-set para transportar la superficie libre \cite{level-set}.
+Se utiliza la técnica de \textit{level-set} para transportar la superficie libre \cite{level-set}.
 Para ello se añade un paso fraccionado extra al sistema de ecuaciones (\ref{eq-mani}):
 
 \begin{equation}
-\left\{ \begin{array}{rcl}
-\displaystyle \frac{\partial\phi}{\partial t}+ (\bar{u} \cdot \nabla) \phi &=& 0
+%\left\{ \begin{array}{rcl}
+%\displaystyle \frac{\partial\phi}{\partial t}+ (\bar{u} \cdot \nabla) \phi &=& 0
+\frac{\partial\phi}{\partial t}+ (\bar{u} \cdot \nabla) \phi = 0
 \label{eq-ls}
-\end{array} \right.
+%\end{array} \right.
 \end{equation}
 donde $\phi$ es el campo que representa la distancia con signo de cada punto a la superficie libre.
 Las porciones del sistema con líquido tienen $\phi$ positivo y las porciones con gas tienen $\phi$ negativo.
@@ -998,21 +1005,21 @@ Las incógnitas pueden reducirse rápidamente a la mitad aplicando relaciones de
 \label{net16}
 \end{figure}
 
-Cada subdominio es modelado con balances cero-dimensionales de conservación de masa y energía.
+Cada subdominio es modelado con balances cero-dimensionales de conservación de masa y energía mecánica.
 Las ecuaciones resultantes para un subsistema genérico que no contiene bordes del dominio original son las siguientes:
 \begin{equation}
 \left \{
-\begin{array}{rcl}
-\frac{p_1}{\rho} + \frac{{v_1}^2}{2} &=& \frac{p_2}{\rho} + \frac{{v_2}^2}{2} + gz_2 + \Delta u_{12} \\
-\frac{p_1}{\rho} + \frac{{v_1}^2}{2} &=& \frac{p_3}{\rho} + \frac{{v_3}^2}{2} + gz_3 + \Delta u_{13} \\
-A_1 v_1 &=& A_2 v_2 + A_3 v_3
+\begin{array}{rl}
+\frac{p_1}{\rho} + \frac{{v_1}^2}{2} =& \frac{p_2}{\rho} + \frac{{v_2}^2}{2} + gz_2 + \Delta u_{12} \\
+\frac{p_1}{\rho} + \frac{{v_1}^2}{2} =& \frac{p_3}{\rho} + \frac{{v_3}^2}{2} + gz_3 + \Delta u_{13} \\
+A_1 v_1 =& A_2 v_2 + A_3 v_3
 \end{array}
 \right .
 \label{net-eq}
 \end{equation}
 donde los subíndices $1$, $2$ y $3$ refieren a diferentes extremos locales del contorno del subdominio,
-$p_i$, $v_i$, $z_i$, y $A_i$ indican \textit{presión}, \textit{velocidad}, \textit{altura} y \textit{área} de la sección en el extremo $i$ respectivamente,
-y $\Delta u_{ij}$ refiere a la diferencia de energía del flujo entre los exremos $i$ y $j$.
+$p_i$, $v_i$, $z_i$, y $A_i$ indican {presión}, {velocidad}, {altura} y {área} de la sección en el extremo $i$ respectivamente,
+y $\Delta u_{ij}$ refiere a la pérdida de energía mecánica debido a la fricción interna entre los exremos $i$ y $j$.
 El extremo 1 siempre corresponde al izquierdo de cada subdominio, y las otros se numeran en forma horaria creciente.
 Deben prestarse algunas consideraciones extras en las ecuaciones para los subsistemas que requieren condiciones $CB_{k}^{l}$ sobre extremos que pertenecían al borde original del sistema completo,
 donde $k$ indica el subsistema y $l$ el extremo local.
@@ -1024,7 +1031,7 @@ P_i = \frac{p_i}{\rho} + \frac{{v_i}^2}{2}
 \label{p-eyd}
 \end{equation}
 
-El término $\Delta u_{ij}$ puede aproximarse mediante una función de pérdida de carga como \cite{white}:
+El término de pérdida de energía mecánica $\Delta u_{ij}$ puede aproximarse mediante las funciones de pérdida de carga distribuida y concentrada \cite{white} de la siguiente forma:
 \begin{equation}
 \Delta u_{ij} = \frac{{v_i}^2}{2} \left ( \frac{f_{D_i} L_{i}}{D_i} + \sum_t K_{i,t} \right ) + \frac{{v_j}^2}{2} \left ( \frac{f_{D_j} L_{j}}{D_j} + \sum_t K_{j,t} \right )
 \label{du}
@@ -1062,10 +1069,10 @@ En cada interfaz de acoplamiento de cada subsistema queda definida una ecuación
 
 \begin{equation}
 \left \{
-\begin{array}{rcl}
-R_1 &=& v_1^{2,guess} - v_1^{2,calc} \\
-R_2 &=& v_1^{3,guess} - v_1^{3,calc} \\
-R_4 &=& P_2^{1,guess} - P_2^{1,calc} \\
+\begin{array}{rl}
+R_1 =& v_1^{2,guess} - v_1^{2,calc}(CB_1^1, P_1^{2,guess}, P_1^{3,guess}) \\
+R_2 =& v_1^{3,guess} - v_1^{3,calc}(CB_1^1, P_1^{2,guess}, P_1^{3,guess}) \\
+R_3 =& P_2^{1,guess} - P_2^{1,calc}(v_2^{1,guess}, CB_2^2, CB_2^3) \\
 ...
 \end{array}
 \right .
