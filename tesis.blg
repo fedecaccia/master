@@ -29,45 +29,45 @@ Warning--empty journal in pumita-relap
 Warning--empty year in pumita-relap
 Warning--empty author in fermi
 Warning--empty author in newton-user-manual
-You've used 51 entries,
+You've used 52 entries,
             2634 wiz_defined-function locations,
-            1278 strings with 16752 characters,
-and the built_in function-call counts, 14744 in all, are:
-= -- 927
-> -- 468
+            1282 strings with 16970 characters,
+and the built_in function-call counts, 15024 in all, are:
+= -- 944
+> -- 480
 < -- 4
-+ -- 236
-- -- 116
-* -- 615
-:= -- 1675
-add.period$ -- 146
-call.type$ -- 51
-change.case$ -- 35
++ -- 242
+- -- 119
+* -- 625
+:= -- 1709
+add.period$ -- 149
+call.type$ -- 52
+change.case$ -- 36
 chr.to.int$ -- 0
-cite$ -- 69
-duplicate$ -- 1504
-empty$ -- 1556
-format.name$ -- 147
-if$ -- 3294
+cite$ -- 70
+duplicate$ -- 1536
+empty$ -- 1582
+format.name$ -- 151
+if$ -- 3354
 int.to.chr$ -- 0
-int.to.str$ -- 51
-missing$ -- 445
-newline$ -- 253
-num.names$ -- 47
-pop$ -- 819
+int.to.str$ -- 52
+missing$ -- 454
+newline$ -- 258
+num.names$ -- 48
+pop$ -- 837
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 441
+skip$ -- 448
 stack$ -- 0
 substring$ -- 347
-swap$ -- 858
+swap$ -- 875
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 18
-while$ -- 66
-width$ -- 53
-write$ -- 498
+while$ -- 67
+width$ -- 54
+write$ -- 508
 (There were 18 warnings)
