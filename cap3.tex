@@ -17,7 +17,7 @@ El primer subsistema se utiliza para estudiar el comportamiento bidimensional en
 donde el fluido modera los neutrones recibidos desde el núcleo del reactor,
 incrementando su temperatura.
 Este fenómeno se modela a través de una fuente interna en el fluido.
-El segundo subsistema representa el circuito de enfriamiento en el cual el fluido disipa energía a través de un intercambiador de calor que en general es refrigerado por helio criogénico.
+El segundo subsistema representa el circuito de enfriamiento en el cual el fluido disipa energía a través de un intercambiador de calor. % que en general es refrigerado por Helio criogénico.
 El comportamiento en este subsistema queda bien descripto con balances cero-dimensionales.
 Ambos subsistemas se comunican mediante dos conexiones, una ubicada en la parte inferior y la otra en la parte superior,
 definiendo un circuito cerrado en el que el flujo queda completamente dominado por convección natural.
@@ -26,60 +26,29 @@ En la Figura \ref{esquemaFuenteFria} puede apreciarse un diagrama del sistema co
 \begin{figure}[ht]
 \centering{}\includegraphics[scale = 0.35]{fuente-fria.png}
 \caption[Modelo de la fuente fría compuesto por un subsistema cero-dimensional y otro subsistema bi-dimensional.]
-{Modelo de la fuente fría analizada. 
-El subsistema de la izquierda es el circuito de enfriaiento y se estudia con un código cero-dimensional.
-El modelo de la derecha es una cavidad con una fuente de energía interna y se estudia con un código bi-dimensional.
-El sistema completo es abordado con una estrategia de acoplamiento mediante condiciones de borde dinámicas.}
+{Modelo de la fuente fría de neutrones analizada. 
+El subsistema $S_1$ es una cavidad con una fuente de energía interna y se estudia con un código bi-dimensional.
+El subsistema $S_2$ es el circuito de enfriamiento y se estudia con un código cero-dimensional.
+El sistema completo es abordado mediante la estrategia de Descomposición Disjunta de Dominios con condiciones de borde dinámicas
+para las interfaces $I_1^1$ e $I_1^2$ en $S_1$ y las interfaces $I_2^1$ e $I_2^2$ en $S_2$.}
 \label{esquemaFuenteFria}
 \end{figure}
 
 
 \subsection*{Subsistemas de estudio}
-Los parámetros del modelo del circuito de enfriamiento son los siguientes:
-flujo de calor por unidad de superficie $q_0"=-2\cdot 10^5 W/m^2$ en el intercambiar de calor,
-longitud total de cañerías $L=30$ $m$, 
-sumatoria de coeficientes de pérdida de carga concentrada $\sum K_i=1.72$, 
-rugosidad de cañerías $\epsilon=0.5\cdot 10^{-3}$ $m$.
-Las áreas de las interfaces de acople son $A_2^1=A_2^2=0.03$ $m^2$.
-La altura total $H$ de este subsistema se varía como un parámetro de estudio,
-y la diferencia de altura $\Delta z$ entre la entrada y la salida es equivalente a la de la cavidad bidimensional.
-Se trabaja con dos fluidos, agua ($\rho_0=10^3$ $Kg/m^3$, $c_p=4184$ $J/KgK$, $\beta = 0.44\cdot10^{-3}K^{-1}$) y deuterio ($\rho_0=163$ $Kg/m^3$, $c_p=6333.6$ $J/KgK$ $\beta = 1.32\cdot10^{-2}K^{-1}$),
-para evaluar alguna posible diferencia en la dinámica del comportamiento.
-La evolución de las variables de presión $p$, caudal $Q$ y temperatura $T$ en el subsistema se calcula mediante un código cero-dimensional escrito para este propósito,
-que resuelve ecuaciones de pérdida de carga en una red hidráulica con flujo turbulento 
-y de transferencia de energía en un intercambiador de calor con flujo constante.
-Las ecuaciones del modelo derivan de balances de masa, de energía mecánica y de energía interna en todo el subsistema y son las siguientes \cite{iedelchik} \cite{kays}:
-
-\begin{equation}
-\left\{ \begin{array}{rl}
-Q_2^{2} =& Q_2^{1} \\ [0.2cm]
-p_2^2 =&  p_2^1 + \rho_0 g \left ( \Delta z + \beta (T_2^1 - T_{ref}) (H-\Delta z) \right ) - \rho \frac{1}{2} \left( \frac{Q_1^1}{A_2^1} \right)^2  \left( \frac {f_D L} {D} + \sum_i K_i \right)  \\ [0.2cm]
-\displaystyle T_2^2 =& \displaystyle T_2^1 + 2 \frac {q_0" L}{\frac{D}{2} \frac{Q_1^1}{A_2^1}\rho c_p}
-\label{eq-intercambiador}
-\end{array}
-\right.
-\end{equation}
-donde $Q_2^i$ es el caudal en la interfaz $i$,
-$p_2^i$ es la presión del subsistema promediada en esta interfaz,
-$T_2^i$ es la temperatura promediada en esta interfaz,
-$g$ es la aceleración generada por el campo gravitatorio,
-$f_D$ es el factor de Darcy de pérdida de carga distribuida,
-y $D$ es el diámetro de la tubería.
-Notar que el subíndice en cada variable refiere a la numeración global del subsistema, y el supraíndice indica el número de interfaz local,
-como se convino previamente en \ref{1:abordaje}.
-En este modelo se supone que el flujo de calor es nulo en la dirección axial en cada interfaz de acople.
-Esta aproximación es correcta ya que las interfaces se seleccionaron lejos de fuentes y sumideros, donde los gradientes de temperatura son despreciables.
-También se utiliza la hipótesis de que los términos provenientes del los balances de energía con derivada temporal son despreciables frente a los términos que sobreviven en \ref{eq-intercambiador},
-considerando que el ritmo de cambio de las variables involucradas es despreciable durante el transitorio inicial y nulo una vez alcanzado el caudal del estado estacionario.
-
-La cavidad bidimensional se modela con $L_0=0.3$ $m$, y $A_1^1=A_1^2=0.03$ $m^2$.
-Los parámetros del fluido de trabajo son: $\rho_0=10^3$ $Kg/m^3$ a la temperatura de referencia $T_{ref}$,
-$\mu=6\cdot 10^{-4}$ $Kg/ms$, $c_p=4184$ $J/KgK$, 
-$k=0.64$ $W/mK$ y $\beta=0.44\cdot10^{-3}K^{-1}$ para el agua, y
+El primer subsistema analizado es la cavidad donde los neutrones son moderados y es estudiada mediante un modelo bidimensional,
+con una longitud de lado $L_0=0.3$ $m$, y área de las secciones a la entrada y a la salida de $A_1^1=A_1^2=0.03$ $m^2$.
+La diferencia de altura $\Delta z$ entre la entrada y la salida es de $\Delta z=0.4m$,
+ya que el subsistema incluye porciones de cañería a la entrada y a la salida.
+Se trabaja con modelos con dos fluidos distintos, para evaluar alguna posible diferencia en la dinámica del comportamiento.
+El primer fluido considerado es agua, y sus parámetros son: $\rho_0=10^3$ $Kg/m^3$ a la temperatura de referencia $T_{ref}$,
+$\mu=6\cdot 10^{-4}$ $Kg/ms$, $c_p=4184$ $J/KgK$ y 
+$k=0.64$ $W/mK$ y $\beta=0.44\cdot10^{-3}K^{-1}$.
+El segundo fluido estudiado es deuterio líquido, y sus parámetros son:
 $\rho_0=163$ $Kg/m^3$ a la temperatura de referencia $T_{ref}$,
 $\mu=2.8\cdot 10^{-5}$ $Kg/ms$, $c_p=6333.6$ $J/KgK$, 
-$k=0.136$ $W/mK$ y $\beta=1.32\cdot10^{-2}K^{-1}$ para el deuterio.
-Se considera que el fluido tiene una fuente interna $f_0$, cuyo valor se varía en diferentes modelos,
+$k=0.136$ $W/mK$ y $\beta=1.32\cdot10^{-2}K^{-1}$.
+Se considera que el fluido tiene una fuente interna $f_0$ en la cavidad, cuyo valor varía en diferentes modelos,
 analizando diferentes casos típicos.
 La evolución de las variables en este subsistema se calcula resolviendo las ecuaciones de Navier-Stokes 
 y de transporte de energía.
@@ -127,6 +96,43 @@ con un tamaño medio de arista de $\Delta x \approx 0.005m$.
 El cálculo se realiza con \textbf{Par-GPFEP} \cite{gpfep} \cite{pargpfep}.
 Las modificaciones de \textbf{Par-GPFEP} que fueron necesarias para implementar el acoplamiento son comentadas en el Apéndice \ref{C:pargpfep}.
 
+El segundo subsistema analizado es el circuito de enfriamiento.
+Los parámetros de este modelo son los siguientes:
+flujo de calor por unidad de superficie $q_0"=-2\cdot 10^5 W/m^2$ en el intercambiar de calor,
+longitud total de cañerías $L=30$ $m$, 
+sumatoria de coeficientes de pérdida de carga concentrada $\sum K_i=1.72$, 
+rugosidad de cañerías $\epsilon=0.5\cdot 10^{-3}$ $m$.
+Las áreas de las interfaces de acople son $A_2^1=A_2^2=0.03$ $m^2$.
+La altura total $H$ de este subsistema se varía como un parámetro de estudio,
+y la diferencia de altura $\Delta z$ entre la entrada y la salida es equivalente a la de la cavidad bidimensional.
+Los parámetros de los fluidos de trabajo son los mismos que los comentados en la descripción del primer subsistema.
+La evolución de las variables de presión $p$, caudal $Q$ y temperatura $T$ se calcula mediante un código cero-dimensional escrito para este propósito,
+que resuelve ecuaciones de pérdida de carga en una red hidráulica %con flujo turbulento 
+y de transferencia de energía en un intercambiador de calor con flujo constante.
+Las ecuaciones del modelo derivan de balances de masa, de energía mecánica y de energía interna en todo el subsistema y son las siguientes \cite{iedelchik} \cite{kays}:
+ 
+\begin{equation}
+\left\{ \begin{array}{rl}
+Q_2^{2} =& Q_2^{1} \\ [0.2cm]
+p_2^2 =& p_2^1 + \rho_0 g \left ( \Delta z + \beta (T_2^1 - T_{ref}) (H-\Delta z) \right ) - \rho \frac{1}{2} \left( \frac{Q_1^1}{A_2^1} \right)^2  \left( \frac {f_D L} {D} + \sum_i K_i \right)  \\ [0.2cm]
+T_2^2 =& T_2^1 + 2 \frac {q_0" L}{\frac{D}{2} \frac{Q_1^1}{A_2^1}\rho c_p}
+\label{eq-intercambiador}
+\end{array}
+\right.
+\end{equation}
+%~ \clearpage
+donde $Q_2^i$ es el caudal en la interfaz $i$,
+$p_2^i$ es la presión del subsistema promediada en esta interfaz,
+$T_2^i$ es la temperatura promediada en esta interfaz,
+$g$ es la aceleración generada por el campo gravitatorio,
+$f_D$ es el factor de Darcy de pérdida de carga distribuida,
+y $D$ es el diámetro de la tubería.
+Notar que el subíndice en cada variable refiere a la numeración global del subsistema, y el supraíndice indica el número de interfaz local,
+como se convino previamente en \ref{1:abordaje}.
+En este modelo se supone que el flujo de calor es nulo en la dirección axial en cada interfaz de acople.
+Esta aproximación es correcta ya que las interfaces se seleccionaron lejos de fuentes y sumideros, donde los gradientes de temperatura son despreciables.
+También se utiliza la hipótesis de que los términos provenientes de los balances de energía con derivada temporal son despreciables frente a los términos que sobreviven en \ref{eq-intercambiador},
+considerando que el ritmo de cambio de las variables involucradas es despreciable durante el transitorio inicial y nulo una vez alcanzado el caudal del estado estacionario.
 
 \subsection*{Estrategia de resolución}
 
@@ -381,14 +387,14 @@ para un valor de $H$ diez veces mayor al valor $\Delta z$ de la diferencia de al
   \centering
   \begin{tabular}{ c c c c c c c } 
       \hline
-      \multicolumn{1}{c}{$f_0$ $[kW]$} & \multicolumn{1}{c}{$H / \Delta z$} & \multicolumn{1}{c}{$Ri$} & \multicolumn{1}{c}{$\Delta T_{media}$ $[K]$} & \multicolumn{1}{c}{$Q$$[m^3/s]$}& \multicolumn{1}{c}{$\Delta p$ $[Pa]$} \\ \hline
-      \multirow{3}{*}{1} & $1$ & 0.8 & 1.1 & $1.159 \cdot 10^{-3}$ & 3765 \\
+      \multicolumn{1}{c}{$f_0$ $[W/m^3]$} & \multicolumn{1}{c}{$H / \Delta z$} & \multicolumn{1}{c}{$Ri$} & \multicolumn{1}{c}{$\Delta T_{media}$ $[K]$} & \multicolumn{1}{c}{$Q$$[m^3/s]$}& \multicolumn{1}{c}{$\Delta p$ $[Pa]$} \\ \hline
+      \multirow{3}{*}{$4\cdot10^4$} & $1$ & 0.8 & 1.1 & $1.159 \cdot 10^{-3}$ & 3765 \\
                          & $4$ & 0.8 & 1.2 & $1.160 \cdot 10^{-3}$ & 3765 \\
                          & $10$ & 0.8 & 1.1 & $1.162 \cdot 10^{-3}$ & 3765 \\ \hline
-      \multirow{3}{*}{10} & $1$ & 7.1 & 8.2 & $1.159 \cdot 10^{-3}$ & 3765 \\
+      \multirow{3}{*}{$4\cdot10^5$} & $1$ & 7.1 & 8.2 & $1.159 \cdot 10^{-3}$ & 3765 \\
                          & $4$ & 7.1 & 8.2 & $1.160 \cdot 10^{-3}$ & 3757 \\
                          & $10$ & 7.2 & 8.4 & $1.162 \cdot 10^{-3}$ & 3757 \\ \hline
-      \multirow{3}{*}{100} & $1$ & 72.1 & 82.4 & $1.159 \cdot 10^{-3}$ & 3757 \\
+      \multirow{3}{*}{$4\cdot10^6$} & $1$ & 72.1 & 82.4 & $1.159 \cdot 10^{-3}$ & 3757 \\
                          & $4$ & 66.4 & 80.2 & $1.160 \cdot 10^{-3}$ & 3680 \\
                          & $10$ & 62.3 & 77.3 & $1.162 \cdot 10^{-3}$ & 3684 \\ \hline
    \end{tabular}   
@@ -401,14 +407,14 @@ para un valor de $H$ diez veces mayor al valor $\Delta z$ de la diferencia de al
   \centering
   \begin{tabular}{ c c c c c c c } 
       \hline
-      \multicolumn{1}{c}{$f_0$ $[kW]$} & \multicolumn{1}{c}{$H / \Delta z$} & \multicolumn{1}{c}{$Ri$} & \multicolumn{1}{c}{$\Delta T$ $[K]$} & \multicolumn{1}{c}{$Q$$[m^3/s]$}& \multicolumn{1}{c}{$\Delta p$ $[Pa]$} \\ \hline
-      \multirow{3}{*}{0.011} & $1$ & 1.6 & $6\cdot10^{-2}$ & $1.158 \cdot 10^{-3}$ & 615 \\
+      \multicolumn{1}{c}{$f_0$ $[W/m^3]$} & \multicolumn{1}{c}{$H / \Delta z$} & \multicolumn{1}{c}{$Ri$} & \multicolumn{1}{c}{$\Delta T$ $[K]$} & \multicolumn{1}{c}{$Q$$[m^3/s]$}& \multicolumn{1}{c}{$\Delta p$ $[Pa]$} \\ \hline
+      \multirow{3}{*}{$4\cdot10^2$} & $1$ & 1.6 & $6\cdot10^{-2}$ & $1.158 \cdot 10^{-3}$ & 615 \\
                          & $4$ & 1.3 & $5\cdot10^{-2}$ & $1.159 \cdot 10^{-3}$ & 615 \\
                          & $10$ & 1.3 & $5\cdot10^{-2}$ & $1.160 \cdot 10^{-3}$ & 615 \\ \hline
-      \multirow{3}{*}{0.11} & $1$ & 26.4 & 0.3 & $1.159 \cdot 10^{-3}$ & 613 \\
+      \multirow{3}{*}{$4\cdot10^3$} & $1$ & 26.4 & 0.3 & $1.159 \cdot 10^{-3}$ & 613 \\
                          & $4$ & 25.9 & 0.3 & $1.160 \cdot 10^{-3}$ & 613 \\
                          & $10$ & 26.4 & 0.3 & $1.173 \cdot 10^{-3}$ & 613 \\ \hline
-      \multirow{3}{*}{1.1} & $1$ & 89.9 & 3.4 & $1.152 \cdot 10^{-3}$ & 600 \\
+      \multirow{3}{*}{$4\cdot10^4$} & $1$ & 89.9 & 3.4 & $1.152 \cdot 10^{-3}$ & 600 \\
                          & $4$ & 83.9 & 3.4 & $1.192 \cdot 10^{-3}$ & 620 \\
                          & $10$ & 72.7 & 3.2 & $1.243 \cdot 10^{-3}$ & 600 \\ \hline
    \end{tabular}   
@@ -938,6 +944,8 @@ se propuso analizar redes hidráulicas de múltiples componentes interconectados
 La idea es utilizar modelos sencillos que describan el comportamiento de cada componente particular para poder centrar el análisis solo en el estudio de convergencia
 de resultados, analizando estados estacionarios.
 
+
+%~ \clearpage
 \subsection*{Subsistemas de estudio}
 \label{3:redes-subsistemas}
 

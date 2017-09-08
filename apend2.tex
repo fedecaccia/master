@@ -52,7 +52,7 @@ Luego deben ser incluidos mediante palabras claves en el archivo de configuraci�
 Con la finalidad de poder establecer conexiones con programas \textit{esclavos} cuyos códigos fuente no están disponibles,
 se incorporaron diferentes modos de comunicación, conforme a la estrategia descripta en el \hyperlink{chapter.2}{Capítulo 2}:
 \begin{itemize}
-\item Comunicación por MPI en modos SISD, SIMD, MISD y MIMD con programas con acceso al código fuente.
+\item Comunicación por MPI entre programas ejecutados en simultáneo o entre programas ejecutados de manera independiente, cuando es posible acceder al código fuente.
 \item Comunicación por lectura y escritura de archivos con programas sin acceso al código fuente.
 \end{itemize}
 Todas estas funciones fueron implementadas en la clase \texttt{Communicator}.
