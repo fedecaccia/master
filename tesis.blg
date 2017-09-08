@@ -12,11 +12,11 @@ A level-1 auxiliary file: apend2.aux
 A level-1 auxiliary file: apend3.aux
 Database file #1: mibib.bib
 Warning--empty author in newton
-Warning--missing publisher in iedelchik
-Warning--missing publisher in kays
 Warning--missing publisher in gunzburger
+Warning--missing publisher in kays
 Warning--missing publisher in galerkin
 Warning--empty journal in gmsh
+Warning--missing publisher in iedelchik
 Warning--empty journal in invap-mockup
 Warning--missing publisher in bird
 Warning--empty journal in salome

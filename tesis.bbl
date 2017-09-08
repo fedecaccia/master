@@ -76,20 +76,15 @@ Buscaglia, G., Dari, E., Martín, E., Arnica, D., Bonetto, F.
 \newblock \emph{International Journal of Computational Fluid Dynamics},
   \textbf{18}, 355--365, 2004.
 
-\bibitem{iedelchik}
-Iedelchik, I.
-\newblock Handbook of Local Resistance and Friction.
-\newblock 1960.
+\bibitem{gunzburger}
+Gunzburger, M.
+\newblock Finite Element Methods for Viscous Incompressible FLows.
+\newblock 1989.
 
 \bibitem{kays}
 Kays, W., Crawford, M.
 \newblock Convective Heat and Mass Transfer, 3rd Edition.
 \newblock 1993.
-
-\bibitem{gunzburger}
-Gunzburger, M.
-\newblock Finite Element Methods for Viscous Incompressible FLows.
-\newblock 1989.
 
 \bibitem{galerkin}
 Fries, T., Matthies, H.-G.
@@ -125,6 +120,11 @@ Buscaglia, G., Felicelli, S.
 Buscaglia, G., Dari, E., Lew, A., Raschi, M.
 \newblock Un programa general de elementos finitos en paralelo.
 \newblock \emph{Mecánica Computacional}, p\'ags. 845--854, 1999.
+
+\bibitem{iedelchik}
+Iedelchik, I.
+\newblock Handbook of Local Resistance and Friction.
+\newblock 1960.
 
 \bibitem{ra10}
 Brollo, F., Blaumann, H., Vertullo, A., Corcuera, R., Parkansky, D., Ramirez,
