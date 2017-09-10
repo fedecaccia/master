@@ -86,7 +86,7 @@ El manejo eficiente de errores fue pensado como una de las características prin
 debido a la complejidad de conexiones y consecuente diversidad en origen de fallas.
 Cualquier error generado comienza la siguiente cascada de eventos:
 \begin{enumerate}
-\item Devolución de un mensaje correspondiente en la salida estándard.
+\item Devolución de un mensaje correspondiente en la salida estándar.
 \item Comunicación del error a todos los procesos de \textbf{Newton}.
 \item Envío de órden de aborto a los programas \textit{esclavos} por parte del proceso \textit{raiz}.
 \item Finalización de las tareas.
@@ -259,7 +259,7 @@ La función \texttt{Newton::initialize} ejecuta todas las tareas necesarias para
 \begin{enumerate}
 \item Creación de objetos de uso interno.
 \item Lectura del archivo de configuración.
-\item Creación de comunicadores con procesos \textit{raíces} de programas ejecutados en modos MISD o MIMD junto con \textbf{Newton}.
+\item Creación de comunicadores con procesos \textit{raíces} de programas ejecutados en simultáneo junto con \textbf{Newton}.
 \item Publicación de puertos y establecimiento de conexiones con procesos \textit{raíces} de programas que necesitan establecer comunicación por MPI.
 \item Envío de datos generales del problema a los programas \textit{esclavos} para chequeo de compatibilidad de datos.
 \item Asignación de espacio en memoria a los arreglos de uso interno dependientes del problema.
