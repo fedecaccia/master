@@ -1,0 +1,57 @@
+\select@language {spanish}
+\select@language {english}
+\select@language {spanish}
+\select@language {english}
+\select@language {spanish}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Esquema de sistema complejo analizado mediante el M\IeC {\'e}todo de Descomposici\IeC {\'o}n Disjunta de Dominios}}{3}{figure.1.1}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Descomposici\IeC {\'o}n disjunta de dominios en el c\IeC {\'a}lculo del campo de temperatura a lo largo de una barra unidimensional}}{4}{figure.1.2}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Esquema de comunicaci\IeC {\'o}n entre programas implementado}}{14}{figure.2.1}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Esquema de acoplamiento entre programas implementado}}{18}{figure.2.2}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Modelo de la fuente fr\IeC {\'\i }a compuesto por un subsistema cero-dimensional y otro subsistema bi-dimensional.}}{22}{figure.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Evoluci\IeC {\'o}n del fluido en la cavidad bidimensional a bajo Richardson}}{28}{figure.3.2}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {t = 0 s}}}{28}{subfigure.2.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {t = 10 s}}}{28}{subfigure.2.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {t = 5 s}}}{28}{subfigure.2.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {t = 15 s}}}{28}{subfigure.2.4}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Evoluci\IeC {\'o}n del fluido en la cavidad bidimensional a bajo Richardson}}{29}{figure.3.3}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {t = 0 s}}}{29}{subfigure.3.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {t = 10 s}}}{29}{subfigure.3.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {t = 5 s}}}{29}{subfigure.3.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {t = 15 s}}}{29}{subfigure.3.4}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Evaluaciones de residuos requeridas por diversos m\IeC {\'e}todos num\IeC {\'e}ricos para resolver los sistemas de ecuaciones planteados en el problema doblemente acoplado descripto de la fuente fr\IeC {\'\i }a de neutrones.\relax }}{30}{figure.3.4}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Esquema del segundo sistema de parada del reactor RA10.\relax }}{32}{figure.3.5}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Evoluci\IeC {\'o}n de la presi\IeC {\'o}n y del caudal volum\IeC {\'e}trico en la interfaz de acople}}{37}{figure.3.6}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Evoluci\IeC {\'o}n del nivel de l\IeC {\'\i }quido en el \textit {mockup} del tanque del reflector del reactor OPAL ante accionamiento del SSP}}{38}{figure.3.7}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Evoluci\IeC {\'o}n del nivel de l\IeC {\'\i }quido en el \textit {mockup} del tanque del reflector del OPAL ante accionamiento del SSP considerando falla simple en diferentes v\IeC {\'a}lvulas}}{39}{figure.3.8}
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Evoluci\IeC {\'o}n del nivel de l\IeC {\'\i }quido en el \textit {mockup} del tanque del reflector del reactor OPAL ante accionamiento del SSP}}{40}{figure.3.9}
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Transitorio inicial de la descarga del tanque a trav\IeC {\'e}s del arreglo de v\IeC {\'a}lvulas del \textit {mockup} del reactor OPAL, con detalle de la evoluci\IeC {\'o}n de la superficie libre}}{41}{figure.3.10}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {t = 0 s}}}{41}{subfigure.10.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {t = 0.6 s}}}{41}{subfigure.10.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {t = 1.2 s}}}{41}{subfigure.10.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {t = 0.3 s}}}{41}{subfigure.10.4}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {t = 0.9 s}}}{41}{subfigure.10.5}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {t = 2.0 s}}}{41}{subfigure.10.6}
+\contentsline {figure}{\numberline {3.11}{\ignorespaces Evaluaci\IeC {\'o}n de diferentes m\IeC {\'e}todos num\IeC {\'e}ricos no lineales en el problema del vaciado del tanque reflector del \textit {mockup} del reactor OPAL}}{42}{figure.3.11}
+\contentsline {figure}{\numberline {3.12}{\ignorespaces Eficiencia para diferentes esquemas de extrapolaci\IeC {\'o}n en la generaci\IeC {\'o}n de semillas}}{43}{figure.3.12}
+\contentsline {figure}{\numberline {3.13}{\ignorespaces Descomposici\IeC {\'o}n disjunta de dominios en el modelado de redes hidr\IeC {\'a}ulicas}}{45}{figure.3.13}
+\contentsline {figure}{\numberline {3.14}{\ignorespaces Comparaci\IeC {\'o}n de diferentes m\IeC {\'e}todos num\IeC {\'e}ricos para la resoluci\IeC {\'o}n de sistemas de redes hidr\IeC {\'a}ulicas}}{47}{figure.3.14}
+\contentsline {figure}{\numberline {3.15}{\ignorespaces Comparaci\IeC {\'o}n de diferentes esquemas de \textit {Broyden} para la resoluci\IeC {\'o}n de sistemas de redes hidr\IeC {\'a}ulicas con reg\IeC {\'\i }menes de flujo laminar}}{48}{figure.3.15}
+\contentsline {figure}{\numberline {3.16}{\ignorespaces Comparaci\IeC {\'o}n de diferentes m\IeC {\'e}todos num\IeC {\'e}ricos para la resoluci\IeC {\'o}n de sistemas de redes hidr\IeC {\'a}ulicas con reg\IeC {\'\i }menes de flujo turbulento}}{49}{figure.3.16}
+\contentsline {figure}{\numberline {3.17}{\ignorespaces N\IeC {\'u}cleo simple en an\IeC {\'a}lisis de acoplamiento neutr\IeC {\'o}nico-termohidr\IeC {\'a}ulico utilizando \textit {RELAP5} y \textit {Fermi}}}{55}{figure.3.17}
+\contentsline {figure}{\numberline {3.18}{\ignorespaces Instancias de c\IeC {\'a}lculo de las variables relacionadas con cada programa \textit {esclavo}}}{56}{figure.3.18}
+\contentsline {figure}{\numberline {3.19}{\ignorespaces Evaluaciones de funciones en cada paso de quemado en c\IeC {\'a}lculo con \textbf {RELAP5} y \textbf {Fermi}}}{57}{figure.3.19}
+\contentsline {figure}{\numberline {3.20}{\ignorespaces Modelo de n\IeC {\'u}cleo del reactor CAREM-25}}{59}{figure.3.20}
+\contentsline {figure}{\numberline {3.21}{\ignorespaces Modelo de n\IeC {\'u}cleo del reactor CAREM-25}}{60}{figure.3.21}
+\contentsline {figure}{\numberline {3.22}{\ignorespaces Modelo de n\IeC {\'u}cleo del reactor CAREM-25}}{60}{figure.3.22}
+\contentsline {figure}{\numberline {3.23}{\ignorespaces Evoluci\IeC {\'o}n de la reactividad en el ciclo de quemado del reactor CAREM-25}}{61}{figure.3.23}
+\contentsline {figure}{\numberline {3.24}{\ignorespaces Evaluaciones de funciones utilizando el m\IeC {\'e}todo de \textit {Picard} en cada paso de quemado en c\IeC {\'a}lculo con \textbf {RELAP5} y \textbf {Fermi}}}{62}{figure.3.24}
+\contentsline {figure}{\numberline {3.25}{\ignorespaces Evaluaciones de funciones utilizando el m\IeC {\'e}todo del punto fijo en cada paso de quemado en c\IeC {\'a}lculo con \textbf {RELAP5} y \textbf {Fermi}}}{63}{figure.3.25}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Definici\IeC {\'o}n del problema de acoplamiento en el SSP de un reactor de investigaci\IeC {\'o}n}}{71}{figure.Alph1.1}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {B.1}{\ignorespaces Instancias de c\IeC {\'a}lculo de las variables relacionadas con cada programa \textit {esclavo}}}{79}{figure.Alph2.1}
+\addvspace {10\p@ }

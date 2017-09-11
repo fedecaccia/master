@@ -1,0 +1,44 @@
+\select@language {spanish}
+\contentsline {chapter}{\'{I}ndice de s{\'{\i }}mbolos}{\es@scroman {iii}}{section*.1}
+\contentsline {chapter}{\'{I}ndice de contenidos}{\es@scroman {v}}{section*.3}
+\contentsline {chapter}{\'{I}ndice de figuras}{\es@scroman {vii}}{section*.5}
+\contentsline {chapter}{\'{I}ndice de tablas}{\es@scroman {ix}}{section*.7}
+\contentsline {chapter}{Resumen}{\es@scroman {xi}}{section*.9}
+\contentsline {chapter}{Abstract}{\es@scroman {xiii}}{section*.11}
+\select@language {english}
+\select@language {spanish}
+\select@language {english}
+\select@language {spanish}
+\contentsline {chapter}{\numberline {1}Introducci\IeC {\'o}n}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Motivaci\IeC {\'o}n}{1}{section.1.1}
+\contentsline {section}{\numberline {1.2}Abordaje del modelado}{2}{section.1.2}
+\contentsline {section}{\numberline {1.3}Objetivos y estructura de trabajo}{9}{section.1.3}
+\contentsline {chapter}{\numberline {2}Estrategia de resoluci\IeC {\'o}n mediante acoplamiento de c\IeC {\'o}digos}{11}{chapter.2}
+\contentsline {section}{\numberline {2.1}Paradigma maestro-esclavo}{11}{section.2.1}
+\contentsline {section}{\numberline {2.2}Modelos de comunicaci\IeC {\'o}n}{12}{section.2.2}
+\contentsline {section}{\numberline {2.3}C\IeC {\'o}digos maestros utilizados}{14}{section.2.3}
+\contentsline {section}{\numberline {2.4}Arquitectura de acoplamiento montada en c\IeC {\'o}digo \textit {esclavo} comunicado por paso de mensajes}{15}{section.2.4}
+\contentsline {chapter}{\numberline {3}Ejemplos de aplicaci\IeC {\'o}n}{21}{chapter.3}
+\contentsline {section}{\numberline {3.1}Fluidodin\IeC {\'a}mica en una fuente fr\IeC {\'\i }a de neutrones}{21}{section.3.1}
+\contentsline {section}{\numberline {3.2}An\IeC {\'a}lisis del segundo sistema de parada de un reactor de investigaci\IeC {\'o}n}{31}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Estrategia de resoluci\IeC {\'o}n}{36}{subsection.3.2.1}
+\contentsline {section}{\numberline {3.3}Resoluci\IeC {\'o}n de redes hidr\IeC {\'a}ulicas de m\IeC {\'u}ltiples componentes}{44}{section.3.3}
+\contentsline {section}{\numberline {3.4}Extensi\IeC {\'o}n a problemas acoplados en modelos de n\IeC {\'u}cleo}{50}{section.3.4}
+\contentsline {chapter}{\numberline {4}Conclusiones}{65}{chapter.4}
+\contentsline {section}{\numberline {4.1}Logros alcanzados}{65}{section.4.1}
+\contentsline {section}{\numberline {4.2}Trabajos futuros}{67}{section.4.2}
+\contentsline {chapter}{\numberline {A}Descripci\IeC {\'o}n del c\IeC {\'o}digo maestro \textbf {Coupling}}{69}{appendix.Alph1}
+\contentsline {section}{\numberline {A.1}Modelado de problemas acoplados}{69}{section.Alph1.1}
+\contentsline {section}{\numberline {A.2}Metodolog\IeC {\'\i }a de resoluci\IeC {\'o}n}{70}{section.Alph1.2}
+\contentsline {section}{\numberline {A.3}Ejemplo de uso}{71}{section.Alph1.3}
+\contentsline {chapter}{\numberline {B}Descripci\IeC {\'o}n del c\IeC {\'o}digo maestro \textbf {Newton}}{75}{appendix.Alph2}
+\contentsline {section}{\numberline {B.1}Principales caracter\IeC {\'\i }sticas}{75}{section.Alph2.1}
+\contentsline {section}{\numberline {B.2}Modelado de problemas acoplados}{78}{section.Alph2.2}
+\contentsline {section}{\numberline {B.3}Metodolog\IeC {\'\i }a de resoluci\IeC {\'o}n}{79}{section.Alph2.3}
+\contentsline {section}{\numberline {B.4}Ejemplo de uso}{81}{section.Alph2.4}
+\contentsline {chapter}{\numberline {C}Acoplamiento de \textbf {Par-GPFEP}}{83}{appendix.Alph3}
+\contentsline {section}{\numberline {C.1}Implementaci\IeC {\'o}n de la arquitectura de acoplamiento en \textbf {Par-GPFEP}}{83}{section.Alph3.1}
+\contentsline {section}{\numberline {C.2}El programa \textbf {genbco}}{84}{section.Alph3.2}
+\contentsline {section}{\numberline {C.3}Ejemplo de uso de \textbf {Par-GPFEP} en forma acoplada}{85}{section.Alph3.3}
+\contentsline {chapter}{Bibliograf{\'{\i }}a}{87}{section*.64}
+\contentsline {chapter}{Publicaciones asociadas}{91}{section*.66}

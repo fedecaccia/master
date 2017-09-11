@@ -1,0 +1,39 @@
+\BOOKMARK [0][-]{section*.1}{\315ndice de s\355mbolos}{}% 1
+\BOOKMARK [0][-]{section*.3}{\315ndice de contenidos}{}% 2
+\BOOKMARK [0][-]{section*.5}{\315ndice de figuras}{}% 3
+\BOOKMARK [0][-]{section*.7}{\315ndice de tablas}{}% 4
+\BOOKMARK [0][-]{section*.9}{Resumen}{}% 5
+\BOOKMARK [0][-]{section*.11}{Abstract}{}% 6
+\BOOKMARK [0][-]{chapter.1}{Introducci\363n}{}% 7
+\BOOKMARK [1][-]{section.1.1}{Motivaci\363n}{chapter.1}% 8
+\BOOKMARK [1][-]{section.1.2}{Abordaje del modelado}{chapter.1}% 9
+\BOOKMARK [1][-]{section.1.3}{Objetivos y estructura de trabajo}{chapter.1}% 10
+\BOOKMARK [0][-]{chapter.2}{Estrategia de resoluci\363n mediante acoplamiento de c\363digos}{}% 11
+\BOOKMARK [1][-]{section.2.1}{Paradigma maestro-esclavo}{chapter.2}% 12
+\BOOKMARK [1][-]{section.2.2}{Modelos de comunicaci\363n}{chapter.2}% 13
+\BOOKMARK [1][-]{section.2.3}{C\363digos maestros utilizados}{chapter.2}% 14
+\BOOKMARK [1][-]{section.2.4}{Arquitectura de acoplamiento montada en c\363digo esclavo comunicado por paso de mensajes}{chapter.2}% 15
+\BOOKMARK [0][-]{chapter.3}{Ejemplos de aplicaci\363n}{}% 16
+\BOOKMARK [1][-]{section.3.1}{Fluidodin\341mica en una fuente fr\355a de neutrones}{chapter.3}% 17
+\BOOKMARK [1][-]{section.3.2}{An\341lisis del segundo sistema de parada de un reactor de investigaci\363n}{chapter.3}% 18
+\BOOKMARK [2][-]{subsection.3.2.1}{Estrategia de resoluci\363n}{section.3.2}% 19
+\BOOKMARK [1][-]{section.3.3}{Resoluci\363n de redes hidr\341ulicas de m\372ltiples componentes}{chapter.3}% 20
+\BOOKMARK [1][-]{section.3.4}{Extensi\363n a problemas acoplados en modelos de n\372cleo}{chapter.3}% 21
+\BOOKMARK [0][-]{chapter.4}{Conclusiones}{}% 22
+\BOOKMARK [1][-]{section.4.1}{Logros alcanzados}{chapter.4}% 23
+\BOOKMARK [1][-]{section.4.2}{Trabajos futuros}{chapter.4}% 24
+\BOOKMARK [0][-]{appendix.Alph1}{Descripci\363n del c\363digo maestro Coupling}{}% 25
+\BOOKMARK [1][-]{section.Alph1.1}{Modelado de problemas acoplados}{appendix.Alph1}% 26
+\BOOKMARK [1][-]{section.Alph1.2}{Metodolog\355a de resoluci\363n}{appendix.Alph1}% 27
+\BOOKMARK [1][-]{section.Alph1.3}{Ejemplo de uso}{appendix.Alph1}% 28
+\BOOKMARK [0][-]{appendix.Alph2}{Descripci\363n del c\363digo maestro Newton}{}% 29
+\BOOKMARK [1][-]{section.Alph2.1}{Principales caracter\355sticas}{appendix.Alph2}% 30
+\BOOKMARK [1][-]{section.Alph2.2}{Modelado de problemas acoplados}{appendix.Alph2}% 31
+\BOOKMARK [1][-]{section.Alph2.3}{Metodolog\355a de resoluci\363n}{appendix.Alph2}% 32
+\BOOKMARK [1][-]{section.Alph2.4}{Ejemplo de uso}{appendix.Alph2}% 33
+\BOOKMARK [0][-]{appendix.Alph3}{Acoplamiento de Par-GPFEP}{}% 34
+\BOOKMARK [1][-]{section.Alph3.1}{Implementaci\363n de la arquitectura de acoplamiento en Par-GPFEP}{appendix.Alph3}% 35
+\BOOKMARK [1][-]{section.Alph3.2}{El programa genbco}{appendix.Alph3}% 36
+\BOOKMARK [1][-]{section.Alph3.3}{Ejemplo de uso de Par-GPFEP en forma acoplada}{appendix.Alph3}% 37
+\BOOKMARK [0][-]{section*.64}{Bibliograf\355a}{}% 38
+\BOOKMARK [0][-]{section*.66}{Publicaciones asociadas}{}% 39
