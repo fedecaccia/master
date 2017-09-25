@@ -16,24 +16,23 @@
 \BOOKMARK [0][-]{chapter.3}{Ejemplos de aplicaci\363n}{}% 16
 \BOOKMARK [1][-]{section.3.1}{Fluidodin\341mica en una fuente fr\355a de neutrones}{chapter.3}% 17
 \BOOKMARK [1][-]{section.3.2}{An\341lisis del segundo sistema de parada de un reactor de investigaci\363n}{chapter.3}% 18
-\BOOKMARK [2][-]{subsection.3.2.1}{Estrategia de resoluci\363n}{section.3.2}% 19
-\BOOKMARK [1][-]{section.3.3}{Resoluci\363n de redes hidr\341ulicas de m\372ltiples componentes}{chapter.3}% 20
-\BOOKMARK [1][-]{section.3.4}{Extensi\363n a problemas acoplados en modelos de n\372cleo}{chapter.3}% 21
-\BOOKMARK [0][-]{chapter.4}{Conclusiones}{}% 22
-\BOOKMARK [1][-]{section.4.1}{Logros alcanzados}{chapter.4}% 23
-\BOOKMARK [1][-]{section.4.2}{Trabajos futuros}{chapter.4}% 24
-\BOOKMARK [0][-]{appendix.Alph1}{Descripci\363n del c\363digo maestro Coupling}{}% 25
-\BOOKMARK [1][-]{section.Alph1.1}{Modelado de problemas acoplados}{appendix.Alph1}% 26
-\BOOKMARK [1][-]{section.Alph1.2}{Metodolog\355a de resoluci\363n}{appendix.Alph1}% 27
-\BOOKMARK [1][-]{section.Alph1.3}{Ejemplo de uso}{appendix.Alph1}% 28
-\BOOKMARK [0][-]{appendix.Alph2}{Descripci\363n del c\363digo maestro Newton}{}% 29
-\BOOKMARK [1][-]{section.Alph2.1}{Principales caracter\355sticas}{appendix.Alph2}% 30
-\BOOKMARK [1][-]{section.Alph2.2}{Modelado de problemas acoplados}{appendix.Alph2}% 31
-\BOOKMARK [1][-]{section.Alph2.3}{Metodolog\355a de resoluci\363n}{appendix.Alph2}% 32
-\BOOKMARK [1][-]{section.Alph2.4}{Ejemplo de uso}{appendix.Alph2}% 33
-\BOOKMARK [0][-]{appendix.Alph3}{Acoplamiento de Par-GPFEP}{}% 34
-\BOOKMARK [1][-]{section.Alph3.1}{Implementaci\363n de la arquitectura de acoplamiento en Par-GPFEP}{appendix.Alph3}% 35
-\BOOKMARK [1][-]{section.Alph3.2}{El programa genbco}{appendix.Alph3}% 36
-\BOOKMARK [1][-]{section.Alph3.3}{Ejemplo de uso de Par-GPFEP en forma acoplada}{appendix.Alph3}% 37
-\BOOKMARK [0][-]{section*.64}{Bibliograf\355a}{}% 38
-\BOOKMARK [0][-]{section*.66}{Publicaciones asociadas}{}% 39
+\BOOKMARK [1][-]{section.3.3}{Resoluci\363n de redes hidr\341ulicas de m\372ltiples componentes}{chapter.3}% 19
+\BOOKMARK [1][-]{section.3.4}{Extensi\363n a problemas acoplados en modelos de n\372cleo}{chapter.3}% 20
+\BOOKMARK [0][-]{chapter.4}{Conclusiones}{}% 21
+\BOOKMARK [1][-]{section.4.1}{Logros alcanzados}{chapter.4}% 22
+\BOOKMARK [1][-]{section.4.2}{Trabajos futuros}{chapter.4}% 23
+\BOOKMARK [0][-]{appendix.Alph1}{Descripci\363n del c\363digo maestro Coupling}{}% 24
+\BOOKMARK [1][-]{section.Alph1.1}{Modelado de problemas acoplados}{appendix.Alph1}% 25
+\BOOKMARK [1][-]{section.Alph1.2}{Metodolog\355a de resoluci\363n}{appendix.Alph1}% 26
+\BOOKMARK [1][-]{section.Alph1.3}{Ejemplo de uso}{appendix.Alph1}% 27
+\BOOKMARK [0][-]{appendix.Alph2}{Descripci\363n del c\363digo maestro Newton}{}% 28
+\BOOKMARK [1][-]{section.Alph2.1}{Principales caracter\355sticas}{appendix.Alph2}% 29
+\BOOKMARK [1][-]{section.Alph2.2}{Modelado de problemas acoplados}{appendix.Alph2}% 30
+\BOOKMARK [1][-]{section.Alph2.3}{Metodolog\355a de resoluci\363n}{appendix.Alph2}% 31
+\BOOKMARK [1][-]{section.Alph2.4}{Ejemplo de uso}{appendix.Alph2}% 32
+\BOOKMARK [0][-]{appendix.Alph3}{Acoplamiento de Par-GPFEP}{}% 33
+\BOOKMARK [1][-]{section.Alph3.1}{Implementaci\363n de la arquitectura de acoplamiento en Par-GPFEP}{appendix.Alph3}% 34
+\BOOKMARK [1][-]{section.Alph3.2}{El programa genbco}{appendix.Alph3}% 35
+\BOOKMARK [1][-]{section.Alph3.3}{Ejemplo de uso de Par-GPFEP en forma acoplada}{appendix.Alph3}% 36
+\BOOKMARK [0][-]{section*.65}{Bibliograf\355a}{}% 37
+\BOOKMARK [0][-]{section*.67}{Publicaciones asociadas}{}% 38

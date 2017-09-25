@@ -21,7 +21,6 @@
 \contentsline {chapter}{\numberline {3}Ejemplos de aplicaci\IeC {\'o}n}{21}{chapter.3}
 \contentsline {section}{\numberline {3.1}Fluidodin\IeC {\'a}mica en una fuente fr\IeC {\'\i }a de neutrones}{21}{section.3.1}
 \contentsline {section}{\numberline {3.2}An\IeC {\'a}lisis del segundo sistema de parada de un reactor de investigaci\IeC {\'o}n}{31}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Estrategia de resoluci\IeC {\'o}n}{36}{subsection.3.2.1}
 \contentsline {section}{\numberline {3.3}Resoluci\IeC {\'o}n de redes hidr\IeC {\'a}ulicas de m\IeC {\'u}ltiples componentes}{44}{section.3.3}
 \contentsline {section}{\numberline {3.4}Extensi\IeC {\'o}n a problemas acoplados en modelos de n\IeC {\'u}cleo}{50}{section.3.4}
 \contentsline {chapter}{\numberline {4}Conclusiones}{65}{chapter.4}
@@ -40,5 +39,5 @@
 \contentsline {section}{\numberline {C.1}Implementaci\IeC {\'o}n de la arquitectura de acoplamiento en \textbf {Par-GPFEP}}{83}{section.Alph3.1}
 \contentsline {section}{\numberline {C.2}El programa \textbf {genbco}}{84}{section.Alph3.2}
 \contentsline {section}{\numberline {C.3}Ejemplo de uso de \textbf {Par-GPFEP} en forma acoplada}{85}{section.Alph3.3}
-\contentsline {chapter}{Bibliograf{\'{\i }}a}{87}{section*.64}
-\contentsline {chapter}{Publicaciones asociadas}{91}{section*.66}
+\contentsline {chapter}{Bibliograf{\'{\i }}a}{87}{section*.65}
+\contentsline {chapter}{Publicaciones asociadas}{91}{section*.67}

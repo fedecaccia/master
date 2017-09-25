@@ -113,7 +113,7 @@ Las ecuaciones del modelo derivan de balances de masa y de energía mecánica en
 \begin{equation}
 \left\{ \begin{array}{rl}
 Q_2^{2} =& Q_2^{1} \\ [0.2cm]
-p_2^2 =& p_2^1 + \rho_0 g \left ( \Delta z + \beta (T_2^1 - T_{ref}) (H-\Delta z) \right ) - \rho \frac{1}{2} \left( \frac{Q_1^1}{A_2^1} \right)^2  \left( \frac {f_D L} {D} + \sum_i K_i \right)  \\ [0.2cm]
+p_2^2 =& p_2^1 + \rho_0 g \left ( \Delta z + \beta (T_2^1 - T_{ref}) (H-\Delta z) \right ) - \rho_0 \frac{1}{2} \left( \frac{Q_1^1}{A_2^1} \right)^2  \left( \frac {f_D L} {D} + \sum_i K_i \right)  \\ [0.2cm]
 T_2^2 =& 0
 %T_2^2 =& T_2^1 + 2 \frac {q_0" L}{\frac{D}{2} \frac{Q_1^1}{A_2^1}\rho c_p}
 \label{eq-intercambiador}
@@ -566,16 +566,16 @@ $\Delta h_{red}$ es la altura total de la columna de líquido en el subsistema,
 $l_D$ es la longitud total de cañerías en el subsistema,
 $p_{atm}$ es la presión sobre la superficie libre,
 y $\rho$ es la densidad del agua.
-$\Delta u$ representa la pérdida de carga por unidad de masa y puede modelarse como:
+$\Delta \hat{u}$ representa la pérdida de carga por unidad de masa y puede modelarse como:
 
 \begin{equation}
-\Delta u = \frac {1} {2} {v_D}^2 \left( \frac {f_D l_D}{D} + \sum_i K_i \right)
+\Delta \hat{u} = \frac {1} {2} {v_D}^2 \left( \frac {f_D l_D}{D} + \sum_i K_i \right)
 \end{equation}
 donde $v_D$ es la velocidad del fluido en la línea de descarga,
 (que puede escribirse en términos de $\dot{h}$),
 $\frac {f_D*l_D}{D}$ es el factor de pérdida de carga distribuida en las tuberías,
 (en función del factor de Darcy $f_D$, la longitud de tuberías $l_D$ y el diámetro de las mismas $D$)
-y $\sum_i K_i$ es la sumatoria de factores de pérdida de carga concetrada.
+y $\sum_i K_i$ es la sumatoria de factores de pérdida de carga concentrada.
 
 La Tabla \ref{tabla-tanque} reúne los parámetros del subsistema.
 Los datos geométricos pueden consultarse en las referencias \cite{invap-mockup}.
@@ -597,7 +597,7 @@ $\rho$           & 998 $Kg/m^3$   \\ \hline
 $D$              & 0.254 $m$      \\ \hline
 $\sum_i K_i$     & 1.13           \\ \hline
 \end{tabular}
-\caption{Parámetros del subsistema del tanque del reflector con acople de sección de red hidráulica}
+\caption{Parámetros del subsistema del tanque del reflector con acople de porción de red hidráulica}
 \label{tabla-tanque}
 \end{table}
 
@@ -689,7 +689,7 @@ el caudal $Q_2^1$ se calcula simplemente mediante integración numérica del cam
 
 Todos estos cálculos se realizan con \textbf{Par-GPFEP}.
 
-\subsection{Estrategia de resolución}
+\subsection*{Estrategia de resolución}
 
 Los dos subsistemas están conectados a través de una sección de la tubería,
 en la cual quedan acoplados los valores de velocidades y fuerzas.

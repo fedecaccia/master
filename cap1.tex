@@ -222,8 +222,8 @@ el sistema de residuos queda:
 
 \begin{equation}
 \left\{\begin{matrix}
-(r_{q''})_{S1}^{1}  = (q''^{ guess}) - (q''^{calc})_{S_1} \\
-(r_{q''})_{S2}^{1}  = (T^{guess}) - (T^{calc})_{S_2}
+(r_{q''})_{S_1}^{1}  = (q''^{ guess}) - (q''^{calc})_{S_1} \\
+(r_{q''})_{S_2}^{1}  = (T^{guess}) - (T^{calc})_{S_2}
 \end{matrix}\right.
 \label{res_qt}
 \end{equation}
@@ -362,10 +362,10 @@ pero la desventaja es que para utilizar este método se requiere la construcció
 Una sencilla aproximación mediante diferencias finitas de primer orden de cada elemento de la matriz jacobiana requiere numerosas evaluaciones.
 Cada elemento $J_{ij}=\frac{\partial R_i}{\partial x_j}$ puede aproximarse mediante diferencias finitas a primer orden como:
 \begin{equation}
-J_{ij} \approx \frac{r_i(\bar{x}_j + \Delta \bar{x}_j) - r_i(\bar{x}_j)}{\left\|\Delta x_j\right\|}
+J_{ij} \approx \frac{r_i(\bar{x} + \Delta \bar{x}^j) - r_i(\bar{x})}{\left\|\Delta \bar{x}^j\right\|}
 \label{j-diff}
 \end{equation}
-donde $\Delta \bar{x}_j$ es un vector que contiene valores nulos en todos sus elementos excepto en el elemento de la posición $j$,
+donde $\Delta \bar{x}^j$ es un vector que contiene valores nulos en todos sus elementos excepto en el elemento de la posición $j$,
 cuyo valor es la diferencia incremental para la variable $j$.
 La construcción de la matriz jacobiana con éste método requiere una evaluación del vector residuo $\bar{r}$ en el punto $\bar{x}$ y luego $N_{unk}$ evaluaciones extras,
 donde $N_{unk}$ es la cantidad total  de incógnitas. 
