@@ -3,6 +3,12 @@
 %~ \chapterquote
 %~ {The trouble with the world is that the stupid are cocksure and the intelligent are full of doubt.}
 %~ {Bertrand Russell, 1872-1970}
+\chapterquote
+{El conocimiento no es una vasija que se llena, sino un fuego que se enciende.}
+{Plutarco, 46-120}
+%~ \chapterquote
+%~ {Lo sabio es la meta del alma humana y, a medida que se avanza en sus conocimientos, va alejando a su vez el horizonte de lo desconocido.}
+%~ {Heráclito,540-480 a.c.}
 
 En la primera sección de este capítulo se resumen las tareas realizadas en el trabajo de maestría y se presentan los resultados obtenidos más destacados.
 En la siguiente sección se comentan las líneas de investigación propuestas para continuar el trabajo.
@@ -58,10 +64,15 @@ combinados con evaluaciones de \textit{line-searching} entre las iteraciones no 
 
 En la sección \ref{3:extension-nucleo} se extendió la metodología de acoplamiento a la resolución de problemas multifísicos provenientes de modelos de análisis del núcleo de reactores nucleares.
 Se desarrolló un modelo de acoplamiento neutrónico-termohidráulico para el estudio de ciclos de quemado de combustibles y se evaluó la eficiencia de resolución de difererentes esquemas numéricos.
-Se analizaron dos núcleos diferentes, y en ambos se constató que la técnica de \textit{Picard} comúnmente utilizada no es la más eficiente ya que requiere evaluaciones serializadas
-que bien pueden paralelizarse utilizando el método del punto fijo.
-El método de \textit{Broyden} resultó ser eficiente en el primer modelo de núcleo, que tenía inferior cantidad de incógnitas.
-En el segundo modelo de núcleo analizado resultó ser eficiente solo durante la primera mitad del ciclo de quemado, pero luego encontró inestabilidades.
+%~ Se analizaron dos núcleos diferentes, y en ambos se constató que la técnica de \textit{Picard} comúnmente utilizada no es la más eficiente ya que requiere evaluaciones serializadas
+%~ que bien pueden paralelizarse utilizando el método del punto fijo.
+Las técnicas explícitas en general resultaron ser robustas, pero en algunos casos se estancaron, iterando en series de valores que se repetían en ciclo,
+y en otros requerieron excesivos tiempos de cálculo.
+El método de \textit{Broyden} resultó ser eficiente en el primer modelo de núcleo.
+En el segundo modelo analizado resultó ser eficiente solo durante la primera mitad del ciclo de quemado,
+durante la cual convergía en la mitad de iteraciones de las que requerían los métodos explícitos.
+Sin embargo, tras esta primera parte del cálculo encontró inestabilidades.
+
 
 \section{Trabajos futuros}
 \label{trabajos-futuros}

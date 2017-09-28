@@ -1,21 +1,21 @@
 \chapter{Introducción}
 \label{chap1}
 \chapterquote
-%~ {Don't get involved in partial problems, 
-%~ but always take flight to where there is a free view over the whole single great problem, 
-%~ even if this view is still not a clear one.}
-{No se involucre en problemas parciales,
-siempre tome vuelo hacia donde hay una vista libre sobre el gran problema único,
-incluso cuando esta visión todavía no sea clara.}
-{Ludwig Wittgenstein, 1889-1951}
+{La verdadera sabiduría está en reconocer la propia ignorancia.}
+{Sócrates, 470-399 a.c.}
+\chapterquote
+{En algún lugar, algo increíble está esperando ser conocido.}
+{Carl Sagan, 1934-1996}
+
 
 \section{Motivación}
 \label{1:motivacion}
 
-La creciente sofisticación en los análisis de ingeniería demanda el estudio de sistemas cada vez más complejos.
-Un ejemplo actual de esto es el modelado de grandes componentes termohidráulicos de geometría muy compleja en la industria nuclear. 
+La creciente sofisticación en los sistemas de ingeniería demanda análisis que pueden resultar muy complejos complejos.
+Por ejemplo, en la industria nuclear existen sistemas termohidráulicos compuestos por múltiples componentes.
+%~ Un ejemplo actual de esto es el modelado de grandes componentes termohidráulicos de geometría muy compleja en la industria nuclear. 
 Es notable la presencia de subsistemas de caracterísiticas muy diferentes: principalmente diferentes tamaños y regímenes de flujos. 
-Si bien se necesita modelar y entender el sistema completo, solo es de interés el detalle en algunos subsistemas. 
+En estos estudios, si bien se necesita modelar y entender el sistema completo, a veces solo es de interés el detalle en algunos subsistemas. 
 Algunos, como las tuberías, se hallan muy bien caracterizados por modelos simple (ODE's).
 Otros, en cambio, requieren un análisis detallado de flujo, y por ello es necesaria la simulación fluidodinámica computacional (CFD).
 
@@ -38,13 +38,13 @@ La Figura \ref{esquema-acoplamiento} presenta el esquema propuesto.
 La notación utilizada es la siguiente:
 \begin{itemize}
 \item $S_i$ representa al subsistema $i$, $i=1,...,N$.
-\item $U_{i,j}^k$ es la unión $k$ entre subsistemas $i$ y $j$, $k=1,...,K_{i,j}$.
-\item $I_{S_i}^{l}$ es la interfaz local $l$ del subsistema $S_i$, $l=1,...,L_i$.
+\item $U_{i,j}^k$ es la unión $k$-ésima entre subsistemas $i$ y $j$, $k=1,...,K_{i,j}$.
+\item $I_{S_i}^{l}$ es la interfaz local $l$-ésima del subsistema $S_i$, $l=1,...,L_i$.
 \item $\Gamma_i$ es la porción de frontera exterior en el subsistema $N$,
  $\Gamma_1$ $\cup$ $\Gamma_2$ $\cup$ ... $\cup$ $\Gamma_i$ ...  $\cup$ $\Gamma_N$ = $\Gamma$.
  Notar que $\Gamma_j$ puede ser nula para algún $S_j$.
-\item ${(x_m)_{S_i}^{I_l}}$ es el valor de la variable $x_m$ en la interfaz ${I_l}$ del subsistema ${S_i}$, $m=1,...,M_i$.
-\item ${(\bar{x})_{S_i}^{I_l}}$ es el vector de incógnitas $\{x_1,x_2,...,x_{M_i}\}$ en la interfaz ${l}$ del subsistema ${i}$.
+\item ${(x_m)_{S_i}^{I_l}}$ es el valor de la variable $x_m$ en la interfaz $l$-ésima del subsistema ${S_i}$, $m=1,...,M_i$.
+\item ${(\bar{x})_{S_i}^{I_l}}$ es el vector de incógnitas $\{x_1,x_2,...,x_{M_i}\}$ en la interfaz $l$-ésima del subsistema ${i}$.
 \end{itemize}
 
 \begin{figure}[ht]
@@ -209,7 +209,7 @@ Existen formas alternativas para resolver el acoplamiento.
 Una de ellas es utilizar el método del punto fijo.
 En este método, inicialmente se propone un vector semilla $\{T^{guess},q''^{guess}\}$ con valores para todas las incógnitas al mismo tiempo.
 Se decide arbitrariamente el tipo de condición de borde impuesta a cada subsistema, con la condición de que deben cubrir todos los valores de cálculo.
-En el ejemplo presentado, alguno de los subsistemas debe calcular $\{T^{calc}$ y otro $\{q''^{calc}$.
+En el ejemplo presentado, alguno de los subsistemas debe calcular $T^{calc}$ y otro $q''^{calc}$.
 Luego se computan los residuos $(r_m)_{i}^{l}$ entre los valores propuestos y los valores calculados para cada variable.
 
 \begin{equation}
@@ -238,8 +238,12 @@ y $\bar{x}^{guess}$ es el vector que contiene los valores $(x_m^{guess})_{S_i}^{
 Comúnmente en el primer cálculo esto no sucede, y por lo tanto es necesario realizar iteraciones hasta obtener convergencia.
 En el método del punto fijo, los valores calculados conforman directamente el vector semilla para cada nueva iteración.
 Es decir, en la iteración $n$, se utiliza como semilla $\bar{x}^{guess}_n$ el resultado de la iteración previa $\bar{x}^{calc}_{n-1}$.
-Si bien este método tiene similares desventajas al método \textit{Dirichlet-to-Neumann} porque es otro método explícito,
-acelera el tiempo de cálculo ya que permite resolver los diferentes subsistemas de estudio al mismo tiempo.
+Este método es similar a combinar diferentes cálculos independientes realizados con el método \textit{Dirichlet-to-Neumann}, en los que cada uno comenzaría con valores $guess$ en diferentes subsistemas.
+Podría utilizar alguna sobrerelajación de los valores $guess$ en las iteraciones y de esta forma aprovechar que todos los subsistemas están siendo resueltos al mismo tiempo.
+ 
+%~ y por lo tanto tiene similares desventajas
+%~ Si bien este método tiene similares desventajas al método \textit{Dirichlet-to-Neumann} porque es otro método explícito,
+%~ acelera el tiempo de cálculo ya que permite resolver los diferentes subsistemas de estudio al mismo tiempo.
 
 Otra alternativa para resolver el acoplamiento es hacerlo en forma implícita.
 En este caso las elecciones para las condiciones de borde en cada subsistema son independientes entre sí.
@@ -332,7 +336,6 @@ Existen diferentes métodos numéricos para hallar las raíces del sistema de ec
 %~ y consiste en tomar como semilla $\bar{x}^{guess}_n$ para cada iteración $n$ al resultado $\bar{x}^{calc}_{n-1}$ de la iteración previa.
 %~ Este método, al igual que el método \textit{Dirichlet-to-Neumann}, tiene bajo orden de convergencia,
 %~ y tampoco permite combinar libremente la elección de condiciones de borde para los diferentes subdominios.
-
 Los métodos más eficientes para la resolución de sistemas de ecuaciones de residuos son métodos implícitos,
 en los que la semilla para cada iteración no es directamente el resultado obtenido en la iteración previa.
 De ahora en adelante para simplificar la notación se usa $\bar{x}_n$ en lugar de $\bar{x}^{guess}_n$.
@@ -340,7 +343,7 @@ Haciendo un desarrollo de Taylor de las ecuaciones de residuos alrededor del pun
 truncando los términos superiores al primer orden, y evaluando en $\bar{x}=\bar{x}_{n+1}$ se tiene:
 
 \begin{equation}
-\bar{r}(\bar{x}_{n+1}) = \bar{r}(\bar{x}_n) + \nabla \bar{r}(\bar{x}_n)(\bar{x}_{n+1}-\bar{x}_n)
+\bar{r}(\bar{x}_{n+1}) \approx \bar{r}(\bar{x}_n) + \nabla \bar{r}(\bar{x}_n)(\bar{x}_{n+1}-\bar{x}_n)
 \label{taylor}
 \end{equation}
 donde $\nabla \bar{r}(\bar{x}_n)$ es la matriz jacobiana del sistema $\mathbb{J}$ evaluada en el punto $\bar{x}_n$, 
@@ -360,7 +363,7 @@ que es el método de iterativo \textit{Newton-Raphson}.
 La principal ventaja de este método es que tiene orden de convergencia cuadrática,
 pero la desventaja es que para utilizar este método se requiere la construcción de la matriz jacobiana en cada iteración, lo cual es demasiado costoso.
 Una sencilla aproximación mediante diferencias finitas de primer orden de cada elemento de la matriz jacobiana requiere numerosas evaluaciones.
-Cada elemento $J_{ij}=\frac{\partial R_i}{\partial x_j}$ puede aproximarse mediante diferencias finitas a primer orden como:
+Cada elemento $J_{ij}=\frac{\partial r_i}{\partial x_j}$ puede aproximarse mediante diferencias finitas a primer orden como:
 \begin{equation}
 J_{ij} \approx \frac{r_i(\bar{x} + \Delta \bar{x}^j) - r_i(\bar{x})}{\left\|\Delta \bar{x}^j\right\|}
 \label{j-diff}
@@ -374,11 +377,11 @@ Si bien estas evaluaciones son independientes entre sí y por lo tanto altamente
 
 Una forma alternativa y elegante de resolver el sistema de ecuaciones planteado en \ref{sistema-simple} es mediante métodos \textit{quasi-Newton}.
 La característica principal de estos métodos es que aproximan la matriz jacobiana sin necesidad de realizar evaluaciones extras en todas las iteraciones,
-y por lo tanto tienen una ventaja fuerte frente al método de \textit{Newton-Raphson}.
+y por lo tanto tienen una ventaja frente al método de \textit{Newton-Raphson}, ya que esto se traduce en un menor tiempon de cálculo.
 Además, en general tienen mayor orden de convergencia que los métodos mediante iteraciones de \textit{Picard}.
 
 El método de \textit{Broyden} es uno de estos métodos \cite{broyden}.
-La matriz jacobiana $\mathbb{B}_n$ en la iteración $n$ es aproximada mediante una matriz $\mathbb{B}_n$ que se construye solo en función 
+La matriz jacobiana $\mathbb{J}_n$ en la iteración $n$ es aproximada mediante una matriz $\mathbb{B}_n$ que se construye solo en función 
 del valor de los vectores incógnitas $\bar{x}_{n-1}$ y $\bar{x}_{n}$,
 de los vectores residuos $\bar{r}_{n-1}$ y $\bar{r}_{n}$,
 y de la matriz de la iteración previa $\mathbb{B}_{n-1}$:
@@ -403,7 +406,7 @@ y en cada una de ellas calculan variaciones en las direcciones de descenso selec
 lo cual implica múltiples evaluaciones de funciones.
 Por este motivo estos métodos resultan altamente costosos.
 
-En la resolución de sistemas de ecuaciones no lineales mediante cualquiera de los métodos imlpícitos
+En la resolución de sistemas de ecuaciones no lineales mediante cualquiera de los métodos implícitos
 puede utilizarse una técnica de aceleración conocida en la bibliografía como \textit{line searching} \cite{kelley}. 
 Esta técnica consiste en búsquedas del mínimo a lo largo de la última dirección de cambio en cada iteración, empleando evaluaciones de funciones extras.
 
@@ -414,13 +417,13 @@ Esto se permite porque cada subsistema podría requerir subpasos de evolución d
 Distintos subdominios pueden tener diferentes requisitos sobre el parámetro de evolución, dependiendo de la física implicada.
 Algunos, por ejemplo, podrían experimentar transitorios fluidodinámicos, en los que es de interés mantener por debajo de algún valor 
 ciertos parámetros numéricos (como el número de \textit{Courant}) proporcionales al paso de tiempo.
-Otros, en cambio, podrían estar siendo resueltos mediante métodos complejos que consumieran elevados recursos temporales,
+Otros, en cambio, podrían estar siendo resueltos mediante métodos complejos que consumieran elevado tiempo de cálculo,
 por tanto sería de interés utilizar subpasos evolutivos mayores.
 }. Notar que no es necesario mantener la misma estrategia de selección de condiciones de borde para cada interfaz a lo largo de la evolución.
 Las variables que son datos o incógnitas para cada subdominio pueden irse alternando,
 seleccionando diferentes ecuaciones \ref{ecuaciones-modelos} a resolver en diferentes pasos de acople.
 Debido a la convergencia fuerte de los valores de las variables en las interfaces de acople,
-el método es incondicionalmente estable a lo largo de la evolución.
+el método de Descomposición Disjunta de Dominios no altera las propiedades de estabilidad en la evolución garantizadas por los esquemas numéricos utilizados en cada subdominio.
 
 \section{Objetivos y estructura de trabajo}
 \label{1:objetivos}

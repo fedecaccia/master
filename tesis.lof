@@ -39,15 +39,15 @@
 \contentsline {figure}{\numberline {3.13}{\ignorespaces Descomposici\IeC {\'o}n disjunta de dominios en el modelado de redes hidr\IeC {\'a}ulicas}}{45}{figure.3.13}
 \contentsline {figure}{\numberline {3.14}{\ignorespaces Comparaci\IeC {\'o}n de diferentes m\IeC {\'e}todos num\IeC {\'e}ricos para la resoluci\IeC {\'o}n de sistemas de redes hidr\IeC {\'a}ulicas}}{47}{figure.3.14}
 \contentsline {figure}{\numberline {3.15}{\ignorespaces Comparaci\IeC {\'o}n de diferentes esquemas de \textit {Broyden} para la resoluci\IeC {\'o}n de sistemas de redes hidr\IeC {\'a}ulicas con reg\IeC {\'\i }menes de flujo laminar}}{48}{figure.3.15}
-\contentsline {figure}{\numberline {3.16}{\ignorespaces Comparaci\IeC {\'o}n de diferentes m\IeC {\'e}todos num\IeC {\'e}ricos para la resoluci\IeC {\'o}n de sistemas de redes hidr\IeC {\'a}ulicas con reg\IeC {\'\i }menes de flujo turbulento}}{49}{figure.3.16}
+\contentsline {figure}{\numberline {3.16}{\ignorespaces Comparaci\IeC {\'o}n de diferentes m\IeC {\'e}todos num\IeC {\'e}ricos para la resoluci\IeC {\'o}n de sistemas de redes hidr\IeC {\'a}ulicas con reg\IeC {\'\i }menes de flujo turbulento}}{50}{figure.3.16}
 \contentsline {figure}{\numberline {3.17}{\ignorespaces N\IeC {\'u}cleo simple en an\IeC {\'a}lisis de acoplamiento neutr\IeC {\'o}nico-termohidr\IeC {\'a}ulico utilizando \textit {RELAP5} y \textit {Fermi}}}{55}{figure.3.17}
-\contentsline {figure}{\numberline {3.18}{\ignorespaces Instancias de c\IeC {\'a}lculo de las variables relacionadas con cada programa \textit {esclavo}}}{56}{figure.3.18}
-\contentsline {figure}{\numberline {3.19}{\ignorespaces Evaluaciones de funciones en cada paso de quemado en c\IeC {\'a}lculo con \textbf {RELAP5} y \textbf {Fermi}}}{57}{figure.3.19}
+\contentsline {figure}{\numberline {3.18}{\ignorespaces Instancias de c\IeC {\'a}lculo de las variables relacionadas con cada programa \textit {esclavo}}}{57}{figure.3.18}
+\contentsline {figure}{\numberline {3.19}{\ignorespaces Evaluaciones de funciones en cada paso de quemado en c\IeC {\'a}lculo con \textbf {RELAP5} y \textbf {Fermi}}}{58}{figure.3.19}
 \contentsline {figure}{\numberline {3.20}{\ignorespaces Modelo de n\IeC {\'u}cleo del reactor CAREM-25}}{59}{figure.3.20}
-\contentsline {figure}{\numberline {3.21}{\ignorespaces Modelo de n\IeC {\'u}cleo del reactor CAREM-25}}{60}{figure.3.21}
-\contentsline {figure}{\numberline {3.22}{\ignorespaces Modelo de n\IeC {\'u}cleo del reactor CAREM-25}}{60}{figure.3.22}
-\contentsline {figure}{\numberline {3.23}{\ignorespaces Evoluci\IeC {\'o}n de la reactividad en el ciclo de quemado del reactor CAREM-25}}{61}{figure.3.23}
-\contentsline {figure}{\numberline {3.24}{\ignorespaces Evaluaciones de funciones utilizando el m\IeC {\'e}todo de \textit {Picard} en cada paso de quemado en c\IeC {\'a}lculo con \textbf {RELAP5} y \textbf {Fermi}}}{62}{figure.3.24}
+\contentsline {figure}{\numberline {3.21}{\ignorespaces Modelo de n\IeC {\'u}cleo del reactor CAREM-25}}{61}{figure.3.21}
+\contentsline {figure}{\numberline {3.22}{\ignorespaces Modelo de n\IeC {\'u}cleo del reactor CAREM-25}}{61}{figure.3.22}
+\contentsline {figure}{\numberline {3.23}{\ignorespaces Evoluci\IeC {\'o}n de la reactividad en el ciclo de quemado del reactor CAREM-25}}{62}{figure.3.23}
+\contentsline {figure}{\numberline {3.24}{\ignorespaces Evaluaciones de funciones utilizando el m\IeC {\'e}todo de \textit {Picard} en cada paso de quemado en c\IeC {\'a}lculo con \textbf {RELAP5} y \textbf {Fermi}}}{63}{figure.3.24}
 \contentsline {figure}{\numberline {3.25}{\ignorespaces Evaluaciones de funciones utilizando el m\IeC {\'e}todo del punto fijo en cada paso de quemado en c\IeC {\'a}lculo con \textbf {RELAP5} y \textbf {Fermi}}}{63}{figure.3.25}
 \addvspace {10\p@ }
 \addvspace {10\p@ }

@@ -1,8 +1,13 @@
 \chapter{Ejemplos de aplicación}
 \label{chap3}
-%~ \chapterquote
-%~ {The City's central computer told you? R2-D2, you know better than to trust a strange computer. }
-%~ {C-3PO, from Star Wars}
+\chapterquote
+%~ {Don't get involved in partial problems, 
+%~ but always take flight to where there is a free view over the whole single great problem, 
+%~ even if this view is still not a clear one.}
+{No se involucre en problemas parciales,
+siempre tome vuelo hacia donde hay una vista libre sobre el gran problema único,
+incluso cuando esta visión todavía no sea clara.}
+{Ludwig Wittgenstein, 1889-1951}
 
 \section{Fluidodinámica en una fuente fría de neutrones}
 \label{3:ff}
@@ -57,7 +62,7 @@ Las ecuaciones implementadas del modelo son las siguientes \cite{gunzburger} \ci
 \begin{equation}
 \left\{ \begin{array}{lr}
 \displaystyle \frac {\partial \bar{u}}{\partial t} + ( \bar{u} \cdot \nabla) \bar{u} = - \frac {\nabla p}{\rho_0}
-+ \left( 1- \beta (T-T_{ref}) \right)\bar{g} \nabla \cdot \left[ \left( \nu + \nu_T \right) \left( \nabla \bar{u} + \nabla \bar{u}^T \right) \right] \\ [0.2cm]
++ \left( 1- \beta (T-T_{ref}) \right)\bar{g} + \nabla \cdot \left[ \left( \nu \right) \left( \nabla \bar{u} + \nabla \bar{u}^T \right) \right] \\ [0.2cm]
 \nabla \cdot \bar{u} = 0 \\ [0.2cm]
 \displaystyle \frac {\partial T}{\partial t} + ( \bar{u} \cdot \nabla) T = \frac {k}{\rho_0 c_p} \Delta T + \frac{f_0}{\rho_0 c_p}
 \label{eq-cavidad}
@@ -71,10 +76,11 @@ $T$ el campo de temperaturas.
 Las ecuaciones (\ref{eq-cavidad}) se resuelven mediante la formulación \textit{Petrov-Galerkin} \cite{galerkin} de elementos finitos, 
 con elementos lineales para aproximar los campos de presiones, velocidades y temperaturas, 
 estabilizando con los métodos \textit{SUPG} \cite{supg} y \textit{PSPG} \cite{pspg}.
-El método \textit{SUPG} (\textit{Streamline Upwind Petrov-Galerkin}) se utiliza para estabilizar problemas de transporte con alto número de \textit{Peclet} (\textit{Pe}).
-El \textit{Pe} es un número adimensional que relaciona la velocidad de advección de un flujo y la velocidad de difusión, y está relacionado con el número de \textit{Reynolds} (\textit{Re}).
-En las ecuaciones de \textit{Navier-Stokes}, el método estabiliza las evoluciones con alto \textit{Re},
-y consiste en la adición de una difusividad extra en la dirección de las líneas de corriente.
+El método \textit{SUPG} (\textit{Streamline Upwind Petrov-Galerkin}) se utiliza para estabilizar problemas de transporte con alto número de \textit{Peclet} (\textit{Pe}) (o \textit{Reynolds (Re)}, en las ecuaciones de \textit{Navier-Stokes}).
+%~ El \textit{Pe} es un número adimensional que relaciona la velocidad de advección de un flujo y la velocidad de difusión, y está relacionado con el número de \textit{Reynolds} (\textit{Re}).
+%~ En las ecuaciones de \textit{Navier-Stokes}, el método estabiliza las evoluciones con alto \textit{Re}, y
+El método
+consiste en la adición de una difusividad extra en la dirección de las líneas de corriente.
 El método \textit{PSPG} (Pressure Stabilizing Petrov-Galerkin) se utiliza para evadir la condición \textit{LBB}\footnote{
 La condición \textit{Ladyzhenskaya-Babuska-Breezi (LBB)} o \textit{inf-sup}
 es una condición necesaria y suficiente para que el problema de \textit{Stokes}
@@ -85,7 +91,7 @@ que básicamente impone restricciones sobre los espacios de elementos utilizados
 
 En las paredes se imponen condiciones de no deslizamiento para las ecuaciones de \textit{Navier-Stokes} y de flujo de energía nulo para la ecuación de energía.
 En las interfaces de acople, deben definirse una serie de condiciones de borde.
-En las ecuaciones de \textit{Navier-Stokes}, en cada interfaz pueden setearse valores de velocidades normales, suponiendo velocidades tangenciales nulas (bajo la hipótesis de flujo paralelo),
+En las ecuaciones de \textit{Navier-Stokes}, en cada interfaz pueden imponerse valores de velocidades normales, suponiendo velocidades tangenciales nulas (bajo la hipótesis de flujo paralelo),
 o valores de fuerzas normales (presión), suponiendo que las fuerzas tangenciales son nulas.
 En la ecuación de energía, cada borde necesita o bien un perfil de temperaturas o bien un perfil de flujo de calor.
 %Los cálculos se realizaron implementando diferentes estrategias y verificando que los mismos convergieran.
@@ -304,7 +310,7 @@ El cálculo cero-dimensional se ejecuta en cada paso de cálculo porque requiere
 
 Las condiciones iniciales del sistema son estáticas y sin gradientes de temperatura.
 A medida que evoluciona el fluido comienza a incrementar su temperatura en la cavidad y a circular por fuerza boyante en sentido anti-horario.
-La dinámica fluídica puede tomartoma comportamientos.
+La dinámica fluídica puede tomar diferentes comportamientos.
 El parámetro de interés es el número de \textit{Richardson}.
 El número de \textit{Richardson} describe la relación entre las fuerzas boyantes y las fuerzas inerciales.
 En \cite{richardson} Buscaglia y Dari proponen calcular el número de \textit{Richardson} de la siguiente forma:
@@ -340,7 +346,7 @@ La fuente fría diseñada para ser instalada en el reactor RA-10, por ejemplo, t
 \end{minipage}
 \caption[Evolución del fluido en la cavidad bidimensional a bajo Richardson]
 {Evolución del fluido en la cavidad bidimensional con número de \textit{Richardson Ri=0.3}.
- El fluido de relleno es deuterio líquido e inicialmente está estático y con distribución de temperaturas es uniforme.
+ El fluido de relleno es deuterio líquido e inicialmente está estático y con distribución de temperaturas uniforme.
  Las fuerzas inerciales dominan durante la evolución y por ello se establece una vena fluídica entre la entrada y la salida.
  Frecuentemente se generan escapes espontáneos de las porciones de fluido que permanecen estáticas mientras incrementan su temperatura, rompiendo con la vena previamente establecida.
  La evolución oscila continuamente entre estos dos comportamientos.}
@@ -367,7 +373,7 @@ que corresponde a una potencia del sistema de aproximadamente $50kW$.
 \end{minipage}
 \caption[Evolución del fluido en la cavidad bidimensional a bajo Richardson]
 {Evolución del fluido en la cavidad bidimensional con número de \textit{Richardson Ri=10.6}.
- El fluido de relleno es deuterio líquido e inicialmente está estático y con distribución de temperaturas es uniforme.
+ El fluido de relleno es deuterio líquido e inicialmente está estático y con distribución de temperaturas uniforme.
  A medida que la dinámica evoluciona el fluido se va estratificando en capas con diferente temperatura.
  Pueden apreciarse las líneas de corriente serpenteantes y la estratificación del fluido alcanzando un $quasi$-estacionario.}
 \label{evol-ri10}
@@ -516,7 +522,7 @@ Cuando es accionado el SSP se abren las válvulas y el líquido comienza a drena
 Asimismo, el Helio circula en el mismo sentido en el resto del sistema, rellenando el volumen desplazado de líquido.
 
 El análisis del problema completo hubiera demandado elevados recursos computacionales debido a los requerimientos de malla.
-Por ello se propuso desarrollar un modelo multiescala del sistema,
+Por ello se desarrolló un modelo multiescala del sistema,
 desacoplándolo en subsistemas que pudieron estudiarse por separado con estrategias de acoplamiento mediante condiciones de borde apropiadas.
 El SSP del RA10 se dividió en tres subsistemas:
 
@@ -1597,7 +1603,7 @@ se decidió utilizar en la resolución del problema modelado en la presente secc
 para demostrar la posibilidad de uso en acoplamientos mediante la estrategia descripta en el \hyperlink{chapter.2}{Capítulo 2}.
 \textbf{RELAP5} resuelve las ecuaciones \ref{relap-calor}, \ref{relap-masa}, \ref{relap-momento} y \ref{relap-energia} a partir de esquemas semi-implícitos de diferencias finitas.
 
-La resolución del sistema acoplado se llevó a cabo utilizando cuatro métodos diferentes.
+La resolución del sistema acoplado se llevó a cabo utilizando tres métodos diferentes.
 Cada paso de quemado se consideró convergido cuando la norma infinito del residuo se hizo inferior a una tolerancia $tol$ absoluta prefijada.
 Esta tolerancia $tol$ se fijó en $0.1$.
 Esta propuesta implica iterar con la solución hasta que el residuo en cada variable caiga por debajo de $0.1$, que es la precisión de los resultados impresos por \textbf{RELAP5}.
@@ -1621,7 +1627,7 @@ y la Tabla \ref{tabla-relap-fermi} integra la cantidad total de evaluaciones y e
       \multicolumn{1}{c}{no lineal} & [días] & \multicolumn{1}{c}{de $\bar{x}^n$} & \multicolumn{1}{c}{de $\mathbb{J}^n$} & \multicolumn{1}{c}{totales} & \multicolumn{1}{c}{total [s]}\\ \hline %\hline
       Broyden & 10 & $\mathscr{O}(1)$ & $\mathscr{O}(1)$ & 85 & 610 \\ %\hline
       Picard & 10 & $\mathscr{O}(1)$ & - & 68 & 684 \\ %\hline
-      Punto fijo & 10 & $\mathscr{O}(1)$ & - & 87 & 628  \\ %\hline
+      %~ Punto fijo & 10 & $\mathscr{O}(1)$ & - & 87 & 628  \\ %\hline
       Shamanskii & 10 & $\mathscr{O}(1)$ & $\mathscr{O}(0)$& 370 & 2663  \\ \hline
    \end{tabular}   
    \caption[Evaluaciones totales y tiempo total requerido por cada método no lineal en cálculo de quemado con \textbf{RELAP5} y \textbf{Fermi}]
@@ -1629,8 +1635,9 @@ y la Tabla \ref{tabla-relap-fermi} integra la cantidad total de evaluaciones y e
    \label{tabla-relap-fermi}
 \end{table}
 
-El método \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}) es el método explícito que consume mayor tiempo de cálculo.
-El método del punto fijo demuestra la ventaja de mantener a los diferentes programas \textit{exclavos} corriendo en paralelo y concluye con un tiempo de cálculo inferior.
+%~ El método \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}) es el método explícito que consume mayor tiempo de cálculo.
+%~ El método del punto fijo demuestra la ventaja de mantener a los diferentes programas \textit{exclavos} corriendo en paralelo y concluye con un tiempo de cálculo inferior.
+Los métodos implícitos estudiados fueron el método de $Shamanskii$ y el método de $Broyden$.
 Se ensayaron diferentes implementaciones del método de \textit{Shamanskii} para el uso en este problema particular.
 El esquema reportado requiere la construcción de la matriz jacobiana en el primer paso temporal,
 y luego se evalúa si es necesario su reinicialización cada dos pasos temporales,
@@ -1644,10 +1651,15 @@ de mantener controlada la cantidad de ejecuciones de código disparadas por el c
 Esquemas con menor frecuencia de reinicio resultan divergentes en algún punto del ciclo de quemado.
 Los esquemas con mayor frecuencia de reinicio, como el método de \textit{Newton-Raphson} (que reinicia la matriz jacobiana en cada iteración),
 convergen pero requieren muchas más evaluaciones asociadas.
-Por último, se utilizó el método de \textit{Broyden} que en previas aplicaciones había demostrado muy buenos resultados.
-Si bien este método requiere numerosas evaluaciones en la primera iteración del primer paso de cálculo para la construcción de la matriz jacobiana,
-en los siguientes pasos de quemado converge en pocas iteraciones, obteniendo el menor tiempo de cálculo total.
-La ganancia de tiempo obtenida hubiera sido mayor para un ciclo de quemado con mayor cantidad de pasos.
+El método de \textit{Broyden} requiere numerosas evaluaciones en la primera iteración del primer paso de cálculo para la construcción de la matriz jacobiana.
+Sin embargo, en los siguientes pasos de quemado converge en pocas iteraciones, obteniendo el menor tiempo de cálculo total.
+
+El método explícito \textit{Dirichlet-to-Neumann} (iteraciones de \textit{Picard}) converge con similar cantidad de iteraciones que el método de $Broyden$ en cada paso de quemado.
+Sin embargo consume mayor tiempo de cálculo debido a que en cada iteración, serializa las ejecuciones del código neutrónico y del código termohidráulico.
+Como en este caso el código termohidráulico resuelve un modelo extremadamente sencillo, consume un porcentaje cercano al $10\%$ del tiempo de cálculo del código neutrónico,
+y por lo tanto las diferencias de tiempo obtenidas entre los dos métodos no son elevadas.
+Si el modelo termohidráulico hubiera sido más complejo, la diferencia en tiempo de cálculo hubiera sido mucho mayor.
+
 Los métodos \textit{Newton-Krylov} no fueron tenidos en cuenta puesto que hubieran requerido numerosas evaluaciones de funciones
 debido a la gran cantidad de incógnitas del sistema.
 
@@ -1765,17 +1777,19 @@ Durante todo el ciclo las barras de control del SAC permanecen insertadas hasta 
 \label{carem-rho}
 \end{figure}
 
-En la resolución del sistema acoplado se utilizaron los mismos métodos que los estudiados en el ejemplo previo,
-con mismo criterio de convergencia para cada paso de quemado.
+En la resolución del sistema acoplado se utilizaron los métodos de \textit{Dirichlet-to-Neumann}, \textit{punto fijo} y \textit{Broyden},
+con mismo criterio de convergencia que en el ejemplo previo para cada paso de quemado.
 Se utilizaron extrapolaciones de órden 0 y órden 1 para la semilla $\bar{x}^n$ y diferente discretización temporal.
 Los métodos explícitos completan el ciclo de quemado de manera robusta y estable.
 El método de \textit{Picard} tiene problemas en algunos pasos de quemado,
 en los que queda iterando entre valores que se repiten en ciclos.
 Como el residuo en estos pasos era solo un orden de magnitud mayor a la tolerancia fijada,
 se optó por considerarlos convergido al cabo de 10 iteraciones y continuar con la evolución.
-El método del punto fijo, en cambio, converge en cada paso de quemado.
-Si bien la cantidad de evaluaciones de funciones  en cada paso de quemado es comparable entre los dos métodos,
-el método del punto fijo resuelve cada paso de quemado paralelizando las ejecuciones de código y por ello completa el ciclo en menor cantidad de tiempo.
+El método del \textit{punto fijo}, en cambio, converge en cada paso de quemado.
+Sin embargo esto es una particularidad para este problema, ya que intrínsecamente está compuesto por dos evaluaciones indepentientes del método \textit{Dirichlet-to-Neumann} y por lo tanto también podría quedar estancado.
+La única ventaja del método del \textit{punto fijo} es que logra reconocer antes si el módulo del vector residuo cae debajo de la tolerancia prefijada,
+mietras que el método de $Picard$ requiere algunas evaluaciones extras para ello.
+La desventaja del método del \textit{punto fijo} es que en cada evaluación utiliza el doble de recursos de CPU.
 
 La Tabla \ref{tab-relap-puma} resume las evaluaciones de funciones y los recursos temporales consumidos por cada método estudiado.
 En las Figuras \ref{fig-relap-puma-es} y \ref{fig-relap-puma-ep} se reporta la cantidad de evaluaciones de funciones requerida por distintos esquemas en cada paso de quemado,
@@ -1833,4 +1847,7 @@ Se desconoce si la inestabilidad encontrada se debe a algún fenómeno físico o
 
 En esta sección se ensayaron solo dos modelos de núcleo para estudiar el acoplamiento neutrónico-termohidráulico,
 por lo que para obtener conclusiones sobre la ventaja de las técnicas implícitas deberían estudiarse múltiples modelos alternativos.
-Cabe destacar que la estrategia de acoplamiento desarrollada provee toda la estructura necesaria para investigar nuevas propuestas.
+Esto excede a los propósitos de la presente sección, en la que solo se intenta demostrar las capacidades de la herramienta desarrollada para estudiar técnicas numéricas en modelos de núcleo que requieran el acoplamiento de diversos códigos. % que resuelvan diferentes fenómenos físicos.
+La estrategia de acoplamiento desarrollada provee toda la estructura necesaria para investigar nuevas propuestas.
+El autor recomienda fuertemente continuar investigando el desempeño del método de \textit{Broyden} y de otros métodos \textit{quasi-Newton} en otros modelos de núcleo,
+estudiando nuevas geometrías y diferentes fenómenos acoplados.
