@@ -17,12 +17,12 @@ En la siguiente sección se comentan las líneas de investigación propuestas pa
 \label{logros}
 
 En el trabajo se desarrolló una estrategia genérica que permite resolver problemas fluidodinámicos formulados mediante el Método de Descomposición Disjunta de Dominios.
-En la última estapa se extendió la estrategia para cubrir la resolución de problemas acoplados en sistemas complejos que requieren análsis multifísicos.
+En la última etapa se extendió la estrategia para cubrir la resolución de problemas acoplados en sistemas complejos que requieren análisis multifísicos.
 Esta estrategia de acoplamiento está compuesta por dos etapas:
 \begin{enumerate}
 \item una primera etapa de modelado, que consiste en la formulación de un problema global, compuesto por subproblemas bien planteados, definición de variables incógnitas y de ecuaciones de residuos (ver \hyperlink{chapter.1}{Capítulo 1});
 \item una segunda etapa de resolución, que consiste en la selección de programas de cálculo que resuelvan los subproblemas parciales,
-selección del programa \textit{maestro} que resuelva las ecuaciones de residuos, selección de modelos de comunicación, y ejecución de la resolución (ver \hyperlink{chapter.2}{Capítulo 2});.
+selección del programa \textit{maestro} que resuelva las ecuaciones de residuos, selección de modelos de comunicación, y ejecución de la resolución (ver \hyperlink{chapter.2}{Capítulo 2}).
 \end{enumerate}
 
 Durante el trabajo se resolvieron problemas utilizando códigos cuyas fuentes estaban disponibles para realizar implementaciones de funciones de comunicación,
@@ -30,7 +30,7 @@ y también utilizando códigos cerrados que se utilizaron como cajas negras de c
 En las tareas de acoplamiento se utilizaron dos códigos \textit{maestros}: el código \textbf{Coupling}, en la resolución de problemas formulados mediante el Método de Descomposición Disjunta de Dominios,
 y el código \textbf{Newton}, que fue diseñado de forma tal que pudiera utilizarse en la resolución de cualquier tipo de problema que requiriera el acoplamiento de códigos,
 y mediante diversos modelos de comunicación.
-Las fuentes de \textbf{Newton} fueron publicadas en \textbf{Github} junto con un manual de uso.
+Las fuentes de \textbf{Newton} fueron publicadas en \textbf{Github} junto con un manual de usuario.
 
 La herramienta de acoplamiento se utilizó en la sección \ref{3:ff} para modelar la dinámica en una fuente fría de neutrones,
 acoplando un subdominio de cálculo cero-dimensional y otro bi-dimensional.
@@ -42,15 +42,15 @@ acoplando un modelo tri-dimensional del arreglo de válvulas presente en la red 
 El análisis reveló que la inercia del fluido en la red hidráulica solo influye en el transitorio inicial y
 genera un retardo de hasta un segundo en el drenaje del tanque,
 respecto de aquellos modelos que no consideran este efecto.
-Transcurrido este transitorio, el caudal de descarga se mantiene aproximadamente constante y es similar en todos los modelos,
-lo cual verifica el cálculo mediante estudios independientes.
+Sin embargo, transcurrido este transitorio, el caudal de descarga se mantiene aproximadamente constante y en todos los modelos es similar a los datos experimentales.
+%lo cual verifica el cálculo mediante estudios independientes.
 El acoplamiento permitió también estudiar la dinámica del vaciado considerando diferentes válvulas en falla, y los resultados arrojaron diferencias despreciables.
 También se pudo confirmar que el gas de relleno de la última porción de las cañerías no genera ningún efecto apreciable durante el vaciado.
 En estos análisis se compararon diferentes métodos numéricos de resolución de sistemas no lineales y el método de \textit{Broyden} demostró también ser el más eficiente,
 junto con su variante, el método de \textit{Broyden ortonormal}.
 Se emplearon diferentes métodos de generación de semillas para el vector de incógnitas $\bar{x}_n$ y la matriz de iteración de \textit{Broyden} $\mathbb{B}_n$ en la iteración $n$,
 y se concluyó que el esquema idóneo para resolver este tipo de problemas es utilizar extrapolaciones de alto orden para $\mathbb{B}_n$ en las primeras etapas del cálculo,
-y luego solo continuar con extrapolaciones de algún orden para $\bar{x}_n$.
+y luego solo continuar con extrapolaciones para $\bar{x}_n$.
 
 En la sección \ref{3:redes} se resolvieron sistemas de redes hidráulicas con grandes cantidades de incógnitas.
 Los modelos de estudio desarrollados para los diferentes subsistemas fueron sencillos,
@@ -67,7 +67,7 @@ Se desarrolló un modelo de acoplamiento neutrónico-termohidráulico para el es
 %~ Se analizaron dos núcleos diferentes, y en ambos se constató que la técnica de \textit{Picard} comúnmente utilizada no es la más eficiente ya que requiere evaluaciones serializadas
 %~ que bien pueden paralelizarse utilizando el método del punto fijo.
 Las técnicas explícitas en general resultaron ser robustas, pero en algunos casos se estancaron, iterando en series de valores que se repetían en ciclo,
-y en otros requerieron excesivos tiempos de cálculo.
+y en otros requerieron excesivo tiempo de cálculo.
 El método de \textit{Broyden} resultó ser eficiente en el primer modelo de núcleo.
 En el segundo modelo analizado resultó ser eficiente solo durante la primera mitad del ciclo de quemado,
 durante la cual convergía en la mitad de iteraciones de las que requerían los métodos explícitos.

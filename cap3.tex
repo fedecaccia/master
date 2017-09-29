@@ -158,7 +158,7 @@ y por ello se selecciona como interfaz de acople aquella que se corresponda con 
 Los valores de temperatura de acople también corresponden a valores $T$ promediados en la interfaz,
 y el flujo de calor $q''$ de acople corresponde al flujo integral a través de ella.
 En los subsistemas bi-dimensionales, los perfiles de velocidades y temperaturas construidos a partir de las variables recibidas se consideran planos,
-bajo la hipótesis de flujo paralelo.
+suponiendo que el flujo es turbulento (hipótesis que pudo verificarse luego).
 Con esta estrategia, existen cuatro incógnitas en cada interfaz de cada subsistema. 
 Considerando los dos subsistemas, existen en total dieciseis incógnitas.
 
@@ -445,7 +445,7 @@ Al disminuir la longitud de cañerías el caudal se incrementa y el efecto resul
   \begin{tabular}{ c c c c c c c } 
       \hline
       \multicolumn{1}{c}{$f_0$ $[W/m^3]$} & \multicolumn{1}{c}{$H / \Delta z$} & \multicolumn{1}{c}{$L$ $[m]$} & \multicolumn{1}{c}{$Ri$} & \multicolumn{1}{c}{$\Delta T$ $[K]$} & \multicolumn{1}{c}{$Q$$[m^3/s]$}& \multicolumn{1}{c}{$\Delta p$ $[Pa]$} \\ \hline
-      \multirow{3}{*}{$2\cdot10^5$} & \multirow{3}{*}{$10$} & 15 & 0.9 & 2.2 & $9.0 \cdot 10^{-2}$ & 620 \\
+      \multirow{3}{*}{$2\cdot10^5$} & \multirow{3}{*}{$10$} & 15 & 0.9 & 2.2 & $9.0 \cdot 10^{-3}$ & 620 \\
                          & & 7 & 0.5 & 1.4 & $9.8 \cdot 10^{-3}$ & 634 \\                          
                          & & 2 & 0.2 & 1.3 & $1.5 \cdot 10^{-2}$ & 630 \\ \hline
    \end{tabular}   
@@ -949,8 +949,8 @@ La Figura \ref{nonlinear_fevals_ex} reporta la cantidad de evaluaciones de funci
 jugando con diferentes órdenes de extrapolación para $\bar{x}_n$ y $\mathbb{B}_n$.
 Las evaluaciones de funciones aquí están directamente relacionadas con las iteraciones necesarias para la convergencia,
 ya que el método de \textit{Broyden} realiza una sola evaluación en cada iteración.
-Al comienzo del cálculo todos los esquemas numéricos requieren excesivas iteraciones para converger,
-y luego comienzan a converger con menor cantidad de iteraciones.
+Al comienzo del cálculo todos los esquemas numéricos requieren mayor cantidad de iteraciones para converger,
+y luego comienzan a converger con menos iteraciones.
 El cálculo con órden nulo de extrapolación para ambas variables es el que más tarda en bajar la cantidad de iteraciones.
 Le siguen todos aquellos esquemas sin extrapolación para la matriz $\mathbb{B}_n$.
 Los esquemas con $k_{\mathbb{B}}=3$ y $k_{\mathbb{B}}=5$ son los que más rápidamente bajan la cantidad de iteraciones,
@@ -959,7 +959,7 @@ En etapas avanzadas la matriz $\mathbb{B}_n$ se estabiliza y comienza a converge
 Es decir, la tasa de cambio del vector solución $\bar{x}_n$ se vuelve aproximadamente constante (como puede observarse en la Figura \ref{qpvst}).
 Ante una pequeño cambio, los esquemas de extrapolación para $\mathbb{B}_n$ amplifican esta perturbación y comienzan a generar malas semillas,
 por lo que comienzan a requerir mayor cantidad de iteraciones para converger.
-Este efecto puede observarse a partir de los $10s$ de cálculo.
+Este efecto puede observarse a partir de los $10$ segundos de cálculo.
 Por el contrario, los esquemas con bajo órden de extrapolación para $\mathbb{B}_n$ y algún órden de extrapolación para $\bar{x}_n$ son más eficientes en esta etapa.
 Aquí podría pensarse que los esquemas de extrapolación son inestables ante perturbaciones en $\mathbb{B}_n$, pero estables para perturbaciones en $\bar{x}_n$.
 
@@ -1262,7 +1262,7 @@ por lo que suele requerirse un acoplamiento entre ellos para resolver la dinámi
 Comúnmente, la evolución temporal se discretiza en diferentes pasos de quemado, y en cada uno de ellos el acoplamiento se resuelve mediante iteraciones explícitas de tipo Picard.
 
 En esta sección se propone un modelo simplificado para el análisis de la dinámica de núcleo de un reactor nuclear durante un ciclo de quemado de elementos combustibles,
-considerando solo los fenómenos neutrónico y termohidráulico.
+considerando solo los fenómenos neutrónicos y termohidráulicos.
 
 \subsection*{Subsistemas de estudio}
 \label{3:subsistemas-nt}
@@ -1292,7 +1292,7 @@ para cada punto espacial y cada grupo de energía, de modo que:
 
 La ecuación \ref{eq-nucleo} requiere condiciones de borde en el contorno del dominio de cálculo.
 En el primer ejemplo analizado se utilizan condiciones de borde homogéneas\footnote{
-Imponer un flujo $\bar{phi}$ nulo en el contorno del dominio implica utilizar la hipótesis de que el flujo se hace nulo a alguna distancia del borde (en la \textit{distancia extrapolada} \cite{lamarsh}),
+Imponer un flujo $\bar{\phi}$ nulo en el contorno del dominio implica utilizar la hipótesis de que el flujo se hace nulo a alguna distancia del borde (en la \textit{distancia extrapolada} \cite{lamarsh}),
 y asumir al mismo tiempo que esta distancia es despreciable, para de esta forma no extender el dominio de cálculo.
 } sobre $\phi$.
 En el segundo ejemplo analizado se imponen condiciones de flujo entrante nulo.
@@ -1314,7 +1314,7 @@ Los fenómenos hidrodinámicos y de transferencia de calor se modelan con ecuaci
 La transferencia de calor a través de las estructuras de combustibles se modela con la siguiente ecuación diferencial:
 
 \begin{equation}
-\rho \frac{\partial T_{comb}}{\partial t} = \nabla \left ( k \nabla T \right )  + S
+\rho c_p \frac{\partial T_{comb}}{\partial t} = \nabla \left ( k \nabla T \right )  + S
 \label{relap-calor}
 \end{equation}
 donde $\rho$ es la densidad del medio difusivo,
@@ -1372,7 +1372,7 @@ Las siguientes dos ecuaciones son las ecuaciones de momento de cada fase:
 \label{relap-momento}
 \end{equation}
 La primera ecuación corresponde a la fase gaseosa y la segunda corresponde a la fase líquida.
-Las ecuaciones son complejas y pueden analizarse separando los términos.
+Las ecuaciones son complejas a continuación se analizan los términos por separado.
 En cualquiera de ambas, los términos del lado izquierdo representan el transporte de momento.
 Los términos de la derecha representan los agentes que generan el cambio de momento.
 El primer término representa el cambio debido al gradiente de presión $P$.
@@ -1838,7 +1838,7 @@ Se hicieron múltiples ensayos incluyendo incialización y reinicialización de 
 diferentes semillas para arrancar el cálculo.
 También se varió el parámetro de discretización temporal.
 En las simulaciones con inicialización de la matriz jacobiana, la cual demanda 113 evaluaciones de funciones extra,
-las soluciones para cada paso de quemado convergen con un promedio de 1 iteración durante los primeros 20 pasos aproximadamente.
+las soluciones para cada paso de quemado convergen con un promedio entre 1 y 2 iteraciones durante los primeros 20 pasos aproximadamente.
 Este resultado es muy bueno, ya que los métodos explícitos convergen con un promedio entre 2 y 3 iteraciones en cada paso de quemado.
 Sin embargo la mayoría de las simulaciones no se pudo completar,
 debido a que en algún punto de la evolución aparece una inestabilidad en la convergencia de los resultados en la primera zona acoplada del núcleo.
