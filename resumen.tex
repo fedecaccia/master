@@ -1,36 +1,61 @@
-\begin{resumen}%
-Los análisis de ingeniería actuales exigen estudios en sistemas cada vez más complejos. 
-Éstos, a su vez, involucran subsistemas de características disímiles: principalmente diferentes tamaños y parámetros característicos. 
-Por ejemplo, en los sistemas termohidráulicos es posible identificar distintos regímenes de flujo en tanques o en cañerías.
+% \begin{resumen}%
+% Los análisis de ingeniería actuales exigen estudios en sistemas cada vez más complejos. 
+% Éstos, a su vez, involucran subsistemas de características disímiles: principalmente diferentes tamaños y parámetros característicos. 
+% Por ejemplo, en los sistemas termohidráulicos es posible identificar distintos regímenes de flujo en tanques o en cañerías.
+% En ciertas ocasiones solo es de interés el detalle en algunos componentes,
+% necesitando modelar el resto del sistema para conservar la dinámica global.
+% En este trabajo se estudia una técnica que permite acoplar el modelado detallado de sistemas fluídicos bi- y tri- dimensionales 
+% con sistemas fluídicos más sencillos uni-dimensionales o cero-dimensionales. 
+% Cada subsistema se halla acoplado a los demás mediante los valores que toman las variables en las interfaces que comparten entre sí. 
+% El problema a resolver se reduce entonces a un sistema de ecuaciones cuyo tamaño depende de la cantidad de incógnitas en cada interfaz. 
+% Estas ecuaciones dependen, a su vez, de la física de cada subsistema y en general resultan ser no lineales.
+% Debido a esta característica, se investigan diferentes métodos de resolución iterativa.
+% Sobre el final del trabajo se extiende la técnica a acoples multifísicos
+% y se muestran algunos ejemplos de acoplamiento neutrónico-termohidráulico.
+% \end{resumen}
+
+% \begin{abstract}%
+% Current engineering analyzes require studies in increasingly complex systems.
+% These, in turn, involve subsystems of dissimilar characteristics: mainly different sizes and characteristic parameters.
+% For example, in thermohydraulic systems it is possible to identify different flow regimes in tanks or pipelines.
+% On some occasions it is only interesting to detail in some components, needing to model the rest of the system to preserve the global dynamics.
+% In this work we study a technique that allows the coupling of the detailed modeling of bi- and three-dimensional fluidic systems 
+% with simplified one-dimensional or zero-dimensional fluidic systems.
+% Each subsystem is coupled to the others by the values that the variables take on the interfaces they share with each other.
+% The problem to be solved is then reduced to a system of equations whose size depends on the number of unknowns in each interface.
+% These equations, in turn, depend on the physics of each subsystem and in general turn out to be non-linear.
+% Due to this characteristic, different iterative resolution methods are investigated.
+% On the end of the work the technique is extended to multiphysical couplings
+% and some examples of neutronic-thermohydraulic coupling are shown.
+% \end{abstract}
+
+
+\begin{resumen}
+En la industria nuclear existen sistemas de ingeniería con gran complejidad, compuestos por múltiples subsistemas en los que cada uno de ellos puede contener fenomenologías físicas que requieren distintos modelos para su análisis.
 En ciertas ocasiones solo es de interés el detalle en algunos componentes,
 necesitando modelar el resto del sistema para conservar la dinámica global.
 En este trabajo se estudia una técnica que permite acoplar el modelado detallado de sistemas fluídicos bi- y tri- dimensionales 
 con sistemas fluídicos más sencillos uni-dimensionales o cero-dimensionales. 
-Cada subsistema se halla acoplado a los demás mediante los valores que toman las variables en las interfaces que comparten entre sí. 
-El problema a resolver se reduce entonces a un sistema de ecuaciones cuyo tamaño depende de la cantidad de incógnitas en cada interfaz. 
-Estas ecuaciones dependen, a su vez, de la física de cada subsistema y en general resultan ser no lineales.
-Debido a esta característica, se investigan diferentes métodos de resolución iterativa.
-Sobre el final del trabajo se extiende la técnica a acoples multifísicos
-y se muestran algunos ejemplos de acoplamiento neutrónico-termohidráulico.
+Cada subsistema se halla acoplado a los demás mediante los valores que toman las variables de estudio en las interfaces que comparten entre sí.
+Tras el modelado matemático, el problema del acoplamiento se reduce a resolver un sistema de ecuaciones cuyo tamaño depende de la cantidad de incógnitas en las interfaces de acople.
+Como estas ecuaciones provienen de la física inherente a cada subsistema, en general resultan ser no lineales, y por esta característica se investigan diferentes técnicas numéricas iterativas para su resolución.
+
+La investigación se enmarca en cuatro aplicaciones de interés. La primera aplicación es el análisis de la fluidodinámica en una fuente fría de neutrones, en la que interesa estudiar patrones de flujo en la cavidad de la fuente, modelando el resto del circuito para conservar la dinámica general. La seguna aplicación es el análisis del Segundo Sistema de Parada de un reactor de investigación, en el que se acopla un modelo tridimensional de un componente del sistema a un modelo cero-dimensional del resto. La tercera aplicación es el estudio de distribucion de presiones y caudales en una red hidráulica con múltiples componentes. La última aplicación extiende la técnica a acoplamientos multifísicos y se reportan algunos ejemplos en el acoplamiento neutrónico-termohidráulico. 
+
+Como resultado general cabe destacar el éxito en la implementación de las funciones necesarias para acoplar diferentes códigos de cálculo como ParGPFFEP, RELAP5, Fermi, PUMA y otros. También se destaca el método implícito de \textit{Broyden} como técnica numerica para resolver los sistemas de ecuaciones no lineales resultantes del acoplamiento.
 \end{resumen}
 
-\begin{abstract}%
-Current engineering analyzes require studies in increasingly complex systems.
-These, in turn, involve subsystems of dissimilar characteristics: mainly different sizes and characteristic parameters.
-For example, in thermohydraulic systems it is possible to identify different flow regimes in tanks or pipelines.
-On some occasions it is only interesting to detail in some components, needing to model the rest of the system to preserve the global dynamics.
-In this work we study a technique that allows the coupling of the detailed modeling of bi- and three-dimensional fluidic systems 
-with simplified one-dimensional or zero-dimensional fluidic systems.
-Each subsystem is coupled to the others by the values that the variables take on the interfaces they share with each other.
-The problem to be solved is then reduced to a system of equations whose size depends on the number of unknowns in each interface.
-These equations, in turn, depend on the physics of each subsystem and in general turn out to be non-linear.
-Due to this characteristic, different iterative resolution methods are investigated.
-On the end of the work the technique is extended to multiphysical couplings
-and some examples of neutronic-thermohydraulic coupling are shown.
+\begin{abstract}
+In nuclear industry there are engineering systems with great complexity, composed by multiple subsystems in which each of them can contain physical phenomenologies that require different models for their analysis.
+In certain occasions only the detail in some components is of interest,
+needing to model the rest of the system to preserve global dynamics.
+In this work we study a technique that allows to coupling the detailed modeling of bi- and tri-dimensional fluidic subsystems
+with simplified one-dimensional or zero-dimensional fluidic subsystems.
+Each subsystem is coupled to the others by the values that the study variables take on the interfaces they share with each other.
+After mathematical modeling, the coupling problem is reduced to solving a system of equations whose size depends on the number of unknowns in the coupling interfaces.
+As these equations come from the physics inherent to each subsystem, they are generally nonlinear, and so we investigate different iterative numerical techniques for their resolution.
+
+The research is framed in four applications of interest. The first application is the analysis of fluid dynamics in a cold neutron source, in which it is interesting to study flow patterns in the source cavity, modeling the rest of the circuit to preserve the general dynamics. The second application is the analysis of the Second Shutdown System of a research reactor, in which a three-dimensional model of a component of the system is coupled to a zero-dimensional model of the rest. The third application is the study of the distribution of pressures and flows in a hydraulic network with multiple components. The latest application extends the technique to multiphysical couplings and some examples are reported in the neutron-thermohydraulic coupling.
+
+As a general result, it is worth mentioning the success in implementing the necessary functions to couple different calculation codes like ParGPFFEP, RELAP5, Fermi, PUMA and others. We also highlights the \textit{Broyden} implicit method as numerical technique to solve the systems of nonlinear equations resulting from the coupling.
 \end{abstract}
-
-
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "template"
-%%% End: 

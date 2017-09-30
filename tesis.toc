@@ -1,10 +1,10 @@
 \select@language {spanish}
-\contentsline {chapter}{\'{I}ndice de s{\'{\i }}mbolos}{\es@scroman {iii}}{section*.1}
-\contentsline {chapter}{\'{I}ndice de contenidos}{\es@scroman {v}}{section*.3}
-\contentsline {chapter}{\'{I}ndice de figuras}{\es@scroman {vii}}{section*.5}
-\contentsline {chapter}{\'{I}ndice de tablas}{\es@scroman {ix}}{section*.7}
-\contentsline {chapter}{Resumen}{\es@scroman {xi}}{section*.9}
-\contentsline {chapter}{Abstract}{\es@scroman {xiii}}{section*.11}
+\contentsline {chapter}{\'{I}ndice de s{\'{\i }}mbolos}{\es@scroman {v}}{section*.1}
+\contentsline {chapter}{\'{I}ndice de contenidos}{\es@scroman {vii}}{section*.3}
+\contentsline {chapter}{\'{I}ndice de figuras}{\es@scroman {ix}}{section*.5}
+\contentsline {chapter}{\'{I}ndice de tablas}{\es@scroman {xi}}{section*.7}
+\contentsline {chapter}{Resumen}{\es@scroman {xiii}}{section*.9}
+\contentsline {chapter}{Abstract}{\es@scroman {xv}}{section*.11}
 \select@language {english}
 \select@language {spanish}
 \select@language {english}
@@ -41,3 +41,4 @@
 \contentsline {section}{\numberline {C.3}Ejemplo de uso de \textbf {Par-GPFEP} en forma acoplada}{85}{section.Alph3.3}
 \contentsline {chapter}{Bibliograf{\'{\i }}a}{87}{section*.65}
 \contentsline {chapter}{Publicaciones asociadas}{91}{section*.67}
+\contentsline {chapter}{Agradecimientos}{93}{section*.69}
